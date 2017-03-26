@@ -1,0 +1,44 @@
+--- 
+########################################
+
+- name: IVRaaS deployment on OrangeInfra
+  hosts: IVRaaS_servers
+  gather_facts: False
+
+  roles:
+   - common
+
+#########################################
+
+- name: IVRaaS was 
+  hosts: was
+  gather_facts: False
+
+  roles:
+   - was_pre
+#   - nfs
+   - java
+   - apache
+   - tomcat
+
+#########################################
+
+- name: IVRaaS db 
+  hosts: db
+  gather_facts: False
+
+  roles:
+   - db_pre
+   - mysql
+
+########################################
+
+- name: IVRaaS batch 
+  hosts: batch
+  gather_facts: False
+
+  roles:
+   - batch_pre
+ #  - nfs
+   - java
+   - batch

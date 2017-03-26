@@ -1,0 +1,56 @@
+---
+
+- name: MYSQL | install mysql client and server
+  yum:
+    name:
+     - mysql
+     - mysql-server
+    state: latest
+  become: yes
+  tags: mysql
+
+- name: copy Mysql-python to host
+  copy:
+    src: "{{ role_path }}/files/MySQL-python-1.2.3-0.3.c1.1.el6.x86_64.rpm"
+    dest: /tmp/MySQL-python-1.2.3-0.3.c1.1.el6.x86_64.rpm
+    owner: root
+    group: root
+  become: yes
+  tags: mysql
+
+- name: install MySQL-python to enable mysql_user module
+  yum:
+    name: /tmp/MySQL-python-1.2.3-0.3.c1.1.el6.x86_64.rpm
+    state: present
+  become: yes
+  tags: mysql
+
+- name: Ensure mysqld is started and enabled 
+  service:
+    name: mysqld
+    state: started
+    enabled: yes
+  become: yes
+  tags: mysql 
+
+- name: MYSQL | Update mysql root password for all root accounts
+  mysql_user: 
+    name: root 
+    host: localhost 
+    password: "{{ mysql_root_password }}"
+  become: yes
+  tags: mysql
+
+- debug: 
+   msg: "{{ mysql_root_password }}"
+
+- name: MYSQL | insert/update "[client]" configuration block in /root/my.cnf
+  blockinfile:
+    dest: /root/.my.cnf
+    block: |
+      [client]
+      password={{ mysql_root_password }}
+    create: yes
+    mode: 0600
+  become: yes
+  tags: mysql

@@ -1,0 +1,66 @@
+---
+
+- name: Ensure tomcat is installed
+  yum:
+    name: tomcat6
+    state: latest
+  become: yes
+  tags: tomcat
+
+- name: Modify /etc/tomcat6/server.xml and /etc/tomcat6/tomcat6.conf (customize thread count) and (customize memory usage)
+  lineinfile:
+    dest: "{{item.dest}}"
+    regexp: "{{item.regexp}}"
+    line: "{{item.line}}"
+  with_items: "{{replace}}"
+  become: yes
+  notify: restart tomcat
+  tags: tomcat
+
+- name: Modify /etc/tomcat6/server.xml to add virtual hosts
+  blockinfile:
+    dest: /etc/tomcat6/server.xml
+    marker: "<!-- {mark} ANSIBLE MANAGED BLOCK -->"
+    insertafter: "</Host>"
+    block: "{{ lookup('file', 'vhosts') }}"
+  become: yes
+  notify: restart tomcat
+  tags: tomcat
+
+- name: Create configuration directories in /etc/tomcat8/Catalina
+  file:
+    path: "{{item}}"
+    state: directory
+  with_items: "{{tomcat_conf_directories}}"
+  become: yes
+  notify: restart tomcat
+  tags: tomcat
+
+- name: Copy tomcat manager/ app tp /usr/share/tomcat6/webapps/
+  copy:
+    src: "{{role_path}}/files/manager"
+    dest: /usr/share/tomcat6/webapps/
+  become: yes
+  notify: restart tomcat
+  tags: tomcat
+
+- name: Modify /etc/tomcat6/tomcat-users to add roles and users
+  blockinfile:
+    dest: /etc/tomcat6/tomcat-users.xml
+    marker: "<!-- {mark} ANSIBLE MANAGED BLOCK -->"
+    insertafter: "<tomcat-users>"
+    block: "{{ lookup('file', 'tomcat-users') }}"
+  become: yes
+  notify: restart tomcat
+  tags: tomcat
+
+- name: Create and copy manager.xml
+  copy:
+    src: "{{role_path}}/files/manager.xml"
+    dest: "{{item}}"
+  with_items: "{{dest}}"
+  become: yes
+  notify: restart tomcat
+  tags: tomcat
+
+

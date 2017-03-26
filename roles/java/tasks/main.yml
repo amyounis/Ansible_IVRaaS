@@ -1,0 +1,37 @@
+---
+
+##################################################################################
+#                           Install Oracle Java Jdk                              #
+##################################################################################
+
+
+- name: Copy java jdk8 to /tmp directory
+  copy:
+    src: "{{ role_path }}/files/jdk-8u121-linux-x64.rpm"
+    dest: /tmp
+  become: yes
+  tags: java
+ 
+
+- name: Install Java 8
+  yum:
+    name: /tmp/jdk-8u121-linux-x64.rpm
+  become: yes
+  tags: java
+
+
+- name: Correct java version selected
+  alternatives:
+    name: java
+    path: /usr/java/jdk1.8.0_121/jre/bin/java
+  become: yes
+  tags: java
+
+
+- name: Correct javac version selected
+  alternatives:
+    name: javac
+    path: /usr/java/jdk1.8.0_121/bin/javac
+  become: yes
+  tags: java
+

@@ -1,0 +1,11 @@
+---
+
+- name: Ensure sox and dejavu* is installed
+  yum:
+    name:
+     - sox
+     - dejavu*
+    state: latest
+  become: yes
+  tags: was_pre
+

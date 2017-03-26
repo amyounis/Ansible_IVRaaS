@@ -1,0 +1,52 @@
+---
+
+#############################################################
+#               Install aosche http server                  #
+#############################################################
+
+- name: Ensure apache http server is installed
+  yum:
+    name: httpd
+    state: latest
+  become: yes
+  tags: apache
+
+- name: Ensure http server is started and enabled
+  service:
+    name: httpd
+    state: started
+    enabled: yes
+  become: yes
+#  tags: apache
+
+
+#############################################################
+#                    Add module mod_jk                      #
+#############################################################
+
+- name: Add mod_jk module in httpd.conf
+  lineinfile: 
+    dest: /etc/httpd/conf/httpd.conf
+    line: include conf/mod_jk.conf
+  become: yes
+  notify: restart httpd
+  tags: apache
+
+
+- name: Copy mod_jk module and its configuration and worker files
+  copy:
+    src: "{{item.src}}" 
+    dest: "{{item.dest}}"
+  with_items: "{{copy_files}}"
+  become: yes
+  notify: restart httpd
+  tags: apache
+
+- name: Create web application and logs directories
+  file:
+    path: "{{item}}"
+    state: directory
+  with_items: "{{webapp_directories}}"
+  become: yes
+  tags: apache
+

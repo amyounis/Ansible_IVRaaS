@@ -1,0 +1,25 @@
+---
+
+copy_files:
+ - { src: '{{role_path}}/files/modules/', dest: '/etc/httpd/modules/' }
+ - { src: '{{role_path}}/files/conf/', dest: '/etc/httpd/conf/' }
+
+webapp_directories:
+ - /usr2/web/gv-admmsgvocale-svi-amea.dmz.cloud.mbs/ROOT
+ - /usr2/web/gv-authent-amea.dmz.cloud.mbs/ROOT
+ - /usr2/web/gv-authent-amea.dmz.cloud.mbs/admin-stp
+ - /usr2/web/gv-authent-amea.dmz.cloud.mbs/stats
+ - /usr2/web/gv-authent-amea.dmz.cloud.mbs/adv1
+ - /usr2/web/gv-authent-amea.dmz.cloud.mbs/vocalmestre1
+ - /usr2/web/gv-provisioning-amea.dmz.cloud.mbs/ROOT
+ - /usr2/web/gv-svifiles-amea.dmz.cloud.mbs/ROOT
+ - /usr2/web/gv-switchingservice-amea.dmz.cloud.mbs/ROOT
+ - /usr2/web/gv-webservices-amea.dmz.cloud.mbs/ROOT
+ - /usr2/logs/apache/gv-admmsgvocale-svi-amea.dmz.cloud.mbs/current
+ - /usr2/logs/apache/gv-authent-amea.dmz.cloud.mbs/current
+ - /usr2/logs/apache/gv-provisioning-amea.dmz.cloud.mbs/current
+ - /usr2/logs/apache/gv-svifiles-amea.dmz.cloud.mbs/current
+ - /usr2/logs/apache/gv-switchingservice-amea.dmz.cloud.mbs/current
+ - /usr2/logs/apache/gv-webservices-amea.dmz.cloud.mbs/current
+ - /usr2/logs/apache/mod_jk/current
+

@@ -1,0 +1,22 @@
+---
+
+replace:
+ - { dest: /etc/tomcat6/server.xml , regexp: '<Connector port="8009"' , line: '<Connector port="8009" maxThreads="800" connectionTimeout="60000" minSpareThreads="25" maxSpareThreads="75" enableLookups="false" protocol="AJP/1.3" redirectPort="8443" />' }
+ - { dest: /etc/tomcat6/server.xml , regexp: '<Engine name="Catalina" defaultHost="localhost' , line: '<Engine name="Catalina" defaultHost="localhost" jvmRoute="localhost">' }
+ - { dest: /etc/tomcat6/tomcat6.conf , regexp: 'JAVA_OPTS=' , line: 'JAVA_OPTS="${JAVA_OPTS} -Xmx1536m -Xms1024m -Xmn512m -XX:MaxPermSize=512m -Djavax.sql.DataSource.Factory=org.apache.commons.dbcp.BasicDataSourceFactory"' }
+
+tomcat_conf_directories:
+ - /etc/tomcat6/Catalina/gv-admmsgvocale-svi-amea.dmz.cloud.mbs
+ - /etc/tomcat6/Catalina/gv-provisioning-amea.dmz.cloud.mbs
+ - /etc/tomcat6/Catalina/gv-switchingservice-amea.dmz.cloud.mbs
+ - /etc/tomcat6/Catalina/gv-authent-amea.dmz.cloud.mbs
+ - /etc/tomcat6/Catalina/gv-webservices-amea.dmz.cloud.mbs
+
+dest: 
+ - /usr/share/tomcat8/conf/Catalina/localhost/
+ - /etc/tomcat8/Catalina/gv-admmsgvocale-svi-amea.dmz.cloud.mbs/
+ - /etc/tomcat8/Catalina/gv-provisioning-amea.dmz.cloud.mbs/
+ - /etc/tomcat8/Catalina/gv-switchingservice-amea.dmz.cloud.mbs/
+ - /etc/tomcat8/Catalina/gv-authent-amea.dmz.cloud.mbs/
+ - /etc/tomcat8/Catalina/gv-webservices-amea.dmz.cloud.mbs/
+ 
