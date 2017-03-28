@@ -1,2 +1,15 @@
 ---
-# defaults file for roles/batch
+
+batch_directories:
+ - { path: /usr2/batch/gv-batch/ , owner: serveur }
+ - { path: /usr2/batch/gv-batch-stp/ , owner: serveur }
+ - { path: /usr2/batch/gv-tools/ , owner: serveur }
+ - { path: /usr2/batch/stats-calculator/ , owner: stats }
+ - { path: /usr2/batch/stats-manager/ , owner: stats}
+ - { path: /usr2/batch/stats-rapatriement/ , owner: stats}
+ - { path: /usr2/batch/stats-utilities/ , owner: stats}
+ - { path: /mnt/statVox2/var/data , owner: stats}
+ - { path: /mnt/statVox2/var/pcn , owner: stats}
+ - { path: /mnt/statVox2/var/stats , owner: stats}
+ - { path: /mnt/statVox2/var/archive , owner: stats}
+

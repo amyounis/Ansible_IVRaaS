@@ -5,7 +5,7 @@
     name: tomcat6
     state: latest
   become: yes
-  tags: tomcat
+#  tags: tomcat
 
 - name: Modify /etc/tomcat6/server.xml and /etc/tomcat6/tomcat6.conf (customize thread count) and (customize memory usage)
   lineinfile:
@@ -38,7 +38,7 @@
 
 - name: Copy tomcat manager/ app tp /usr/share/tomcat6/webapps/
   copy:
-    src: "{{role_path}}/files/manager"
+    src: manager
     dest: /usr/share/tomcat6/webapps/
   become: yes
   notify: restart tomcat
@@ -56,11 +56,43 @@
 
 - name: Create and copy manager.xml
   copy:
-    src: "{{role_path}}/files/manager.xml"
+    src: manager.xml
     dest: "{{item}}"
   with_items: "{{dest}}"
   become: yes
   notify: restart tomcat
   tags: tomcat
 
+- name: Copy webapp.zip to /tmp/IVRaaS
+  copy:
+    src: webapp.zip
+    dest: /tmp/IVRaaS
+  become: yes
+  notify: restart tomcat
+  tags: tomcat
+
+- name: Unarchive webapps
+  shell: /usr/bin/unzip webapp.zip && rm -f webapp.zip 
+  args:
+    chdir: /tmp/IVRaaS
+    creates: /tmp/IVRaaS/webapp/gv*
+  become: yes
+  notify: restart tomcat
+  tags: tomcat
+
+- name: Register apps names
+  command: ls /tmp/IVRaaS/webapp
+  register: result
+  become: yes
+  notify: restart tomcat
+  tags: tomcat
+
+- name: Place webapps in its place
+  shell: tar xfz "{{item.name}}"*.tar.gz && unzip binpackage/*.war -d "{{item.dir}}" && cp -r conf/. "{{item.dir}}"/META-INF && find . ! -name '*.tar.gz' -delete
+  args:
+    chdir: /tmp/IVRaaS/webapp
+    creates: "{{item.dir}}/META-INF"
+  with_items: "{{WEBAPPS}}"
+  become: yes
+  tags: tomcat
 

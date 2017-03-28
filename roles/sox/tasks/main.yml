@@ -1,0 +1,10 @@
+---
+
+- name: Ensure sox s installed
+  yum:
+    name: sox
+    state: latest
+  become: yes
+  tags: sox
+
+

@@ -15,8 +15,8 @@
   gather_facts: False
 
   roles:
-   - was_pre
-#   - nfs
+   - sox
+   - nfs
    - java
    - apache
    - tomcat
@@ -28,7 +28,6 @@
   gather_facts: False
 
   roles:
-   - db_pre
    - mysql
 
 ########################################
@@ -38,7 +37,6 @@
   gather_facts: False
 
   roles:
-   - batch_pre
- #  - nfs
+   - nfs
    - java
    - batch

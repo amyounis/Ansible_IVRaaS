@@ -1,7 +1,7 @@
 ---
 
 #############################################################
-#               Install aosche http server                  #
+#               Install apache http server                  #
 #############################################################
 
 - name: Ensure apache http server is installed
@@ -17,7 +17,7 @@
     state: started
     enabled: yes
   become: yes
-#  tags: apache
+  tags: apache
 
 
 #############################################################

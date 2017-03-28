@@ -1,0 +1,19 @@
+---
+
+DOMAIN: amea.dmz.cloud.mbs
+
+WEBAPPS:
+ - { name: gv-admmsgvocale-svi , dir: /usr2/web/gv-admmsgvocale-svi-amea.dmz.cloud.mbs/ROOT }
+ - { name: gv-authent , dir: /usr2/web/gv-authent-amea.dmz.cloud.mbs/ROOT }
+ - { name: gv-provisioning , dir: /usr2/web/gv-provisioning-amea.dmz.cloud.mbs/ROOT }
+ - { name: gv-svifiles , dir: /usr2/web/gv-svifiles-amea.dmz.cloud.mbs/ROOT }
+ - { name: gv-switchingservice , dir: /usr2/web/gv-switchingservice-amea.dmz.cloud.mbs/ROOT }
+ - { name: gv-webservices , dir: /usr2/web/gv-webservices-amea.dmz.cloud.mbs/ROOT }
+ - { name: gv-admin-stp , dir: /usr2/web/gv-authent-amea.dmz.cloud.mbs/admin-stp }
+ - { name: gv-adv , dir: /usr2/web/gv-authent-amea.dmz.cloud.mbs/adv1 }
+ - { name: gv-stats , dir: /usr2/web/gv-authent-amea.dmz.cloud.mbs/stats }
+ - { name: gv-vocalmestre , dir: /usr2/web/gv-authent-amea.dmz.cloud.mbs/vocalmestre1 }
+
+ROOT_DIR: /usr2/web
+
+

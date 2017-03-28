@@ -1,2 +1,92 @@
 ---
-# tasks file for roles/batch
+- name: MYSQL | install mysql client and server
+  yum:
+    name:
+     - mysql
+     - mysql-devel
+    state: latest
+  become: yes
+#  tags: batch
+
+- name: Create user stats 
+  user:
+    name: stats
+  become: yes
+  tags: batch
+
+- name: Create user serveur
+  user:
+    name: serveur
+  become: yes
+  tags: batch
+
+- name: Create group tomcat gid 91
+  group:
+    name: tomcat
+    gid: 91
+    state: present
+  become: yes
+  tags: batch
+
+- name: Cerate user tomcat uid 91
+  user: 
+    name: tomcat
+    uid: 91
+    group: tomcat
+  become: yes
+  tags: batch
+
+- name: Create web application and logs directories
+  file:
+    path: "{{item.path}}"
+    state: directory
+    owner: "{{item.owner}}"
+  with_items: "{{batch_directories}}"
+  become: yes
+  tags: batch
+
+- name: Copy the libperl.zip to /tmp/IVRaaS
+  copy:
+    src: libperl.zip
+    dest: /tmp/IVRaaS/
+  become: yes
+  tags: batch
+
+- name: Unzip /tmp/IVRaaS into /usr2/batch/libperl
+  command : unzip /tmp/IVRaaS/libperl.zip 
+  args:
+    chdir: /usr2/batch/
+    creates: /usr2/batch/libperl/Algorithm/Diff/XS.pm
+  become: yes
+  tags: batch
+
+#- name: Unarchive libperl.zip into /usr2/batch
+#  unarchive:
+#    src: libperl.zip
+#    dest: /usr2/batch
+#    remote_src: True
+#  become: yes
+#  tags: batch
+
+- name: Export environment variable of stats user
+  lineinfile:
+     dest: /home/stats/.bashrc
+     line: export SHARED_LIB_PERL=/usr2/batch/libperl
+  become: yes
+  tags: batch
+
+- name: Copy cronbatch_batch.zip to /tmp/IVRaaS
+  copy:
+    src: cronbatch_batch.zip
+    dest: /tmp/IVRaaS
+  become: yes
+  tags: batch
+ 
+- name: Unarchive batch_cronbatch.zip
+  shell: /usr/bin/unzip cronbatch_batch.zip && rm -f cronbatch_batch.zip
+  args:
+    chdir: /tmp/IVRaaS
+    creates: /tmp/IVRaaS/cronbatch_batch/gv*
+  become: yes
+  tags: batch
+
