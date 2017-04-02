@@ -5,17 +5,16 @@
 ##################################################################################
 
 
-- name: Copy java jdk8 to /tmp/IVRaaS
+- name: Copy java jdk8 to {{EXTRACT_DIR}}
   copy:
     src: jdk-8u121-linux-x64.rpm
-    dest: /tmp/IVRaaS/
-  become: yes
+    dest: "{{EXTRACT_DIR}}"
   tags: java
  
 
 - name: Install Java 8
   yum:
-    name: /tmp/IVRaaS/jdk-8u121-linux-x64.rpm
+    name: "{{EXTRACT_DIR}}jdk-8u121-linux-x64.rpm"
   become: yes
   tags: java
 

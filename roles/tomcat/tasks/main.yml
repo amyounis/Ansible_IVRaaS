@@ -5,7 +5,7 @@
     name: tomcat6
     state: latest
   become: yes
-#  tags: tomcat
+  tags: tomcat
 
 - name: Modify /etc/tomcat6/server.xml and /etc/tomcat6/tomcat6.conf (customize thread count) and (customize memory usage)
   lineinfile:
@@ -63,35 +63,34 @@
   notify: restart tomcat
   tags: tomcat
 
-- name: Copy webapp.zip to /tmp/IVRaaS
+- name: Copy web.sh to {{EXTRACT_DIR}}
   copy:
-    src: webapp.zip
-    dest: /tmp/IVRaaS
+    src: web.sh
+    dest: "{{EXTRACT_DIR}}"
+    mode: 0550
   become: yes
-  notify: restart tomcat
   tags: tomcat
 
-- name: Unarchive webapps
-  shell: /usr/bin/unzip webapp.zip && rm -f webapp.zip 
+- name: Unarchive {{WEB_ZIP_FILENAME}}.zip into {{EXTRACT_DIR}}
+  unarchive:
+    src: "{{WEB_ZIP_FILENAME}}.zip"
+    dest: "{{EXTRACT_DIR}}"
+  tags: tomcat
+
+#- name: Place webapps in its place
+#  shell: tar xfz "{{item.name}}"*.tar.gz && unzip binpackage/*.war -d "{{item.dir}}" && cp -r conf/. "{{item.dir}}"/META-INF && find . ! -name '*.tar.gz' -delete
+#  args:
+#    chdir: /tmp/IVRaaS/webapp
+#    creates: "{{item.dir}}/META-INF"
+#  with_items: "{{WEBAPPS}}"
+#  become: yes
+#  tags: tomcat
+
+- name: Deploy webapps in its place
+  shell: MODULE="{{item.NAME}}" PACKAGE="{{EXTRACT_DIR}}""{{WEB_ZIP_FILENAME}}"/"{{item.NAME}}"-"{{item.TYPE}}"-"{{item.VERSION}}".tar.gz ./web.sh >> /tmp/web.sh_output 2>&1
   args:
-    chdir: /tmp/IVRaaS
-    creates: /tmp/IVRaaS/webapp/gv*
-  become: yes
-  notify: restart tomcat
-  tags: tomcat
-
-- name: Register apps names
-  command: ls /tmp/IVRaaS/webapp
-  register: result
-  become: yes
-  notify: restart tomcat
-  tags: tomcat
-
-- name: Place webapps in its place
-  shell: tar xfz "{{item.name}}"*.tar.gz && unzip binpackage/*.war -d "{{item.dir}}" && cp -r conf/. "{{item.dir}}"/META-INF && find . ! -name '*.tar.gz' -delete
-  args:
-    chdir: /tmp/IVRaaS/webapp
-    creates: "{{item.dir}}/META-INF"
+    chdir: "{{EXTRACT_DIR}}"
+#    creates: "{{item.dir}}/META-INF"
   with_items: "{{WEBAPPS}}"
   become: yes
   tags: tomcat

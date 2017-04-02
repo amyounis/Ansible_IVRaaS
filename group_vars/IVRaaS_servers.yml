@@ -1,3 +1,54 @@
 ---
-# variables for group all
+###############################################################################
+#
+###############################################################################
 
+EXTRACT_DIR: /tmp/IVRaaS/
+
+###############################################################################
+#
+###############################################################################
+
+# Web applications root directory
+WEB_ROOT_DIR: /usr2/web
+
+# Web applications Domain name
+WEB_DOMAIN: amea.dmz.cloud.mbs
+
+# Web applications zip file name
+WEB_ZIP_FILENAME: webapp
+
+# Web applications names
+WEBAPPS:
+ - { NAME: gv-admmsgvocale-svi  , TYPE: webapp , VERSION: V12.4.12  }
+ - { NAME: gv-authent		, TYPE: webapp , VERSION: V12.4.12  }
+ - { NAME: gv-provisioning 	, TYPE: webapp , VERSION: V1.1.0    }
+ - { NAME: gv-svifiles	 	, TYPE: webapp , VERSION: V12.4.12  }
+ - { NAME: gv-switchingservice 	, TYPE: webapp , VERSION: V1.12.1   }
+ - { NAME: gv-webservices 	, TYPE: webapp , VERSION: V12.4.12  }
+ - { NAME: gv-admin-stp 	, TYPE: webapp , VERSION: V2.10.5.1 }
+ - { NAME: gv-adv 		, TYPE: webapp , VERSION: V12.4.12  }
+ - { NAME: gv-stats 		, TYPE: webapp , VERSION: V2.10.5.1 }
+ - { NAME: gv-vocalmestre 	, TYPE: webapp , VERSION: V12.4.12  }
+
+###############################################################################
+#
+###############################################################################
+
+# Batches root directory
+BATCH_ROOT_DIR: /usr2/batch/
+
+# Batch zip filename
+BATCH_ZIP_FILENAME: batch
+
+# Batche modules names
+BATCHES:
+ - { NAME: convPcnV2 			, TYPE: batch	  , VERSION: V2.1.0    }
+ - { NAME: gv-batch 			, TYPE: cronbatch , VERSION: V12.4.12  }
+ - { NAME: gv-batch-stp			, TYPE: cronbatch , VERSION: V2.10.5.1 }
+ - { NAME: gv-tools			, TYPE: cronbatch , VERSION: V12.4.12  }
+ - { NAME: stats-calculator		, TYPE: batch 	  , VERSION: V2.1.0    }
+ - { NAME: stats-manager		, TYPE: batch 	  , VERSION: V2.1.0    }
+ - { NAME: stats-manager-reintegration	, TYPE: batch 	  , VERSION: V2.1.0    }
+ - { NAME: stats-rapatriement		, TYPE: cronbatch , VERSION: V2.1.0    }
+ - { NAME: stats-utilities		, TYPE: cronbatch , VERSION: V2.1.0    }

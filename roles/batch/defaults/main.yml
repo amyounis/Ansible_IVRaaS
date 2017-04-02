@@ -13,3 +13,4 @@ batch_directories:
  - { path: /mnt/statVox2/var/stats , owner: stats}
  - { path: /mnt/statVox2/var/archive , owner: stats}
 
+
