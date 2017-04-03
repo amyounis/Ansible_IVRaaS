@@ -7,14 +7,14 @@
 
 - name: Copy java jdk8 to {{EXTRACT_DIR}}
   copy:
-    src: jdk-8u121-linux-x64.rpm
+    src: "{{JAVA_RPM}}"
     dest: "{{EXTRACT_DIR}}"
   tags: java
  
 
 - name: Install Java 8
   yum:
-    name: "{{EXTRACT_DIR}}jdk-8u121-linux-x64.rpm"
+    name: "{{EXTRACT_DIR}}/{{JAVA_RPM}}"
   become: yes
   tags: java
 
@@ -22,15 +22,8 @@
 - name: Correct java version selected
   alternatives:
     name: java
-    path: /usr/java/jdk1.8.0_121/jre/bin/java
+    path: "{{JAVA_HOME}}/java"
   become: yes
   tags: java
 
-
-- name: Correct javac version selected
-  alternatives:
-    name: javac
-    path: /usr/java/jdk1.8.0_121/bin/javac
-  become: yes
-  tags: java
 

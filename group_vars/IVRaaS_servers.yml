@@ -3,34 +3,93 @@
 #
 ###############################################################################
 
-EXTRACT_DIR: /tmp/IVRaaS/
+EXTRACT_DIR: /tmp/IVRaaS
 
-###############################################################################
+################################################################################
 #
 ###############################################################################
 
-# Web applications root directory
-WEB_ROOT_DIR: /usr2/web
+JAVA_RPM: jdk-8u121-linux-x64.rpm 
+JAVA_HOME: /usr/java/jdk1.8.0_121/jre/bin
 
-# Web applications Domain name
+##############################################################################
+#
+###############################################################################
+
 WEB_DOMAIN: amea.dmz.cloud.mbs
 
-# Web applications zip file name
+WEB_APP_BASE: /usr2/web
+
+WEB_LOG_BASE: /user2/logs/apache 
+
 WEB_ZIP_FILENAME: webapp
 
-# Web applications names
-WEBAPPS:
- - { NAME: gv-admmsgvocale-svi  , TYPE: webapp , VERSION: V12.4.12  }
- - { NAME: gv-authent		, TYPE: webapp , VERSION: V12.4.12  }
- - { NAME: gv-provisioning 	, TYPE: webapp , VERSION: V1.1.0    }
- - { NAME: gv-svifiles	 	, TYPE: webapp , VERSION: V12.4.12  }
- - { NAME: gv-switchingservice 	, TYPE: webapp , VERSION: V1.12.1   }
- - { NAME: gv-webservices 	, TYPE: webapp , VERSION: V12.4.12  }
- - { NAME: gv-admin-stp 	, TYPE: webapp , VERSION: V2.10.5.1 }
- - { NAME: gv-adv 		, TYPE: webapp , VERSION: V12.4.12  }
- - { NAME: gv-stats 		, TYPE: webapp , VERSION: V2.10.5.1 }
- - { NAME: gv-vocalmestre 	, TYPE: webapp , VERSION: V12.4.12  }
 
+WEB_APPS:
+ - { NAME: gv-admmsgvocale-svi  , VERSION: V12.4.12  }
+ - { NAME: gv-authent		, VERSION: V12.4.12  }
+ - { NAME: gv-provisioning 	, VERSION: V1.1.0    }
+ - { NAME: gv-svifiles	 	, VERSION: V12.4.12  }
+ - { NAME: gv-switchingservice	, VERSION: V1.12.1   }
+ - { NAME: gv-webservices 	, VERSION: V12.4.12  }
+ - { NAME: gv-admin-stp 	, VERSION: V2.10.5.1 }
+ - { NAME: gv-adv 		, VERSION: V12.4.12  }
+ - { NAME: gv-stats 		, VERSION: V2.10.5.1 }
+ - { NAME: gv-vocalmestre	, VERSION: V12.4.12  }
+
+
+WEB_APPS_OBJS:
+ - { NAME: "{{WEB_APPS.0.NAME}}" , VERSION: "{{WEB_APP.0.VERSION}}" , PATH: /ROOT	  }
+ - { NAME: "{{WEB_APPS.1.NAME}}" , VERSION: "{{WEB_APP.1.VERSION}}" , PATH: /ROOT	  }
+ - { NAME: "{{WEB_APPS.2.NAME}}" , VERSION: "{{WEB_APP.2.VERSION}}" , PATH: /ROOT 	  }
+ - { NAME: "{{WEB_APPS.3.NAME}}" , VERSION: "{{WEB_APP.3.VERSION}}" , PATH: /ROOT 	  }
+ - { NAME: "{{WEB_APPS.4.NAME}}" , VERSION: "{{WEB_APP.4.VERSION}}" , PATH: /ROOT 	  }
+ - { NAME: "{{WEB_APPS.5.NAME}}" , VERSION: "{{WEB_APP.5.VERSION}}" , PATH: /ROOT	  }
+ - { NAME: "{{WEB_APPS.6.NAME}}" , VERSION: "{{WEB_APP.6.VERSION}}" , PATH: /admin-stp	  }
+ - { NAME: "{{WEB_APPS.7.NAME}}" , VERSION: "{{WEB_APP.7.VERSION}}" , PATH: /adv1	  }
+ - { NAME: "{{WEB_APPS.8.NAME}}" , VERSION: "{{WEB_APP.8.VERSION}}" , PATH: /stats	  }
+ - { NAME: "{{WEB_APPS.9.NAME}}" , VERSION: "{{WEB_APP.9.VERSION}}" , PATH: /vocalmestre1 }
+
+
+
+##############################################################################
+
+APACHE_HOME: /var/www
+APACHE_CONF: /etc/httpd
+
+APACHE_LINEINFILE:
+ - { dest: "{{APACHE_CONF}}/conf/httpd.conf" , line: "include conf/mod_jk.conf" }
+
+APACHE_COPY:
+ - { src: modules/ 	, dest: "{{APACHE_CONF}}/modules/"	}
+ - { src: conf/		, dest: "{{APACHE_CONF}}/conf/"		}
+
+APACHE_FILE:
+# - { PATH: /usr2/web/gv-admmsgvocale-svi-amea.dmz.cloud.mbs/ROOT 		} 
+# - { PATH: /usr2/web/gv-authent-amea.dmz.cloud.mbs/ROOT 	 		}	 
+# - { PATH: /usr2/web/gv-authent-amea.dmz.cloud.mbs/admin-stp 	 		}			
+# - { PATH: /usr2/web/gv-authent-amea.dmz.cloud.mbs/stats 	 		}
+# - { PATH: /usr2/web/gv-authent-amea.dmz.cloud.mbs/adv1 	 		}
+# - { PATH: /usr2/web/gv-authent-amea.dmz.cloud.mbs/vocalmestre1 		}
+# - { PATH: /usr2/web/gv-provisioning-amea.dmz.cloud.mbs/ROOT			}
+# - { PATH: /usr2/web/gv-svifiles-amea.dmz.cloud.mbs/ROOT			}
+# - { PATH: /usr2/web/gv-switchingservice-amea.dmz.cloud.mbs/ROOT		}
+# - { PATH: /usr2/web/gv-webservices-amea.dmz.cloud.mbs/ROOT			}
+# - { PATH: /usr2/logs/apache/gv-admmsgvocale-svi-amea.dmz.cloud.mbs/current	}
+# - { PATH: /usr2/logs/apache/gv-authent-amea.dmz.cloud.mbs/current		}
+# - { PATH: /usr2/logs/apache/gv-provisioning-amea.dmz.cloud.mbs/current		}
+# - { PATH: /usr2/logs/apache/gv-svifiles-amea.dmz.cloud.mbs/current		}
+# - { PATH: /usr2/logs/apache/gv-switchingservice-amea.dmz.cloud.mbs/current	}
+# - { PATH: /usr2/logs/apache/gv-webservices-amea.dmz.cloud.mbs/current		}
+ - { PATH: /usr2/logs/apache/mod_jk/current					}
+
+
+##############################################################################
+
+
+TOMCAT_VERSION: 6
+TOMCAT_HOME: /usr/share/tomcat{{TOMCAT_VERSION}}
+TOMCAT_CONF: /etc/tomcat{{TOMCAT_VERSION}}
 ###############################################################################
 #
 ###############################################################################
@@ -52,3 +111,9 @@ BATCHES:
  - { NAME: stats-manager-reintegration	, TYPE: batch 	  , VERSION: V2.1.0    }
  - { NAME: stats-rapatriement		, TYPE: cronbatch , VERSION: V2.1.0    }
  - { NAME: stats-utilities		, TYPE: cronbatch , VERSION: V2.1.0    }
+
+BATCH_STARTUP:
+ - { SERVICE: gvStatCalculator	, SRC: /usr2/batch/stats-calculator/batch/bin/init.d/gvStatCalculator	}
+ - { SERVICE: gvStatManager	, SRC: /usr2/batch/stats-manager/batch/bin/init.d/gvStatManager		}
+ - { SERVICE: convPcnV2 	, SRC: /usr2/batch/convPcnV2/batch/bin/init.d/convPcnV2			}
+

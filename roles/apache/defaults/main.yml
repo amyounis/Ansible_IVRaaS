@@ -1,25 +1,30 @@
 ---
 
-copy_files:
- - { src: 'modules/', dest: '/etc/httpd/modules/' }
- - { src: 'conf/', dest: '/etc/httpd/conf/' }
+APACHE_LINEINFILE:
+ - { dest: "{{APACHE_CONF}}/conf/httpd.conf" , line: "include conf/mod_jk.conf" }
 
-webapp_directories:
- - /usr2/web/gv-admmsgvocale-svi-amea.dmz.cloud.mbs/ROOT
- - /usr2/web/gv-authent-amea.dmz.cloud.mbs/ROOT
- - /usr2/web/gv-authent-amea.dmz.cloud.mbs/admin-stp
- - /usr2/web/gv-authent-amea.dmz.cloud.mbs/stats
- - /usr2/web/gv-authent-amea.dmz.cloud.mbs/adv1
- - /usr2/web/gv-authent-amea.dmz.cloud.mbs/vocalmestre1
- - /usr2/web/gv-provisioning-amea.dmz.cloud.mbs/ROOT
- - /usr2/web/gv-svifiles-amea.dmz.cloud.mbs/ROOT
- - /usr2/web/gv-switchingservice-amea.dmz.cloud.mbs/ROOT
- - /usr2/web/gv-webservices-amea.dmz.cloud.mbs/ROOT
- - /usr2/logs/apache/gv-admmsgvocale-svi-amea.dmz.cloud.mbs/current
- - /usr2/logs/apache/gv-authent-amea.dmz.cloud.mbs/current
- - /usr2/logs/apache/gv-provisioning-amea.dmz.cloud.mbs/current
- - /usr2/logs/apache/gv-svifiles-amea.dmz.cloud.mbs/current
- - /usr2/logs/apache/gv-switchingservice-amea.dmz.cloud.mbs/current
- - /usr2/logs/apache/gv-webservices-amea.dmz.cloud.mbs/current
- - /usr2/logs/apache/mod_jk/current
+APACHE_COPY:
+ - { src: modules/ 	, dest: "{{APACHE_CONF}}/modules/"	}
+ - { src: conf/		, dest: "{{APACHE_CONF}}/conf/"		}
+
+APACHE_FILE:
+ - { PATH: "{{WEB_APP_BASE}}/gv-admmsgvocale-svi-{{WEB_DOMAIN}}/ROOT" 	 } 
+ - { PATH: "{{WEB_APP_BASE}}/gv-authent-{{WEB_DOMAIN}}/ROOT" 	 	 }	 
+ - { PATH: "{{WEB_APP_BASE}}/gv-authent-{{WEB_DOMAIN}}/admin-stp" 	 }			
+ - { PATH: "{{WEB_APP_BASE}}/gv-authent-{{WEB_DOMAIN}}/stats" 	 	 }
+ - { PATH: "{{WEB_APP_BASE}}/gv-authent-{{WEB_DOMAIN}}/adv1" 	 	 }
+ - { PATH: "{{WEB_APP_BASE}}/gv-authent-{{WEB_DOMAIN}}/vocalmestre1" 	 }
+ - { PATH: "{{WEB_APP_BASE}}/gv-provisioning-{{WEB_DOMAIN}}/ROOT"	 }
+ - { PATH: "{{WEB_APP_BASE}}/gv-svifiles-{{WEB_DOMAIN}}/ROOT"		 }
+ - { PATH: "{{WEB_APP_BASE}}/gv-switchingservice-{{WEB_DOMAIN}}/ROOT"	 }
+ - { PATH: "{{WEB_APP_BASE}}/gv-webservices-{{WEB_DOMAIN}}/ROOT"	 }
+ - { PATH: "{{WEB_LOG_BASE}}/gv-admmsgvocale-svi-{{WEB_DOMAIN}}/current" }
+ - { PATH: "{{WEB_LOG_BASE}}/gv-authent-{{WEB_DOMAIN}}/current"		 }
+ - { PATH: "{{WEB_LOG_BASE}}/gv-provisioning-{{WEB_DOMAIN}}/current"	 }
+ - { PATH: "{{WEB_LOG_BASE}}/gv-svifiles-{{WEB_DOMAIN}}/current"	 }
+ - { PATH: "{{WEB_LOG_BASE}}/gv-switchingservice-{{WEB_DOMAIN}}/current" }
+ - { PATH: "{{WEB_LOG_BASE}}/gv-webservices-{{WEB_DOMAIN}}/current"	 }
+ - { PATH: "{{WEB_LOG_BASE}}/mod_jk/current"				 }
+
+
 

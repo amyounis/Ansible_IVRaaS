@@ -1,22 +1,84 @@
 ---
 
-replace:
- - { dest: /etc/tomcat6/server.xml , regexp: '<Connector port="8009"' , line: '<Connector port="8009" maxThreads="800" connectionTimeout="60000" minSpareThreads="25" maxSpareThreads="75" enableLookups="false" protocol="AJP/1.3" redirectPort="8443" />' }
- - { dest: /etc/tomcat6/server.xml , regexp: '<Engine name="Catalina" defaultHost="localhost' , line: '<Engine name="Catalina" defaultHost="localhost" jvmRoute="localhost">' }
- - { dest: /etc/tomcat6/tomcat6.conf , regexp: 'JAVA_OPTS=' , line: 'JAVA_OPTS="${JAVA_OPTS} -Xmx1536m -Xms1024m -Xmn512m -XX:MaxPermSize=512m -Djavax.sql.DataSource.Factory=org.apache.commons.dbcp.BasicDataSourceFactory"' }
+TOMCAT_LINEINFILE:
+ - dest: "{{TOMCAT_CONF}}/server.xml"
+   regexp: '<Connector port="8009"'
+   line: >
+          '<Connector port="8009" maxThreads="800" connectionTimeout="60000" minSp  areThreads="25"
+           maxSpareThreads="75"    enableLookups="false" protocol="AJP/1.3" redirectPort="8443" />'
 
-tomcat_conf_directories:
- - /etc/tomcat6/Catalina/gv-admmsgvocale-svi-amea.dmz.cloud.mbs
- - /etc/tomcat6/Catalina/gv-provisioning-amea.dmz.cloud.mbs
- - /etc/tomcat6/Catalina/gv-switchingservice-amea.dmz.cloud.mbs
- - /etc/tomcat6/Catalina/gv-authent-amea.dmz.cloud.mbs
- - /etc/tomcat6/Catalina/gv-webservices-amea.dmz.cloud.mbs
+ - dest: "{{TOMCAT_CONF}}/server.xml"
+   regexp: '<Engine name="Catalina" defaultHost="localhost'
+   line: '<Engine name="Catalina" defaultHost="localhost"     jvmRoute="localhost">'
 
-dest: 
- - /usr/share/tomcat8/conf/Catalina/localhost/
- - /etc/tomcat8/Catalina/gv-admmsgvocale-svi-amea.dmz.cloud.mbs/
- - /etc/tomcat8/Catalina/gv-provisioning-amea.dmz.cloud.mbs/
- - /etc/tomcat8/Catalina/gv-switchingservice-amea.dmz.cloud.mbs/
- - /etc/tomcat8/Catalina/gv-authent-amea.dmz.cloud.mbs/
- - /etc/tomcat8/Catalina/gv-webservices-amea.dmz.cloud.mbs/
- 
+ - dest: "{{TOMCAT_CONF}}/tomcat6.conf"
+   regexp: 'JAVA_OPTS='
+   line: >
+          'JAVA_OPTS="${JAVA_OPTS} -Xmx1536m -Xms1024m -Xmn512m -XX:MaxPermSize=512m -Djavax
+          .sql.DataSource.Factory=org.apache.commons.dbcp.BasicDataSourceFactory"'
+
+
+TOMCAT_BLOCKINFILE:
+ - dest: "{{TOMCAT_CONF}}/server.xml" 
+   insertafter: "</Host>"
+   block: |
+	<Host name="gv-authent-amea.dmz.cloud.mbs" appBase="/usr2/web/gv-authent-amea.dmz.cloud.mbs" unpackWARs="false" liveDeploy="false" autoDeploy="false" deployOnStartup="true" deployXML="false">
+      	</Host>
+
+	<Host name="gv-admmsgvocale-svi-amea.dmz.cloud.mbs" appBase="/usr2/web/gv-admmsgvocale-svi-amea.dmz.cloud.mbs" unpackWARs="false" liveDeploy="false" autoDeploy="false" deployOnStartup="true" deployXML="false">
+      	</Host>
+
+	<Host name="gv-switchingservice-amea.dmz.cloud.mbs" appBase="/usr2/web/gv-switchingservice-amea.dmz.cloud.mbs" unpackWARs="false" liveDeploy="false" autoDeploy="false" deployOnStartup="true" deployXML="false">
+      	</Host>
+
+	<Host name="gv-webservices-amea.dmz.cloud.mbs" appBase="/usr2/web/gv-webservices-amea.dmz.cloud.mbs" unpackWARs="false" liveDeploy="false" autoDeploy="false" deployOnStartup="true" deployXML="false">
+      	</Host>
+
+	<Host name="gv-provisioning-amea.dmz.cloud.mbs" appBase="/usr2/web/gv-provisioning-amea.dmz.cloud.mbs" unpackWARs="false" liveDeploy="false" autoDeploy="false" deployOnStartup="true" deployXML="false">
+	</Host>
+	
+ - dest: "{{TOMCAT_CONF}}/tomcat-users.xml"
+   insertafter: "<tomcat-users>"
+   block: |
+	<role rolename="tomcat"/>
+	<role rolename="role1"/>
+	<role rolename="manager"/>
+	<role rolename="admin"/>
+	<user username="tomcat" password="tomcat" roles="tomcat"/>
+	<user username="both" password="tomcat" roles="tomcat,role1"/>
+	<user username="role1" password="tomcat" roles="role1"/>
+	<user username="admin" password="admin" roles="tomcat,role1,admin,manager"/> 
+
+
+TOMCAT_FILE:
+ - { path: /etc/tomcat6/Catalina/gv-admmsgvocale-svi-amea.dmz.cloud.mbs , state: directory }
+ - { path: /etc/tomcat6/Catalina/gv-provisioning-amea.dmz.cloud.mbs 	, state: directory }
+ - { path: /etc/tomcat6/Catalina/gv-switchingservice-amea.dmz.cloud.mbs , state: directory }
+ - { path: /etc/tomcat6/Catalina/gv-authent-amea.dmz.cloud.mbs 		, state: directory }
+ - { path: /etc/tomcat6/Catalina/gv-webservices-amea.dmz.cloud.mbs 	, state: directory }
+
+
+TOMCAT_COPY:
+ - { src: manager.xml , dest: /usr/share/tomcat8/conf/Catalina/localhost/ 		    } 
+ - { src: manager.xml , dest: /etc/tomcat8/Catalina/gv-admmsgvocale-svi-amea.dmz.cloud.mbs/ } 
+ - { src: manager.xml , dest: /etc/tomcat8/Catalina/gv-provisioning-amea.dmz.cloud.mbs/	    } 
+ - { src: manager.xml , dest: /etc/tomcat8/Catalina/gv-switchingservice-amea.dmz.cloud.mbs/ } 
+ - { src: manager.xml , dest: /etc/tomcat8/Catalina/gv-authent-amea.dmz.cloud.mbs/ 	    } 
+ - { src: manager.xml , dest: /etc/tomcat8/Catalina/gv-webservices-amea.dmz.cloud.mbs/ 	    } 
+
+TOMCAT_UNARCHIVE: 
+ - { src: "{{WEB_ZIP_FILENAME}}.zip" , dest: "{{EXTRACT_DIR}}" } 
+
+TOMCAT_APPS_OBJS:
+ - { NAME: "{{WEB_APPS.0.NAME}}" , VERSION: "{{WEB_APP.0.VERSION}}" , PATH: /ROOT	  }
+ - { NAME: "{{WEB_APPS.1.NAME}}" , VERSION: "{{WEB_APP.1.VERSION}}" , PATH: /ROOT	  }
+ - { NAME: "{{WEB_APPS.2.NAME}}" , VERSION: "{{WEB_APP.2.VERSION}}" , PATH: /ROOT 	  }
+ - { NAME: "{{WEB_APPS.3.NAME}}" , VERSION: "{{WEB_APP.3.VERSION}}" , PATH: /ROOT 	  }
+ - { NAME: "{{WEB_APPS.4.NAME}}" , VERSION: "{{WEB_APP.4.VERSION}}" , PATH: /ROOT 	  }
+ - { NAME: "{{WEB_APPS.5.NAME}}" , VERSION: "{{WEB_APP.5.VERSION}}" , PATH: /ROOT	  }
+ - { NAME: "{{WEB_APPS.6.NAME}}" , VERSION: "{{WEB_APP.6.VERSION}}" , PATH: /admin-stp	  }
+ - { NAME: "{{WEB_APPS.7.NAME}}" , VERSION: "{{WEB_APP.7.VERSION}}" , PATH: /adv1	  }
+ - { NAME: "{{WEB_APPS.8.NAME}}" , VERSION: "{{WEB_APP.8.VERSION}}" , PATH: /stats	  }
+ - { NAME: "{{WEB_APPS.9.NAME}}" , VERSION: "{{WEB_APP.9.VERSION}}" , PATH: /vocalmestre1 }
+
+

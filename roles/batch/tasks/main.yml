@@ -90,3 +90,22 @@
   become: yes
   tags: batch
 
+- name: Copy files from foo to bar
+  copy: 
+    remote_src: True 
+    src: "{{item.SRC}}"
+    dest: /etc/init.d/
+    mode: 0700
+  with_items: "{{BATCH_STARTUP}}"
+  become: yes 
+  tags: batch
+
+- name: Ensure Batch startup scripts are started and enabled
+  service:
+    name: "{{item.SERVICE}}"
+    state: started
+    enabled: yes
+  with_items: "{{BATCH_STARTUP}}"
+  become: yes
+  tags: batch
+

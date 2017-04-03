@@ -26,8 +26,9 @@
 
 - name: Add mod_jk module in httpd.conf
   lineinfile: 
-    dest: /etc/httpd/conf/httpd.conf
-    line: include conf/mod_jk.conf
+    dest: "{{item.dest}}"
+    line: "{{item.line}}"
+  with_items: "{{APACHE_LINEINFILE}}"
   become: yes
   notify: restart httpd
   tags: apache
@@ -37,16 +38,16 @@
   copy:
     src: "{{item.src}}" 
     dest: "{{item.dest}}"
-  with_items: "{{copy_files}}"
+  with_items: "{{APACHE_COPY}}"
   become: yes
   notify: restart httpd
   tags: apache
 
 - name: Create web application and logs directories
   file:
-    path: "{{item}}"
+    path: "{{item.path}}"
     state: directory
-  with_items: "{{webapp_directories}}"
+  with_items: "{{APACHE_FILE}}"
   become: yes
   tags: apache
 
