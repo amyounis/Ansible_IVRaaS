@@ -1,0 +1,9 @@
+LoadModule jk_module modules/mod_jk.so
+
+<IfModule mod_jk.c>
+JkWorkersFile conf/workers.properties
+JkLogFile     {{item.var1}}/mod_jk/current/mod_jk.log
+JkShmFile     {{item.var1}}/mod_jk/current/jk-runtime-status
+JkLogLevel warn
+</IfModule>
+

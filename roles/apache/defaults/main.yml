@@ -3,28 +3,66 @@
 APACHE_LINEINFILE:
  - { dest: "{{APACHE_CONF}}/conf/httpd.conf" , line: "include conf/mod_jk.conf" }
 
+
 APACHE_COPY:
- - { src: modules/ 	, dest: "{{APACHE_CONF}}/modules/"	}
- - { src: conf/		, dest: "{{APACHE_CONF}}/conf/"		}
+ - { src: modules/  , dest: "{{APACHE_CONF}}/modules/" }
+
 
 APACHE_FILE:
- - { PATH: "{{WEB_APP_BASE}}/gv-admmsgvocale-svi-{{WEB_DOMAIN}}/ROOT" 	 } 
- - { PATH: "{{WEB_APP_BASE}}/gv-authent-{{WEB_DOMAIN}}/ROOT" 	 	 }	 
- - { PATH: "{{WEB_APP_BASE}}/gv-authent-{{WEB_DOMAIN}}/admin-stp" 	 }			
- - { PATH: "{{WEB_APP_BASE}}/gv-authent-{{WEB_DOMAIN}}/stats" 	 	 }
- - { PATH: "{{WEB_APP_BASE}}/gv-authent-{{WEB_DOMAIN}}/adv1" 	 	 }
- - { PATH: "{{WEB_APP_BASE}}/gv-authent-{{WEB_DOMAIN}}/vocalmestre1" 	 }
- - { PATH: "{{WEB_APP_BASE}}/gv-provisioning-{{WEB_DOMAIN}}/ROOT"	 }
- - { PATH: "{{WEB_APP_BASE}}/gv-svifiles-{{WEB_DOMAIN}}/ROOT"		 }
- - { PATH: "{{WEB_APP_BASE}}/gv-switchingservice-{{WEB_DOMAIN}}/ROOT"	 }
- - { PATH: "{{WEB_APP_BASE}}/gv-webservices-{{WEB_DOMAIN}}/ROOT"	 }
- - { PATH: "{{WEB_LOG_BASE}}/gv-admmsgvocale-svi-{{WEB_DOMAIN}}/current" }
- - { PATH: "{{WEB_LOG_BASE}}/gv-authent-{{WEB_DOMAIN}}/current"		 }
- - { PATH: "{{WEB_LOG_BASE}}/gv-provisioning-{{WEB_DOMAIN}}/current"	 }
- - { PATH: "{{WEB_LOG_BASE}}/gv-svifiles-{{WEB_DOMAIN}}/current"	 }
- - { PATH: "{{WEB_LOG_BASE}}/gv-switchingservice-{{WEB_DOMAIN}}/current" }
- - { PATH: "{{WEB_LOG_BASE}}/gv-webservices-{{WEB_DOMAIN}}/current"	 }
- - { PATH: "{{WEB_LOG_BASE}}/mod_jk/current"				 }
+ - { dest: "{{WEB_APP_BASE}}/gv-admmsgvocale-svi-{{WEB_DOMAIN}}/ROOT"	 , state: directory }
+ - { dest: "{{WEB_APP_BASE}}/gv-authent-{{WEB_DOMAIN}}/ROOT"		 , state: directory }
+ - { dest: "{{WEB_APP_BASE}}/gv-authent-{{WEB_DOMAIN}}/admin-stp"	 , state: directory }
+ - { dest: "{{WEB_APP_BASE}}/gv-authent-{{WEB_DOMAIN}}/stats"		 , state: directory }
+ - { dest: "{{WEB_APP_BASE}}/gv-authent-{{WEB_DOMAIN}}/adv1"		 , state: directory }
+ - { dest: "{{WEB_APP_BASE}}/gv-authent-{{WEB_DOMAIN}}/vocalmestre1"	 , state: directory }
+ - { dest: "{{WEB_APP_BASE}}/gv-provisioning-{{WEB_DOMAIN}}/ROOT"	 , state: directory }
+ - { dest: "{{WEB_APP_BASE}}/gv-svifiles-{{WEB_DOMAIN}}/ROOT"		 , state: directory }
+ - { dest: "{{WEB_APP_BASE}}/gv-switchingservice-{{WEB_DOMAIN}}/ROOT"	 , state: directory }
+ - { dest: "{{WEB_APP_BASE}}/gv-webservices-{{WEB_DOMAIN}}/ROOT"	 , state: directory }
+ - { dest: "{{WEB_LOG_BASE}}/gv-admmsgvocale-svi-{{WEB_DOMAIN}}/current" , state: directory }
+ - { dest: "{{WEB_LOG_BASE}}/gv-authent-{{WEB_DOMAIN}}/current"		 , state: directory }
+ - { dest: "{{WEB_LOG_BASE}}/gv-provisioning-{{WEB_DOMAIN}}/current"	 , state: directory }
+ - { dest: "{{WEB_LOG_BASE}}/gv-svifiles-{{WEB_DOMAIN}}/current"	 , state: directory }
+ - { dest: "{{WEB_LOG_BASE}}/gv-switchingservice-{{WEB_DOMAIN}}/current" , state: directory }
+ - { dest: "{{WEB_LOG_BASE}}/gv-webservices-{{WEB_DOMAIN}}/current"	 , state: directory }
+ - { dest: "{{WEB_LOG_BASE}}/mod_jk/current"				 , state: directory }
 
 
-
+APACHE_TEMPLATE:
+ - src: mod_jk.conf.j2
+   dest: "{{APACHE_CONF}}/conf/mod_jk.conf"
+   var1: "{{WEB_LOG_BASE}}"
+ - src: workers.properties.j2
+   dest: "{{APACHE_CONF}}/conf/workers.properties"
+   var1: "{{TOMCAT_HOME}}"
+ - src: gv-authent.conf.j2
+   dest: "{{APACHE_CONF}}/conf.d/gv-authent-{{WEB_DOMAIN}}.conf"
+   var1: "{{WEB_DOMAIN}}"
+   var2: "{{WEB_APP_BASE}}"
+   var3: "{{WEB_LOG_BASE}}"
+ - src: gv-admmsgvocale-svi.conf.j2
+   dest: "{{APACHE_CONF}}/conf.d/gv-admmsgvocale-svi-{{WEB_DOMAIN}}.conf"
+   var1: "{{WEB_DOMAIN}}"
+   var2: "{{WEB_APP_BASE}}"
+   var3: "{{WEB_LOG_BASE}}"
+ - src: gv-provisioning.conf.j2
+   dest: "{{APACHE_CONF}}/conf.d/gv-provisioning-{{WEB_DOMAIN}}.conf"
+   var1: "{{WEB_DOMAIN}}"
+   var2: "{{WEB_APP_BASE}}"
+   var3: "{{WEB_LOG_BASE}}"
+ - src: gv-svifiles.conf.j2
+   dest: "{{APACHE_CONF}}/conf.d/gv-svifiles-{{WEB_DOMAIN}}.conf"
+   var1: "{{WEB_DOMAIN}}"
+   var2: "{{WEB_APP_BASE}}"
+   var3: "{{WEB_LOG_BASE}}"
+ - src: gv-switchingservice.conf.j2
+   dest: "{{APACHE_CONF}}/conf.d/gv-switchingservice-{{WEB_DOMAIN}}.conf"
+   var1: "{{WEB_DOMAIN}}"
+   var2: "{{WEB_APP_BASE}}"
+   var3: "{{WEB_LOG_BASE}}"
+ - src: gv-webservices.conf.j2
+   dest: "{{APACHE_CONF}}/conf.d/gv-webservices-{{WEB_DOMAIN}}.conf"
+   var1: "{{WEB_DOMAIN}}"
+   var2: "{{WEB_APP_BASE}}"
+   var3: "{{WEB_LOG_BASE}}"
+ 

@@ -8,15 +8,12 @@
   yum:
     name: httpd
     state: latest
-  become: yes
   tags: apache
 
-- name: Ensure http server is started and enabled
+- name: Ensure http server is enabled
   service:
     name: httpd
-    state: started
     enabled: yes
-  become: yes
   tags: apache
 
 
@@ -24,30 +21,34 @@
 #                    Add module mod_jk                      #
 #############################################################
 
-- name: Add mod_jk module in httpd.conf
+- name: Modify {{APACHE_CONF}}/conf/httpd.conf 
   lineinfile: 
     dest: "{{item.dest}}"
     line: "{{item.line}}"
   with_items: "{{APACHE_LINEINFILE}}"
-  become: yes
   notify: restart httpd
   tags: apache
 
-
-- name: Copy mod_jk module and its configuration and worker files
+- name: Copy module/ to {{APACHE_CONF}}/modules/
   copy:
     src: "{{item.src}}" 
     dest: "{{item.dest}}"
   with_items: "{{APACHE_COPY}}"
-  become: yes
   notify: restart httpd
   tags: apache
 
 - name: Create web application and logs directories
   file:
-    path: "{{item.path}}"
-    state: directory
+    dest: "{{item.dest}}"
+    state: "{{item.state}}"
   with_items: "{{APACHE_FILE}}"
-  become: yes
   tags: apache
+
+- name: Templating {{APACHE_CONF}}/conf/mod_jk.conf
+  template:
+    src: "{{item.src}}"
+    dest: "{{item.dest}}"
+  with_items: "{{APACHE_TEMPLATE}}"
+  tags: apache
+
 

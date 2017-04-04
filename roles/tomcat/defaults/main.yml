@@ -4,12 +4,12 @@ TOMCAT_LINEINFILE:
  - dest: "{{TOMCAT_CONF}}/server.xml"
    regexp: '<Connector port="8009"'
    line: >
-          '<Connector port="8009" maxThreads="800" connectionTimeout="60000" minSp  areThreads="25"
-           maxSpareThreads="75"    enableLookups="false" protocol="AJP/1.3" redirectPort="8443" />'
+          '<Connector port="8009" maxThreads="800" connectionTimeout="60000" minSpareThreads="25"
+           maxSpareThreads="75" enableLookups="false" protocol="AJP/1.3" redirectPort="8443" />'
 
  - dest: "{{TOMCAT_CONF}}/server.xml"
    regexp: '<Engine name="Catalina" defaultHost="localhost'
-   line: '<Engine name="Catalina" defaultHost="localhost"     jvmRoute="localhost">'
+   line: '<Engine name="Catalina" defaultHost="localhost" jvmRoute="localhost">'
 
  - dest: "{{TOMCAT_CONF}}/tomcat6.conf"
    regexp: 'JAVA_OPTS='
@@ -19,52 +19,45 @@ TOMCAT_LINEINFILE:
 
 
 TOMCAT_BLOCKINFILE:
- - dest: "{{TOMCAT_CONF}}/server.xml" 
-   insertafter: "</Host>"
-   block: |
-	<Host name="gv-authent-amea.dmz.cloud.mbs" appBase="/usr2/web/gv-authent-amea.dmz.cloud.mbs" unpackWARs="false" liveDeploy="false" autoDeploy="false" deployOnStartup="true" deployXML="false">
-      	</Host>
-
-	<Host name="gv-admmsgvocale-svi-amea.dmz.cloud.mbs" appBase="/usr2/web/gv-admmsgvocale-svi-amea.dmz.cloud.mbs" unpackWARs="false" liveDeploy="false" autoDeploy="false" deployOnStartup="true" deployXML="false">
-      	</Host>
-
-	<Host name="gv-switchingservice-amea.dmz.cloud.mbs" appBase="/usr2/web/gv-switchingservice-amea.dmz.cloud.mbs" unpackWARs="false" liveDeploy="false" autoDeploy="false" deployOnStartup="true" deployXML="false">
-      	</Host>
-
-	<Host name="gv-webservices-amea.dmz.cloud.mbs" appBase="/usr2/web/gv-webservices-amea.dmz.cloud.mbs" unpackWARs="false" liveDeploy="false" autoDeploy="false" deployOnStartup="true" deployXML="false">
-      	</Host>
-
-	<Host name="gv-provisioning-amea.dmz.cloud.mbs" appBase="/usr2/web/gv-provisioning-amea.dmz.cloud.mbs" unpackWARs="false" liveDeploy="false" autoDeploy="false" deployOnStartup="true" deployXML="false">
-	</Host>
-	
  - dest: "{{TOMCAT_CONF}}/tomcat-users.xml"
    insertafter: "<tomcat-users>"
-   block: |
-	<role rolename="tomcat"/>
-	<role rolename="role1"/>
-	<role rolename="manager"/>
-	<role rolename="admin"/>
-	<user username="tomcat" password="tomcat" roles="tomcat"/>
-	<user username="both" password="tomcat" roles="tomcat,role1"/>
-	<user username="role1" password="tomcat" roles="role1"/>
-	<user username="admin" password="admin" roles="tomcat,role1,admin,manager"/> 
+   marker: "<!-- {mark} ANSIBLE MANAGED BLOCK -->"
+   block: "{{ lookup('file', 'tomcat-users') }}" 
+ - dest: "{{TOMCAT_CONF}}/server.xml"
+   insertafter: 
+   marker: "<!-- {mark} ANSIBLE MANAGED BLOCK -->"
+#   block: "{{ lookup('file', 'vhosts') }}"
+   block: ' |
+         <Host name="gv-authent-amea.dmz.cloud.mbs" appBase="/usr2/web/gv-authent-amea.dmz.cloud.mbs" unpackWARs="false" liveDeploy="false" autoDeploy="false" deployOnStartup="true" deployXML="false"> 
+         </Host>
+         
+         <Host name="gv-admmsgvocale-svi-amea.dmz.cloud.mbs" appBase="/usr2/web/gv-admmsgvocale-svi-amea.dmz.cloud.mbs" unpackWARs="false" liveDeploy="false" autoDeploy="false" deployOnStartup="true" deployXML="false">
+         </Host>
 
+         <Host name="gv-switchingservice-amea.dmz.cloud.mbs" appBase="/usr2/web/gv-switchingservice-amea.dmz.cloud.mbs" unpackWARs="false" liveDeploy="false" autoDeploy="false" deployOnStartup="true" deployXML="false"> 
+         </Host>
+
+         <Host name="gv-webservices-amea.dmz.cloud.mbs" appBase="/usr2/web/gv-webservices-amea.dmz.cloud.mbs" unpackWARs="false" liveDeploy="false" autoDeploy="false" deployOnStartup="true" deployXML="false"> 
+         </Host>
+
+         <Host name="gv-provisioning-amea.dmz.cloud.mbs" appBase="/usr2/web/gv-provisioning-amea.dmz.cloud.mbs" unpackWARs="false" liveDeploy="false" autoDeploy="false" deployOnStartup="true" deployXML="false"> 
+         </Host> '
 
 TOMCAT_FILE:
- - { path: /etc/tomcat6/Catalina/gv-admmsgvocale-svi-amea.dmz.cloud.mbs , state: directory }
- - { path: /etc/tomcat6/Catalina/gv-provisioning-amea.dmz.cloud.mbs 	, state: directory }
- - { path: /etc/tomcat6/Catalina/gv-switchingservice-amea.dmz.cloud.mbs , state: directory }
- - { path: /etc/tomcat6/Catalina/gv-authent-amea.dmz.cloud.mbs 		, state: directory }
- - { path: /etc/tomcat6/Catalina/gv-webservices-amea.dmz.cloud.mbs 	, state: directory }
+ - { path: "{{TOMCAT_CONF}}/Catalina/gv-admmsgvocale-svi-{{WEB_DOMAIN}}" , state: directory }
+ - { path: "{{TOMCAT_CONF}}/Catalina/gv-provisioning-{{WEB_DOMAIN}}"	 , state: directory }
+ - { path: "{{TOMCAT_CONF}}/Catalina/gv-switchingservice-{{WEB_DOMAIN}}" , state: directory }
+ - { path: "{{TOMCAT_CONF}}/Catalina/gv-authent-{{WEB_DOMAIN}}" 	 , state: directory }
+ - { path: "{{TOMCAT_CONF}}/Catalina/gv-webservices-{{WEB_DOMAIN}}" 	 , state: directory }
 
 
 TOMCAT_COPY:
- - { src: manager.xml , dest: /usr/share/tomcat8/conf/Catalina/localhost/ 		    } 
- - { src: manager.xml , dest: /etc/tomcat8/Catalina/gv-admmsgvocale-svi-amea.dmz.cloud.mbs/ } 
- - { src: manager.xml , dest: /etc/tomcat8/Catalina/gv-provisioning-amea.dmz.cloud.mbs/	    } 
- - { src: manager.xml , dest: /etc/tomcat8/Catalina/gv-switchingservice-amea.dmz.cloud.mbs/ } 
- - { src: manager.xml , dest: /etc/tomcat8/Catalina/gv-authent-amea.dmz.cloud.mbs/ 	    } 
- - { src: manager.xml , dest: /etc/tomcat8/Catalina/gv-webservices-amea.dmz.cloud.mbs/ 	    } 
+ - { src: manager.xml , dest: "{{TOMCAT_HOME}}/conf/Catalina/localhost/" 		     } 
+ - { src: manager.xml , dest: "{{TOMCAT_CONF}}/Catalina/gv-admmsgvocale-svi-{{WEB_DOMAIN}}/" } 
+ - { src: manager.xml , dest: "{{TOMCAT_CONF}}/Catalina/gv-provisioning-{{WEB_DOMAIN}}/"     } 
+ - { src: manager.xml , dest: "{{TOMCAT_CONF}}/Catalina/gv-switchingservice-{{WEB_DOMAIN}}/" } 
+ - { src: manager.xml , dest: "{{TOMCAT_CONF}}/Catalina/gv-authent-{{WEB_DOMAIN}}/" 	     } 
+ - { src: manager.xml , dest: "{{TOMCAT_CONF}}/Catalina/gv-webservices-{{WEB_DOMAIN}}/"      } 
 
 TOMCAT_UNARCHIVE: 
  - { src: "{{WEB_ZIP_FILENAME}}.zip" , dest: "{{EXTRACT_DIR}}" } 

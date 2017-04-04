@@ -1,0 +1,47 @@
+<VirtualHost *:80>
+        ServerName gv-svifiles-{{item.var1}}
+
+        DocumentRoot {{item.var2}}/gv-svifiles-{{item.var1}}/ROOT/
+
+        ErrorLog {{item.var3}}/gv-svifiles-{{item.var1}}/current/error.log
+        ErrorLog syslog:local2
+        CustomLog {{item.var3}}/gv-svifiles-{{item.var1}}/current/access.log combined
+        CustomLog "| logger -p 'local2.info' -t '[gv-svifiles-amea]'" combined
+
+        DirectoryIndex index.html index.htm index.vxml
+
+        Alias /services/ /mntcvf/web_rw/gv-data/services/
+        <Directory /mntcvf/web_rw/gv-data/services/>
+               Options FollowSymLinks
+               AllowOverride None
+               Order allow,deny
+               Allow from all
+        </Directory>
+
+        <Directory />
+                Options FollowSymLinks
+        </Directory>
+
+        <Directory {{item.var2}}/gv-svifiles-{{item.var1}}/ROOT/>
+                Options Indexes FollowSymLinks MultiViews
+                AllowOverride all
+                Order allow,deny
+                allow from all
+        </Directory>
+
+        ExpiresActive On
+             ExpiresDefault "access plus 1 minutes"
+
+        <Location /static>
+                ExpiresDefault "access plus 1 hours"
+        </Location>
+
+# IP HAproxy dédié ITG
+        <IfModule rpaf_module>
+                RPAFenable On
+                RPAFsethostname Off
+                RPAFproxy_ips 10.200.224.77 10.200.224.78
+        </IfModule>
+
+</VirtualHost>
+

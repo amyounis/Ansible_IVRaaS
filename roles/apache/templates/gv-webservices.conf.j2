@@ -1,0 +1,54 @@
+<VirtualHost *:80>
+        ServerName gv-webservices-{{item.var1}}
+
+        DocumentRoot {{item.var2}}/gv-webservices-{{item.var1}}/ROOT/
+
+        ErrorLog {{item.var3}}/gv-webservices-{{item.var1}}/current/error.log
+        ErrorLog syslog:local2
+        CustomLog {{item.var3}}/gv-webservices-{{item.var1}}/current/access.log combined
+        CustomLog "| logger -p 'local2.info' -t '[gv-webservices-amea]'" combined
+
+        #KeepAlive off
+
+        # Empecher d'aller dans le repertoire WEB-INF
+        <Location /WEB-INF/>
+                #AllowOverride None
+                deny from all
+        </Location>
+
+        # Empecher d'aller dans le repertoire META-INF
+        <Location /META-INF/>
+                #AllowOverride None
+                deny from all
+        </Location>
+
+        #Empeche d'aller dans /manager/
+        <Location /manager/>
+                #AllowOverride None
+                deny from all
+        </Location>
+
+        DirectoryIndex index.jsp index.html index.htm
+
+        <Directory />
+                Options  FollowSymLinks ExecCGI
+        </Directory>
+
+        JkMount /* localhost_ajp13
+
+        <Directory "{{item.var2}}/gv-webservices-{{item.var1}}/ROOT/">
+                Options  FollowSymLinks
+                AllowOverride all
+                order allow,deny
+                allow from all
+        </Directory>
+
+# IP HAproxy dédié ITG
+        <IfModule rpaf_module>
+                RPAFenable On
+                RPAFsethostname Off
+                RPAFproxy_ips 10.200.224.77 10.200.224.78
+        </IfModule>
+
+</VirtualHost>
+

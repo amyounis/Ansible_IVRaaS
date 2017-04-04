@@ -6,7 +6,6 @@
   yum:
     name: tomcat6
     state: latest
-  become: yes
   tags: tomcat
 
 - name: Ensure tomcat server is started and enabled
@@ -14,7 +13,6 @@
     name: tomcat6
     state: started
     enabled: yes
-  become: yes
   tags: tomcat
 
 #########################################################################################################################
@@ -25,7 +23,6 @@
     regexp: "{{item.regexp}}"
     line: "{{item.line}}"
   with_items: "{{TOMCAT_LINEINFILE}}"
-  become: yes
   notify: restart tomcat
   tags: tomcat
 
@@ -33,9 +30,9 @@
   blockinfile:
     dest: "{{item.dest}}"
     insertafter: "{{item.insertafter}}"
+    marker: "{{item.marker}}"
     block: "{{item.block}}"
   with_items: "{{TOMCAT_BLOCKINFILE}}"
-  become: yes
   notify: restart tomcat
   tags: tomcat
 
@@ -44,7 +41,6 @@
     path: "{{item.path}}"
     state: directory
   with_items: "{{TOMCAT_FILE}}"
-  become: yes
   notify: restart tomcat
   tags: tomcat
 
@@ -53,7 +49,6 @@
     src: "{{item.src}}"
     dest: "{{item.dest}}"
   with_items: "{{TOMCAT_COPY}}"
-  become: yes
   notify: restart tomcat
   tags: tomcat
 
@@ -71,15 +66,13 @@
 #    chdir: /tmp/IVRaaS/webapp
 #    creates: "{{item.dir}}/META-INF"
 #  with_items: "{{WEBAPPS}}"
-#  become: yes
 #  tags: tomcat
 
-- name: Deploy webapps in its place
-  shell: MODULE="{{item.NAME}}" PACKAGE="{{EXTRACT_DIR}}""{{WEB_ZIP_FILENAME}}"/"{{item.NAME}}"-"{{item.TYPE}}"-"{{item.VERSION}}".tar.gz ./web.sh >> /tmp/web.sh_output 2>&1
-  args:
-    chdir: "{{EXTRACT_DIR}}"
-#    creates: "{{item.dir}}/META-INF"
-  with_items: "{{WEBAPPS}}"
-  become: yes
-  tags: tomcat_test
+#- name: Deploy webapps in its place
+#  shell: MODULE="{{item.NAME}}" PACKAGE="{{EXTRACT_DIR}}""{{WEB_ZIP_FILENAME}}"/"{{item.NAME}}"-"{{item.TYPE}}"-"{{item.VERSION}}".tar.gz ./web.sh >> /tmp/web.sh_output 2>&1
+#  args:
+#    chdir: "{{EXTRACT_DIR}}"
+##    creates: "{{item.dir}}/META-INF"
+#  with_items: "{{WEBAPPS}}"
+#  tags: tomcat_test
 

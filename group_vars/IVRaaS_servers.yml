@@ -38,50 +38,12 @@ WEB_APPS:
  - { NAME: gv-vocalmestre	, VERSION: V12.4.12  }
 
 
-WEB_APPS_OBJS:
- - { NAME: "{{WEB_APPS.0.NAME}}" , VERSION: "{{WEB_APP.0.VERSION}}" , PATH: /ROOT	  }
- - { NAME: "{{WEB_APPS.1.NAME}}" , VERSION: "{{WEB_APP.1.VERSION}}" , PATH: /ROOT	  }
- - { NAME: "{{WEB_APPS.2.NAME}}" , VERSION: "{{WEB_APP.2.VERSION}}" , PATH: /ROOT 	  }
- - { NAME: "{{WEB_APPS.3.NAME}}" , VERSION: "{{WEB_APP.3.VERSION}}" , PATH: /ROOT 	  }
- - { NAME: "{{WEB_APPS.4.NAME}}" , VERSION: "{{WEB_APP.4.VERSION}}" , PATH: /ROOT 	  }
- - { NAME: "{{WEB_APPS.5.NAME}}" , VERSION: "{{WEB_APP.5.VERSION}}" , PATH: /ROOT	  }
- - { NAME: "{{WEB_APPS.6.NAME}}" , VERSION: "{{WEB_APP.6.VERSION}}" , PATH: /admin-stp	  }
- - { NAME: "{{WEB_APPS.7.NAME}}" , VERSION: "{{WEB_APP.7.VERSION}}" , PATH: /adv1	  }
- - { NAME: "{{WEB_APPS.8.NAME}}" , VERSION: "{{WEB_APP.8.VERSION}}" , PATH: /stats	  }
- - { NAME: "{{WEB_APPS.9.NAME}}" , VERSION: "{{WEB_APP.9.VERSION}}" , PATH: /vocalmestre1 }
-
-
 
 ##############################################################################
 
 APACHE_HOME: /var/www
 APACHE_CONF: /etc/httpd
 
-APACHE_LINEINFILE:
- - { dest: "{{APACHE_CONF}}/conf/httpd.conf" , line: "include conf/mod_jk.conf" }
-
-APACHE_COPY:
- - { src: modules/ 	, dest: "{{APACHE_CONF}}/modules/"	}
- - { src: conf/		, dest: "{{APACHE_CONF}}/conf/"		}
-
-APACHE_FILE:
-# - { PATH: /usr2/web/gv-admmsgvocale-svi-amea.dmz.cloud.mbs/ROOT 		} 
-# - { PATH: /usr2/web/gv-authent-amea.dmz.cloud.mbs/ROOT 	 		}	 
-# - { PATH: /usr2/web/gv-authent-amea.dmz.cloud.mbs/admin-stp 	 		}			
-# - { PATH: /usr2/web/gv-authent-amea.dmz.cloud.mbs/stats 	 		}
-# - { PATH: /usr2/web/gv-authent-amea.dmz.cloud.mbs/adv1 	 		}
-# - { PATH: /usr2/web/gv-authent-amea.dmz.cloud.mbs/vocalmestre1 		}
-# - { PATH: /usr2/web/gv-provisioning-amea.dmz.cloud.mbs/ROOT			}
-# - { PATH: /usr2/web/gv-svifiles-amea.dmz.cloud.mbs/ROOT			}
-# - { PATH: /usr2/web/gv-switchingservice-amea.dmz.cloud.mbs/ROOT		}
-# - { PATH: /usr2/web/gv-webservices-amea.dmz.cloud.mbs/ROOT			}
-# - { PATH: /usr2/logs/apache/gv-admmsgvocale-svi-amea.dmz.cloud.mbs/current	}
-# - { PATH: /usr2/logs/apache/gv-authent-amea.dmz.cloud.mbs/current		}
-# - { PATH: /usr2/logs/apache/gv-provisioning-amea.dmz.cloud.mbs/current		}
-# - { PATH: /usr2/logs/apache/gv-svifiles-amea.dmz.cloud.mbs/current		}
-# - { PATH: /usr2/logs/apache/gv-switchingservice-amea.dmz.cloud.mbs/current	}
-# - { PATH: /usr2/logs/apache/gv-webservices-amea.dmz.cloud.mbs/current		}
- - { PATH: /usr2/logs/apache/mod_jk/current					}
 
 
 ##############################################################################
