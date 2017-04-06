@@ -1,11 +1,11 @@
 <VirtualHost *:80>
-        ServerName gv-authent-{{item.var1}}
+        ServerName {{item.var1}}
 
-        DocumentRoot {{item.var2}}/gv-authent-{{item.var1}}/ROOT/
+        DocumentRoot {{item.var2}}/{{item.var1}}/ROOT/
 
-        ErrorLog {{item.var3}}/gv-authent-{{item.var1}}/current/error.log
+        ErrorLog {{item.var3}}/{{item.var1}}/current/error.log
         ErrorLog syslog:local2
-        CustomLog {{item.var3}}/gv-authent-{{item.var1}}/current/access.log combined
+        CustomLog {{item.var3}}/{{item.var1}}/current/access.log combined
         CustomLog "| logger -p 'local2.info' -t '[gv-authent-amea]'" combined
 
 
@@ -45,7 +45,7 @@
         ExpiresActive On
         ExpiresByType image/* "access plus 1 days"
 
-        <Directory "{{item.var2}}/gv-authent-{{item.var1}}/ROOT/">
+        <Directory "{{item.var2}}/{{item.var1}}/ROOT/">
                 Options  FollowSymLinks
                 AllowOverride all
                 order allow,deny

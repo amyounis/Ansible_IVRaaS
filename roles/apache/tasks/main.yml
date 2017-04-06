@@ -18,37 +18,35 @@
 
 
 #############################################################
-#                    Add module mod_jk                      #
+#               Apache server Configuration                 #
 #############################################################
 
-- name: Modify {{APACHE_CONF}}/conf/httpd.conf 
-  lineinfile: 
-    dest: "{{item.dest}}"
-    line: "{{item.line}}"
-  with_items: "{{APACHE_LINEINFILE}}"
-  notify: restart httpd
-  tags: apache
-
-- name: Copy module/ to {{APACHE_CONF}}/modules/
-  copy:
-    src: "{{item.src}}" 
-    dest: "{{item.dest}}"
-  with_items: "{{APACHE_COPY}}"
-  notify: restart httpd
-  tags: apache
-
-- name: Create web application and logs directories
+- name: File-- Create web application and logs directories
   file:
     dest: "{{item.dest}}"
     state: "{{item.state}}"
   with_items: "{{APACHE_FILE}}"
   tags: apache
 
-- name: Templating {{APACHE_CONF}}/conf/mod_jk.conf
+- name: Copy-- Copy  modules/ to {{APACHE_CONF}}/modules/
+  copy:
+    src: "{{item.src}}" 
+    dest: "{{item.dest}}"
+  with_items: "{{APACHE_COPY}}"
+  tags: apache
+
+- name: Template-- Templating mod_jk.conf, worker.properties and apache virtual hosts configuration files
   template:
     src: "{{item.src}}"
     dest: "{{item.dest}}"
   with_items: "{{APACHE_TEMPLATE}}"
+  notify: restart httpd
   tags: apache
 
+- name: Lineinfile-- Modify httpd.conf 
+  lineinfile: 
+    dest: "{{item.dest}}"
+    line: "{{item.line}}"
+  with_items: "{{APACHE_LINEINFILE}}"
+  tags: apache
 

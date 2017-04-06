@@ -1,11 +1,11 @@
 <VirtualHost *:80>
-        ServerName gv-admmsgvocale-svi-{{item.var1}}
+        ServerName {{item.var1}}
 
-        DocumentRoot {{item.var2}}/gv-admmsgvocale-svi-{{item.var1}}/ROOT/
+        DocumentRoot {{item.var2}}/{{item.var1}}/ROOT/
 
-        ErrorLog {{item.var3}}}/gv-admmsgvocale-svi-{{item.var1}}/current/error.log
+        ErrorLog {{item.var3}}}/{{item.var1}}/current/error.log
         ErrorLog syslog:local2
-        CustomLog {{item.var3}}}/gv-admmsgvocale-svi-{{item.var1}}/current/access.log combined
+        CustomLog {{item.var3}}}/{{item.var1}}/current/access.log combined
         CustomLog "| logger -p 'local2.info' -t '[gv-admmsgvocale-svi.dmz]'" combined
 
 
@@ -48,7 +48,7 @@
         JkUnMount /*.srg localhost_ajp13
         JkUnMount /*.wav localhost_ajp13
 
-        <Directory "{{item.var2}}/gv-admmsgvocale-svi-{{item.var1}}/ROOT/">
+        <Directory "{{item.var2}}/{{item.var1}}/ROOT/">
                 Options  FollowSymLinks
                 AllowOverride all
                 order allow,deny

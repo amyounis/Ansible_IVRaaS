@@ -1,11 +1,11 @@
 <VirtualHost *:80>
-        ServerName gv-svifiles-{{item.var1}}
+        ServerName {{item.var1}}
 
-        DocumentRoot {{item.var2}}/gv-svifiles-{{item.var1}}/ROOT/
+        DocumentRoot {{item.var2}}/{{item.var1}}/ROOT/
 
-        ErrorLog {{item.var3}}/gv-svifiles-{{item.var1}}/current/error.log
+        ErrorLog {{item.var3}}/{{item.var1}}/current/error.log
         ErrorLog syslog:local2
-        CustomLog {{item.var3}}/gv-svifiles-{{item.var1}}/current/access.log combined
+        CustomLog {{item.var3}}/{{item.var1}}/current/access.log combined
         CustomLog "| logger -p 'local2.info' -t '[gv-svifiles-amea]'" combined
 
         DirectoryIndex index.html index.htm index.vxml
@@ -22,7 +22,7 @@
                 Options FollowSymLinks
         </Directory>
 
-        <Directory {{item.var2}}/gv-svifiles-{{item.var1}}/ROOT/>
+        <Directory {{item.var2}}/{{item.var1}}/ROOT/>
                 Options Indexes FollowSymLinks MultiViews
                 AllowOverride all
                 Order allow,deny

@@ -1,31 +1,33 @@
 ---
 
 #########################################################################################################################
+#						Tomcat installation  						 	#
+#########################################################################################################################
 
 - name: Ensure tomcat is installed
   yum:
     name: tomcat6
     state: latest
-#  tags: tomcat
+  tags: tomcat
 
 - name: Ensure tomcat server is started and enabled
   service:
     name: tomcat6
-    state: started
     enabled: yes
-#  tags: tomcat
+  tags: tomcat
 
 #########################################################################################################################
+#						Tomcat configurations							#
+#########################################################################################################################
 
-- name: Create virtual hosts dirs under  {{TOMCAT_CONF}}/Catalina
+- name: File-- Create virtual hosts dirs under  {{TOMCAT_CONF}}/Catalina and dirs to extract webapps in {{EXTRACT_DIR}}
   file:
     path: "{{item.path}}"
     state: "{{item.state}}"
   with_items: "{{TOMCAT_FILE}}"
-#  notify: restart tomcat
   tags: tomcat
 
-- name: Unarchive {{WEB_ZIP_FILENAME}}.zip into {{EXTRACT_DIR}}
+- name: Unarchive-- extract {{WEB_ZIP_FILENAME}}.zip and webapps into {{EXTRACT_DIR}}
   unarchive:
     src: "{{item.src}}"
     dest: "{{item.dest}}"
@@ -33,54 +35,38 @@
   with_items: "{{TOMCAT_UNARCHIVE}}"
   tags: tomcat
 
-- name: Sync
+- name: Synchronize-- copy conf/ to META-INF
   synchronize:
     src: "{{item.src}}"
     dest: "{{item.dest}}"
   delegate_to: "{{ inventory_hostname }}"
-  with_items: "{{TOMCAT_SYNC}}"
+  with_items: "{{TOMCAT_SYNCHRONIZE}}"
   tags: tomcat
 
-- name: Copy tomcat manager/ app tp {{TOMCAT_HOME}}/webapps/
+- name: Copy-- Copy tomcat manager/ app to {{TOMCAT_HOME}}/webapps/ , manager.xml under vhosts and context.xml to <appname>.xml 
   copy:
     src: "{{item.src}}"
     dest: "{{item.dest}}"
     remote_src: "{{item.remote_src}}"
   with_items: "{{TOMCAT_COPY}}"
-#  notify: restart tomcat
   tags: tomcat
 
-- name: Modify {{TOMCAT_CONF}}/server.xml and {{TOMCAT_CONF}}/tomcat6.conf (customize thread count) and (customize memory usage)
+- name: Lineinfile-- Modify {{TOMCAT_CONF}}/server.xml and {{TOMCAT_CONF}}/tomcat6.conf 
   lineinfile:
     dest: "{{item.dest}}"
     regexp: "{{item.regexp}}"
     line: "{{item.line}}"
   with_items: "{{TOMCAT_LINEINFILE}}"
-#  notify: restart tomcat
+  notify: restart tomcat
   tags: tomcat
 
-- name: Modify {{TOMCAT_CONF}}/server.xml to add virtual hosts and {{TOMCAT_CONF}}/tomcat-users.xml to add users and roles 
+- name: Blockinfile-- Modify {{TOMCAT_CONF}}/server.xml to add virtual hosts and {{TOMCAT_CONF}}/tomcat-users.xml to add users and roles 
   blockinfile:
     dest: "{{item.dest}}"
     insertafter: "{{item.insertafter}}"
     marker: "{{item.marker}}"
     block: "{{item.block}}"
   with_items: "{{TOMCAT_BLOCKINFILE}}"
-#  notify: restart tomcat
+  notify: restart tomcat
   tags: tomcat
-#- name: Place webapps in its place
-#  shell: tar xfz "{{item.name}}"*.tar.gz && unzip binpackage/*.war -d "{{item.dir}}" && cp -r conf/. "{{item.dir}}"/META-INF && find . ! -name '*.tar.gz' -delete
-#  args:
-#    chdir: /tmp/IVRaaS/webapp
-#    creates: "{{item.dir}}/META-INF"
-#  with_items: "{{WEBAPPS}}"
-#  tags: tomcat
-
-#- name: Deploy webapps in its place
-#  shell: MODULE="{{item.NAME}}" PACKAGE="{{EXTRACT_DIR}}""{{WEB_ZIP_FILENAME}}"/"{{item.NAME}}"-"{{item.TYPE}}"-"{{item.VERSION}}".tar.gz ./web.sh >> /tmp/web.sh_output 2>&1
-#  args:
-#    chdir: "{{EXTRACT_DIR}}"
-##    creates: "{{item.dir}}/META-INF"
-#  with_items: "{{WEBAPPS}}"
-#  tags: tomcat_test
 

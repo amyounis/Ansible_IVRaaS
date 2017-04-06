@@ -3,7 +3,7 @@
 #
 ###############################################################################
 
-EXTRACT_DIR: /tmp/IVRaaS
+EXTRACT_DIR: /images/IVRaaS
 
 ################################################################################
 #
@@ -38,47 +38,12 @@ WEB_APPS:
  - { name: gv-vocalmestre	, version: V12.4.12  , vhost: gv-authent-amea.dmz.cloud.mbs 	     } 
 
 
-#WEBAPPS:
-# - gv-admmsgvocale-svi
-# - gv-authent
-# - gv-provisioning
-# - gv-switchingservice
-# - gv-webservices
-# - gv-svifiles
-# - gv-admin-stp
-# - gv-adv
-# - gv-stats
-# - gv-vocalmestre
-#
-#WEBAPPS_VERSIONS:
-# - V12.4.12
-# - V12.4.12
-# - V1.1.0
-# - V1.12.1
-# - V12.4.12
-# - V12.4.12
-# - V2.10.5.1
-# - V12.4.12
-# - V2.10.5.1
-# - V12.4.12
-#
-#VHOSTS:
-# - gv-authent-amea.dmz.cloud.mbs
-# - gv-provisioning-amea.dmz.cloud.mbs
-# - gv-switchingservice-amea.dmz.cloud.mbs
-# - gv-webservices-amea.dmz.cloud.mbs
-
-
-
 ##############################################################################
 
 APACHE_HOME: /var/www
 APACHE_CONF: /etc/httpd
 
-
-
 ##############################################################################
-
 
 TOMCAT_VERSION: 6
 TOMCAT_HOME: /usr/share/tomcat{{TOMCAT_VERSION}}
@@ -87,49 +52,24 @@ TOMCAT_CONF: /etc/tomcat{{TOMCAT_VERSION}}
 #
 ###############################################################################
 
-# Batches root directory
-BATCH_ROOT_DIR: /usr2/batch/
+BATCH_APP_BASE: /usr2/batch
 
-# Batch zip filename
 BATCH_ZIP_FILENAME: batch
 
-# Batche modules names
 BATCHES:
- - { NAME: convPcnV2 			, TYPE: batch	  , VERSION: V2.1.0    }
- - { NAME: gv-batch 			, TYPE: cronbatch , VERSION: V12.4.12  }
- - { NAME: gv-batch-stp			, TYPE: cronbatch , VERSION: V2.10.5.1 }
- - { NAME: gv-tools			, TYPE: cronbatch , VERSION: V12.4.12  }
- - { NAME: stats-calculator		, TYPE: batch 	  , VERSION: V2.1.0    }
- - { NAME: stats-manager		, TYPE: batch 	  , VERSION: V2.1.0    }
- - { NAME: stats-manager-reintegration	, TYPE: batch 	  , VERSION: V2.1.0    }
- - { NAME: stats-rapatriement		, TYPE: cronbatch , VERSION: V2.1.0    }
- - { NAME: stats-utilities		, TYPE: cronbatch , VERSION: V2.1.0    }
+ - { name: convPcnV2 			, type: batch	  , version: V2.1.0    }
+ - { name: gv-batch 			, type: cronbatch , version: V12.4.12  }
+ - { name: gv-batch-stp			, type: cronbatch , version: V2.10.5.1 }
+ - { name: gv-tools			, type: cronbatch , version: V12.4.12  }
+ - { name: stats-calculator		, type: batch 	  , version: V2.1.0    }
+ - { name: stats-manager		, type: batch 	  , version: V2.1.0    }
+ - { name: stats-manager-reintegration	, type: batch 	  , version: V2.1.0    }
+ - { name: stats-rapatriement		, type: cronbatch , version: V2.1.0    }
+ - { name: stats-utilities		, type: cronbatch , version: V2.1.0    }
 
 BATCH_STARTUP:
  - { SERVICE: gvStatCalculator	, SRC: /usr2/batch/stats-calculator/batch/bin/init.d/gvStatCalculator	}
  - { SERVICE: gvStatManager	, SRC: /usr2/batch/stats-manager/batch/bin/init.d/gvStatManager		}
  - { SERVICE: convPcnV2 	, SRC: /usr2/batch/convPcnV2/batch/bin/init.d/convPcnV2			}
 
-zzzzzzzzzzzzTOMCAT_UNARCHIVE:
- - { src: "{{WEB_ZIP_FILENAME}}.zip",dest: "{{EXTRACT_DIR}}" , remote_src: no }
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.0.name}}-webapp-{{WEB_APPS.0.version}}.tar.gz",dest: "{{EXTRACT_DIR}}/{{WEB_APPS.0.name}}" , remote_src: yes}
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.1.name}}-webapp-{{WEB_APPS.1.version}}.tar.gz",dest: "{{EXTRACT_DIR}}/{{WEB_APPS.1.name}}" , remote_src: yes}
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.2.name}}-webapp-{{WEB_APPS.2.version}}.tar.gz",dest: "{{EXTRACT_DIR}}/{{WEB_APPS.2.name}}" , remote_src: yes}
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.3.name}}-webapp-{{WEB_APPS.3.version}}.tar.gz",dest: "{{EXTRACT_DIR}}/{{WEB_APPS.3.name}}" , remote_src: yes}
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.4.name}}-webapp-{{WEB_APPS.4.version}}.tar.gz",dest: "{{EXTRACT_DIR}}/{{WEB_APPS.4.name}}" , remote_src: yes}
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.5.name}}-webapp-{{WEB_APPS.5.version}}.tar.gz",dest: "{{EXTRACT_DIR}}/{{WEB_APPS.5.name}}" , remote_src: yes}
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.6.name}}-webapp-{{WEB_APPS.6.version}}.tar.gz",dest: "{{EXTRACT_DIR}}/{{WEB_APPS.6.name}}" , remote_src: yes}
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.7.name}}-webapp-{{WEB_APPS.7.version}}.tar.gz",dest: "{{EXTRACT_DIR}}/{{WEB_APPS.7.name}}" , remote_src: yes}
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.8.name}}-webapp-{{WEB_APPS.8.version}}.tar.gz",dest: "{{EXTRACT_DIR}}/{{WEB_APPS.8.name}}" , remote_src: yes}
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.9.name}}-webapp-{{WEB_APPS.9.version}}.tar.gz",dest: "{{EXTRACT_DIR}}/{{WEB_APPS.9.name}}" , remote_src: yes}
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.0.name}}/binpackage/{{WEB_APPS.0.name}}.war" , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.0.name}}" , remote_src: yes}
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.1.name}}/binpackage/{{WEB_APPS.1.name}}.war" , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.1.name}}" , remote_src: yes}
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.2.name}}/binpackage/{{WEB_APPS.2.name}}.war" , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.2.name}}" , remote_src: yes}
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.3.name}}/binpackage/{{WEB_APPS.3.name}}.war" , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.3.name}}" , remote_src: yes}
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.4.name}}/binpackage/{{WEB_APPS.4.name}}.war" , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.4.name}}" , remote_src: yes}
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.5.name}}/binpackage/{{WEB_APPS.5.name}}.war" , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.5.name}}" , remote_src: yes}
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.6.name}}/binpackage/{{WEB_APPS.6.name}}.war" , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.6.name}}" , remote_src: yes}
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.7.name}}/binpackage/{{WEB_APPS.7.name}}.war" , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.7.name}}" , remote_src: yes}
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.8.name}}/binpackage/{{WEB_APPS.8.name}}.war" , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.8.name}}" , remote_src: yes}
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.9.name}}/binpackage/{{WEB_APPS.9.name}}.war" , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.9.name}}" , remote_src: yes}
 

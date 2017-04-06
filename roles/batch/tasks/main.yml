@@ -1,111 +1,125 @@
 ---
-- name: MYSQL | install mysql client and server
+
+#################################################################################
+#										#
+#################################################################################
+
+- name: Yum-- install mysql client and server
   yum:
     name:
      - mysql
      - mysql-devel
     state: latest
-  become: yes
 #  tags: batch
 
-- name: Create user stats 
-  user:
-    name: stats
-  become: yes
-  tags: batch
+#################################################################################
+#										#
+#################################################################################
 
-- name: Create user serveur
-  user:
-    name: serveur
-  become: yes
-  tags: batch
-
-- name: Create group tomcat gid 91
+- name: Group-- Create groups stats,serveur and tomcat
   group:
-    name: tomcat
-    gid: 91
-    state: present
-  become: yes
+    name: "{{item.name}}"
+    gid: "{{item.gid}}"
+  with_items: "{{BATCH_GROUP}}"
   tags: batch
 
-- name: Cerate user tomcat uid 91
-  user: 
-    name: tomcat
-    uid: 91
-    group: tomcat
-  become: yes
+- name: User-- Create users stats,serveur and tomcat 
+  user:
+    name: "{{item.name}}"
+    uid: "{{item.uid}}"
+    group: "{{item.group}}" 
+  with_items: "{{BATCH_USER}}"
   tags: batch
 
-- name: Create web application and logs directories
+- name: File-- Create batches and stats directories
   file:
     path: "{{item.path}}"
-    state: directory
     owner: "{{item.owner}}"
-  with_items: "{{batch_directories}}"
-  become: yes
+    group: "{{item.group}}"
+    state: "{{item.state}}"
+  with_items: "{{BATCH_FILE_1}}"
   tags: batch
 
-- name: Copy the libperl.zip to {{EXTRACT_DIR}}
-  copy:
-    src: libperl.zip
-    dest: "{{EXTRACT_DIR}}"
-  become: yes
+- name: Unarchive-- extract libperl.zip and batches   
+  unarchive:
+    src: "{{item.src}}"
+    dest: "{{item.dest}}"
+    remote_src: "{{item.remote_src}}"
+  with_items: "{{BATCH_UNARCHIVE}}"
   tags: batch
 
-- name: Unzip {{EXTRACT_DIR}}libperl.zip into /usr2/batch/libperl
-  command : unzip "{{EXTRACT_DIR}}"libperl.zip 
-  args:
-    chdir: /usr2/batch/
-    creates: /usr2/batch/libperl/Algorithm/Diff/XS.pm
-  become: yes
+- name: Synchronize-- copy conf/ to etc/
+  synchronize:
+    src: "{{item.src}}"
+    dest: "{{item.dest}}"
+  delegate_to: "{{ inventory_hostname }}"
+  with_items: "{{BATCH_SYNCHRONIZE}}"
+  tags: batch
+
+- name: File-- Set owner and group for synchronized files and directories
+  file:
+    path: "{{item.path}}"
+    owner: "{{item.owner}}"
+    group: "{{item.group}}"
+    recurse: "{{item.recurse}}"
+  with_items: "{{BATCH_FILE_2}}"
+  tags: batch
+
+- name: File-- Set owner and group for synchronized files and directories
+  file:
+    src: "{{item.src}}"
+    dest: "{{item.dest}}"
+    owner: "{{item.owner}}"
+    group: "{{item.group}}"
+    state: "{{item.state}}"
+  with_items: "{{BATCH_FILE_3}}"
   tags: batch
 
 - name: Export environment variable of stats user
   lineinfile:
      dest: /home/stats/.bashrc
-     line: export SHARED_LIB_PERL=/usr2/batch/libperl
-  become: yes
+     line: "export SHARED_LIB_PERL={{BATCH_APP_BASE}}/libperl"
   tags: batch
 
-- name: Unarchive {{BATCH_ZIP_FILENAME}}.zip into {{EXTRACT_DIR}}
-  unarchive:
-    src: "{{BATCH_ZIP_FILENAME}}.zip"
-    dest: "{{EXTRACT_DIR}}"
-  tags: batch
-
-- name: Copy batch.sh to {{EXTRACT_DIR}}
-  copy:
-    src: batch.sh
-    dest: "{{EXTRACT_DIR}}"
-    mode: 0550
-  become: yes
-  tags: batch
- 
-- name: Place batches in its place
-  shell: MODULE="{{item.NAME}}" FULL_FILENAME="{{EXTRACT_DIR}}""{{BATCH_ZIP_FILENAME}}"/"{{item.NAME}}"-"{{item.TYPE}}"-"{{item.VERSION}}".tar.gz ./batch.sh >> /tmp/batch.sh_output 2>&1
-  args:
-    chdir: "{{EXTRACT_DIR}}"
-#    creates: "{{item.dir}}/META-INF"
-  with_items: "{{BATCHES}}"
-  become: yes
-  tags: batch
-
-- name: Copy files from foo to bar
-  copy: 
-    remote_src: True 
-    src: "{{item.SRC}}"
-    dest: /etc/init.d/
-    mode: 0700
-  with_items: "{{BATCH_STARTUP}}"
-  become: yes 
-  tags: batch
-
-- name: Ensure Batch startup scripts are started and enabled
-  service:
-    name: "{{item.SERVICE}}"
-    state: started
-    enabled: yes
-  with_items: "{{BATCH_STARTUP}}"
-  become: yes
-  tags: batch
+#- name: Unarchive {{BATCH_ZIP_FILENAME}}.zip into {{EXTRACT_DIR}}
+#  unarchive:
+#    src: "{{BATCH_ZIP_FILENAME}}.zip"
+#    dest: "{{EXTRACT_DIR}}"
+#  tags: batch
+#
+#- name: Copy batch.sh to {{EXTRACT_DIR}}
+#  copy:
+#    src: batch.sh
+#    dest: "{{EXTRACT_DIR}}"
+#    mode: 0550
+#  become: yes
+#  tags: batch
+# 
+#- name: Place batches in its place
+#  shell: MODULE="{{item.NAME}}" FULL_FILENAME="{{EXTRACT_DIR}}""{{BATCH_ZIP_FILENAME}}"/"{{item.NAME}}"-"{{item.TYPE}}"-"{{item.VERSION}}".tar.gz ./batch.sh >> /tmp/batch.sh_output 2>&1
+#  args:
+#    chdir: "{{EXTRACT_DIR}}"
+##    creates: "{{item.dir}}/META-INF"
+#  with_items: "{{BATCHES}}"
+#  become: yes
+#  tags: batch
+#
+#- name: Copy files from foo to bar
+#  copy: 
+#    remote_src: True 
+#    src: "{{item.SRC}}"
+#    dest: /etc/init.d/
+#    mode: 0700
+#  with_items: "{{BATCH_STARTUP}}"
+#  become: yes 
+#  tags: batch
+#
+#- name: Ensure Batch startup scripts are started and enabled
+#  service:
+#    name: "{{item.SERVICE}}"
+#    state: started
+#    enabled: yes
+#  with_items: "{{BATCH_STARTUP}}"
+#  become: yes
+#  tags: batch
 

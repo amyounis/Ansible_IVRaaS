@@ -1,21 +1,21 @@
 ---
 
 TOMCAT_FILE:
- - { path: "{{TOMCAT_CONF}}/Catalina/gv-admmsgvocale-svi-{{WEB_DOMAIN}}" , state: directory }
- - { path: "{{TOMCAT_CONF}}/Catalina/gv-provisioning-{{WEB_DOMAIN}}"	 , state: directory }
- - { path: "{{TOMCAT_CONF}}/Catalina/gv-switchingservice-{{WEB_DOMAIN}}" , state: directory }
- - { path: "{{TOMCAT_CONF}}/Catalina/gv-authent-{{WEB_DOMAIN}}" 	 , state: directory }
- - { path: "{{TOMCAT_CONF}}/Catalina/gv-webservices-{{WEB_DOMAIN}}" 	 , state: directory }
- - { path: "{{EXTRACT_DIR}}/{{WEB_APPS.0.name}}" 	 		 , state: directory }
- - { path: "{{EXTRACT_DIR}}/{{WEB_APPS.1.name}}" 	 		 , state: directory }
- - { path: "{{EXTRACT_DIR}}/{{WEB_APPS.2.name}}" 	 		 , state: directory }
- - { path: "{{EXTRACT_DIR}}/{{WEB_APPS.3.name}}" 	 		 , state: directory }
- - { path: "{{EXTRACT_DIR}}/{{WEB_APPS.4.name}}" 	 		 , state: directory }
- - { path: "{{EXTRACT_DIR}}/{{WEB_APPS.5.name}}" 	 		 , state: directory }
- - { path: "{{EXTRACT_DIR}}/{{WEB_APPS.6.name}}" 	 		 , state: directory }
- - { path: "{{EXTRACT_DIR}}/{{WEB_APPS.7.name}}" 	 		 , state: directory }
- - { path: "{{EXTRACT_DIR}}/{{WEB_APPS.8.name}}" 	 		 , state: directory }
- - { path: "{{EXTRACT_DIR}}/{{WEB_APPS.9.name}}" 	 		 , state: directory }
+ - { path: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.0.vhost}}" , state: directory }
+ - { path: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.1.vhost}}" , state: directory }
+ - { path: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.2.vhost}}" , state: directory }
+ - { path: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.3.vhost}}" , state: directory }
+ - { path: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.4.vhost}}" , state: directory }
+ - { path: "{{EXTRACT_DIR}}/{{WEB_APPS.0.name}}" 	   , state: directory }
+ - { path: "{{EXTRACT_DIR}}/{{WEB_APPS.1.name}}" 	   , state: directory }
+ - { path: "{{EXTRACT_DIR}}/{{WEB_APPS.2.name}}" 	   , state: directory }
+ - { path: "{{EXTRACT_DIR}}/{{WEB_APPS.3.name}}" 	   , state: directory }
+ - { path: "{{EXTRACT_DIR}}/{{WEB_APPS.4.name}}" 	   , state: directory }
+ - { path: "{{EXTRACT_DIR}}/{{WEB_APPS.5.name}}" 	   , state: directory }
+ - { path: "{{EXTRACT_DIR}}/{{WEB_APPS.6.name}}" 	   , state: directory }
+ - { path: "{{EXTRACT_DIR}}/{{WEB_APPS.7.name}}" 	   , state: directory }
+ - { path: "{{EXTRACT_DIR}}/{{WEB_APPS.8.name}}" 	   , state: directory }
+ - { path: "{{EXTRACT_DIR}}/{{WEB_APPS.9.name}}" 	   , state: directory }
 
 
 TOMCAT_UNARCHIVE: 
@@ -41,7 +41,7 @@ TOMCAT_UNARCHIVE:
  - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.8.name}}/binpackage/{{WEB_APPS.8.name}}.war" , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.1.vhost}}/stats" , remote_src: yes}
  - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.9.name}}/binpackage/{{WEB_APPS.9.name}}.war" , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.1.vhost}}/vocalmestre1" , remote_src: yes} 
 
-TOMCAT_SYNC:
+TOMCAT_SYNCHRONIZE:
  - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.0.name}}/conf/" , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.1.vhost}}/ROOT/META-INF" 	    }
  - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.1.name}}/conf/" , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.1.vhost}}/ROOT/META-INF"	    }
  - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.2.name}}/conf/" , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.1.vhost}}/ROOT/META-INF" 	    }
@@ -54,22 +54,22 @@ TOMCAT_SYNC:
  - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.9.name}}/conf/" , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.1.vhost}}/vocalmestre1/META-INF" }
  
 TOMCAT_COPY:
- - { src: manager.xml , dest: "{{TOMCAT_HOME}}/conf/Catalina/localhost/" 		     , remote_src: no  }
- - { src: manager.xml , dest: "{{TOMCAT_CONF}}/Catalina/gv-admmsgvocale-svi-{{WEB_DOMAIN}}/" , remote_src: no  }
- - { src: manager.xml , dest: "{{TOMCAT_CONF}}/Catalina/gv-provisioning-{{WEB_DOMAIN}}/"     , remote_src: no  }
- - { src: manager.xml , dest: "{{TOMCAT_CONF}}/Catalina/gv-switchingservice-{{WEB_DOMAIN}}/" , remote_src: no  }
- - { src: manager.xml , dest: "{{TOMCAT_CONF}}/Catalina/gv-authent-{{WEB_DOMAIN}}/" 	     , remote_src: no  }
- - { src: manager.xml , dest: "{{TOMCAT_CONF}}/Catalina/gv-webservices-{{WEB_DOMAIN}}/"      , remote_src: no  }
- - { src: manager     , dest: "{{TOMCAT_HOME}}/webapps/"     		      		     , remote_src: no  }
+ - { src: manager     , dest: "{{TOMCAT_HOME}}/webapps/"     		       , remote_src: no  }
+ - { src: manager.xml , dest: "{{TOMCAT_HOME}}/conf/Catalina/localhost/"       , remote_src: no  }
+ - { src: manager.xml , dest: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.0.vhost}}/" , remote_src: no  }
+ - { src: manager.xml , dest: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.1.vhost}}/" , remote_src: no  }
+ - { src: manager.xml , dest: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.2.vhost}}/" , remote_src: no  }
+ - { src: manager.xml , dest: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.3.vhost}}/" , remote_src: no  }
+ - { src: manager.xml , dest: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.4.vhost}}/" , remote_src: no  }
  - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.0.name}}/conf/context.xml" , dest: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.0.vhost}}/ROOT.xml" , remote_src: yes  }
  - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.1.name}}/conf/context.xml" , dest: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.1.vhost}}/ROOT.xml" , remote_src: yes  }
  - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.2.name}}/conf/context.xml" , dest: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.2.vhost}}/ROOT.xml" , remote_src: yes  }
  - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.3.name}}/conf/context.xml" , dest: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.3.vhost}}/ROOT.xml" , remote_src: yes  }
  - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.4.name}}/conf/context.xml" , dest: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.4.vhost}}/ROOT.xml" , remote_src: yes  }
  - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.6.name}}/conf/context.xml" , dest: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.1.vhost}}/admin-stp.xml" , remote_src: yes  }
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.7.name}}/conf/context.xml" , dest: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.7.vhost}}/adv1.xml" , remote_src: yes  }
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.8.name}}/conf/context.xml" , dest: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.8.vhost}}/stats.xml" , remote_src: yes  }
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.9.name}}/conf/context.xml" , dest: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.9.vhost}}/vocalmestre1.xml" , remote_src: yes  }
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.7.name}}/conf/context.xml" , dest: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.1.vhost}}/adv1.xml" , remote_src: yes  }
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.8.name}}/conf/context.xml" , dest: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.1.vhost}}/stats.xml" , remote_src: yes  }
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.9.name}}/conf/context.xml" , dest: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.1.vhost}}/vocalmestre1.xml" , remote_src: yes  }
 
 
 TOMCAT_LINEINFILE:
@@ -81,7 +81,7 @@ TOMCAT_LINEINFILE:
    regexp: '<Engine name="Catalina" defaultHost="localhost"'
    line: <Engine name="Catalina" defaultHost="localhost" jvmRoute="localhost">
 
- - dest: "{{TOMCAT_CONF}}/tomcat6.conf"
+ - dest: "{{TOMCAT_CONF}}/tomcat{{TOMCAT_VERSION}}.conf"
    regexp: 'JAVA_OPTS='
    line: JAVA_OPTS="${JAVA_OPTS} -Xmx1536m -Xms1024m -Xmn512m -XX:MaxPermSize=512m -Djavax.sql.DataSource.Factory=org.apache.commons.dbcp.BasicDataSourceFactory"
 
@@ -96,19 +96,18 @@ TOMCAT_BLOCKINFILE:
    marker: "<!-- {mark} ANSIBLE MANAGED BLOCK -->"
 #   block: "{{ lookup('file', 'vhosts') }}"
    block: |
-      <Host name="gv-authent-{{WEB_DOMAIN}}" appBase="/usr2/web/gv-authent-amea.dmz.cloud.mbs" unpackWARs="false" liveDeploy="false" autoDeploy="false" deployOnStartup="true" deployXML="false">
+      <Host name="{{WEB_APPS.1.vhost}}" appBase="{{WEB_APP_BASE}}/{{WEB_APPS.1.vhost}}" unpackWARs="false" liveDeploy="false" autoDeploy="false" deployOnStartup="true" deployXML="false">
       </Host>
  
-      <Host name="gv-admmsgvocale-svi-{{WEB_DOMAIN}}" appBase="/usr2/web/gv-admmsgvocale-svi-amea.dmz.cloud.mbs" unpackWARs="false" liveDeploy="false" autoDeploy="false" deployOnStartup="true" deployXML="false">
+      <Host name="{{WEB_APPS.0.vhost}}" appBase="{{WEB_APP_BASE}}/{{WEB_APPS.0.vhost}}" unpackWARs="false" liveDeploy="false" autoDeploy="false" deployOnStartup="true" deployXML="false">
       </Host>
  
-      <Host name="gv-switchingservice-{{WEB_DOMAIN}}" appBase="/usr2/web/gv-switchingservice-amea.dmz.cloud.mbs" unpackWARs="false" liveDeploy="false" autoDeploy="false" deployOnStartup="true" deployXML="false">
+      <Host name="{{WEB_APPS.3.vhost}}" appBase="{{WEB_APP_BASE}}/{{WEB_APPS.3.vhost}}" unpackWARs="false" liveDeploy="false" autoDeploy="false" deployOnStartup="true" deployXML="false">
       </Host>
  
-      <Host name="gv-webservices-{{WEB_DOMAIN}}" appBase="/usr2/web/gv-webservices-amea.dmz.cloud.mbs" unpackWARs="false" liveDeploy="false" autoDeploy="false" deployOnStartup="true" deployXML="false">
+      <Host name="{{WEB_APPS.4.vhost}}" appBase="{{WEB_APP_BASE}}/{{WEB_APPS.4.vhost}}" unpackWARs="false" liveDeploy="false" autoDeploy="false" deployOnStartup="true" deployXML="false">
       </Host>
  
-      <Host name="gv-provisioning-{{WEB_DOMAIN}}" appBase="/usr2/web/gv-provisioning-amea.dmz.cloud.mbs" unpackWARs="false" liveDeploy="false" autoDeploy="false" deployOnStartup="true" deployXML="false">
+      <Host name="{{WEB_APPS.2.vhost}}" appBase="{{WEB_APP_BASE}}/{{WEB_APPS.2.vhost}}" unpackWARs="false" liveDeploy="false" autoDeploy="false" deployOnStartup="true" deployXML="false">
       </Host>
-
 
