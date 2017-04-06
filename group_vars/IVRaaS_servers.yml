@@ -26,16 +26,47 @@ WEB_ZIP_FILENAME: webapp
 
 
 WEB_APPS:
- - { NAME: gv-admmsgvocale-svi  , VERSION: V12.4.12  }
- - { NAME: gv-authent		, VERSION: V12.4.12  }
- - { NAME: gv-provisioning 	, VERSION: V1.1.0    }
- - { NAME: gv-svifiles	 	, VERSION: V12.4.12  }
- - { NAME: gv-switchingservice	, VERSION: V1.12.1   }
- - { NAME: gv-webservices 	, VERSION: V12.4.12  }
- - { NAME: gv-admin-stp 	, VERSION: V2.10.5.1 }
- - { NAME: gv-adv 		, VERSION: V12.4.12  }
- - { NAME: gv-stats 		, VERSION: V2.10.5.1 }
- - { NAME: gv-vocalmestre	, VERSION: V12.4.12  }
+ - { name: gv-admmsgvocale-svi  , version: V12.4.12  , vhost: gv-admmsgvocale-svi-amea.dmz.cloud.mbs }
+ - { name: gv-authent		, version: V12.4.12  , vhost: gv-authent-amea.dmz.cloud.mbs          }
+ - { name: gv-provisioning 	, version: V1.1.0    , vhost: gv-provisioning-amea.dmz.cloud.mbs     } 
+ - { name: gv-switchingservice	, version: V1.12.1   , vhost: gv-switchingservice-amea.dmz.cloud.mbs }
+ - { name: gv-webservices 	, version: V12.4.12  , vhost: gv-webservices-amea.dmz.cloud.mbs      }
+ - { name: gv-svifiles	 	, version: V12.4.12  , vhost: gv-svifiles-amea.dmz.cloud.mbs 	     }
+ - { name: gv-admin-stp 	, version: V2.10.5.1 , vhost: gv-authent-amea.dmz.cloud.mbs 	     } 
+ - { name: gv-adv 		, version: V12.4.12  , vhost: gv-authent-amea.dmz.cloud.mbs 	     }
+ - { name: gv-stats 		, version: V2.10.5.1 , vhost: gv-authent-amea.dmz.cloud.mbs 	     }
+ - { name: gv-vocalmestre	, version: V12.4.12  , vhost: gv-authent-amea.dmz.cloud.mbs 	     } 
+
+
+#WEBAPPS:
+# - gv-admmsgvocale-svi
+# - gv-authent
+# - gv-provisioning
+# - gv-switchingservice
+# - gv-webservices
+# - gv-svifiles
+# - gv-admin-stp
+# - gv-adv
+# - gv-stats
+# - gv-vocalmestre
+#
+#WEBAPPS_VERSIONS:
+# - V12.4.12
+# - V12.4.12
+# - V1.1.0
+# - V1.12.1
+# - V12.4.12
+# - V12.4.12
+# - V2.10.5.1
+# - V12.4.12
+# - V2.10.5.1
+# - V12.4.12
+#
+#VHOSTS:
+# - gv-authent-amea.dmz.cloud.mbs
+# - gv-provisioning-amea.dmz.cloud.mbs
+# - gv-switchingservice-amea.dmz.cloud.mbs
+# - gv-webservices-amea.dmz.cloud.mbs
 
 
 
@@ -78,4 +109,27 @@ BATCH_STARTUP:
  - { SERVICE: gvStatCalculator	, SRC: /usr2/batch/stats-calculator/batch/bin/init.d/gvStatCalculator	}
  - { SERVICE: gvStatManager	, SRC: /usr2/batch/stats-manager/batch/bin/init.d/gvStatManager		}
  - { SERVICE: convPcnV2 	, SRC: /usr2/batch/convPcnV2/batch/bin/init.d/convPcnV2			}
+
+zzzzzzzzzzzzTOMCAT_UNARCHIVE:
+ - { src: "{{WEB_ZIP_FILENAME}}.zip",dest: "{{EXTRACT_DIR}}" , remote_src: no }
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.0.name}}-webapp-{{WEB_APPS.0.version}}.tar.gz",dest: "{{EXTRACT_DIR}}/{{WEB_APPS.0.name}}" , remote_src: yes}
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.1.name}}-webapp-{{WEB_APPS.1.version}}.tar.gz",dest: "{{EXTRACT_DIR}}/{{WEB_APPS.1.name}}" , remote_src: yes}
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.2.name}}-webapp-{{WEB_APPS.2.version}}.tar.gz",dest: "{{EXTRACT_DIR}}/{{WEB_APPS.2.name}}" , remote_src: yes}
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.3.name}}-webapp-{{WEB_APPS.3.version}}.tar.gz",dest: "{{EXTRACT_DIR}}/{{WEB_APPS.3.name}}" , remote_src: yes}
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.4.name}}-webapp-{{WEB_APPS.4.version}}.tar.gz",dest: "{{EXTRACT_DIR}}/{{WEB_APPS.4.name}}" , remote_src: yes}
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.5.name}}-webapp-{{WEB_APPS.5.version}}.tar.gz",dest: "{{EXTRACT_DIR}}/{{WEB_APPS.5.name}}" , remote_src: yes}
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.6.name}}-webapp-{{WEB_APPS.6.version}}.tar.gz",dest: "{{EXTRACT_DIR}}/{{WEB_APPS.6.name}}" , remote_src: yes}
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.7.name}}-webapp-{{WEB_APPS.7.version}}.tar.gz",dest: "{{EXTRACT_DIR}}/{{WEB_APPS.7.name}}" , remote_src: yes}
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.8.name}}-webapp-{{WEB_APPS.8.version}}.tar.gz",dest: "{{EXTRACT_DIR}}/{{WEB_APPS.8.name}}" , remote_src: yes}
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.9.name}}-webapp-{{WEB_APPS.9.version}}.tar.gz",dest: "{{EXTRACT_DIR}}/{{WEB_APPS.9.name}}" , remote_src: yes}
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.0.name}}/binpackage/{{WEB_APPS.0.name}}.war" , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.0.name}}" , remote_src: yes}
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.1.name}}/binpackage/{{WEB_APPS.1.name}}.war" , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.1.name}}" , remote_src: yes}
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.2.name}}/binpackage/{{WEB_APPS.2.name}}.war" , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.2.name}}" , remote_src: yes}
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.3.name}}/binpackage/{{WEB_APPS.3.name}}.war" , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.3.name}}" , remote_src: yes}
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.4.name}}/binpackage/{{WEB_APPS.4.name}}.war" , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.4.name}}" , remote_src: yes}
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.5.name}}/binpackage/{{WEB_APPS.5.name}}.war" , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.5.name}}" , remote_src: yes}
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.6.name}}/binpackage/{{WEB_APPS.6.name}}.war" , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.6.name}}" , remote_src: yes}
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.7.name}}/binpackage/{{WEB_APPS.7.name}}.war" , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.7.name}}" , remote_src: yes}
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.8.name}}/binpackage/{{WEB_APPS.8.name}}.war" , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.8.name}}" , remote_src: yes}
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.9.name}}/binpackage/{{WEB_APPS.9.name}}.war" , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.9.name}}" , remote_src: yes}
 

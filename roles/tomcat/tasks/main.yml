@@ -6,16 +6,49 @@
   yum:
     name: tomcat6
     state: latest
-  tags: tomcat
+#  tags: tomcat
 
 - name: Ensure tomcat server is started and enabled
   service:
     name: tomcat6
     state: started
     enabled: yes
-  tags: tomcat
+#  tags: tomcat
 
 #########################################################################################################################
+
+- name: Create virtual hosts dirs under  {{TOMCAT_CONF}}/Catalina
+  file:
+    path: "{{item.path}}"
+    state: "{{item.state}}"
+  with_items: "{{TOMCAT_FILE}}"
+#  notify: restart tomcat
+  tags: tomcat
+
+- name: Unarchive {{WEB_ZIP_FILENAME}}.zip into {{EXTRACT_DIR}}
+  unarchive:
+    src: "{{item.src}}"
+    dest: "{{item.dest}}"
+    remote_src: "{{item.remote_src}}"
+  with_items: "{{TOMCAT_UNARCHIVE}}"
+  tags: tomcat
+
+- name: Sync
+  synchronize:
+    src: "{{item.src}}"
+    dest: "{{item.dest}}"
+  delegate_to: "{{ inventory_hostname }}"
+  with_items: "{{TOMCAT_SYNC}}"
+  tags: tomcat
+
+- name: Copy tomcat manager/ app tp {{TOMCAT_HOME}}/webapps/
+  copy:
+    src: "{{item.src}}"
+    dest: "{{item.dest}}"
+    remote_src: "{{item.remote_src}}"
+  with_items: "{{TOMCAT_COPY}}"
+#  notify: restart tomcat
+  tags: tomcat
 
 - name: Modify {{TOMCAT_CONF}}/server.xml and {{TOMCAT_CONF}}/tomcat6.conf (customize thread count) and (customize memory usage)
   lineinfile:
@@ -23,43 +56,18 @@
     regexp: "{{item.regexp}}"
     line: "{{item.line}}"
   with_items: "{{TOMCAT_LINEINFILE}}"
-  notify: restart tomcat
+#  notify: restart tomcat
   tags: tomcat
 
-- name: Modify {{TOMCAT_CONF}}/server.xml to add virtual hosts
+- name: Modify {{TOMCAT_CONF}}/server.xml to add virtual hosts and {{TOMCAT_CONF}}/tomcat-users.xml to add users and roles 
   blockinfile:
     dest: "{{item.dest}}"
     insertafter: "{{item.insertafter}}"
     marker: "{{item.marker}}"
     block: "{{item.block}}"
   with_items: "{{TOMCAT_BLOCKINFILE}}"
-  notify: restart tomcat
+#  notify: restart tomcat
   tags: tomcat
-
-- name: Create configuration directories in {{TOMCAT_CONF}}/Catalina
-  file:
-    path: "{{item.path}}"
-    state: directory
-  with_items: "{{TOMCAT_FILE}}"
-  notify: restart tomcat
-  tags: tomcat
-
-- name: Copy tomcat manager/ app tp {{TOMCAT_HOME}}/webapps/
-  copy:
-    src: "{{item.src}}"
-    dest: "{{item.dest}}"
-  with_items: "{{TOMCAT_COPY}}"
-  notify: restart tomcat
-  tags: tomcat
-
-
-- name: Unarchive {{WEB_ZIP_FILENAME}}.zip into {{EXTRACT_DIR}}
-  unarchive:
-    src: "{{item.src}}"
-    dest: "{{item.dest}}"
-  with_items: "{{TOMCAT_UNARCHIVE}}"
-  tags: tomcat
-
 #- name: Place webapps in its place
 #  shell: tar xfz "{{item.name}}"*.tar.gz && unzip binpackage/*.war -d "{{item.dir}}" && cp -r conf/. "{{item.dir}}"/META-INF && find . ! -name '*.tar.gz' -delete
 #  args:

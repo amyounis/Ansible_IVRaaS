@@ -1,0 +1,3 @@
+[defaults]
+remote_tmp     = /tmp/IVRaaS/.ansible-${USER}/tmp
+

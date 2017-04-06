@@ -4,5 +4,4 @@
   service: 
     name: tomcat6
     state: restarted
-  become: yes
   
