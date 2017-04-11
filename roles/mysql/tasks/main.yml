@@ -1,80 +1,87 @@
 ---
 
-- name: MYSQL | install mysql client and server
+#########################################################################################
+#											#
+#########################################################################################
+
+- name: YUM-- install mysql client and server
   yum:
     name:
      - mysql
      - mysql-server
     state: latest
-  become: yes
   tags: mysql
 
-- name: copy Mysql-python to /tmp/IVRaaS
+- name: COPY-- copy Mysql-python to {{ECTRACT_DIR}}
   copy:
     src: MySQL-python-1.2.3-0.3.c1.1.el6.x86_64.rpm
-    dest: /tmp/IVRaaS/MySQL-python-1.2.3-0.3.c1.1.el6.x86_64.rpm
+    dest: "{{EXTRACT_DIR}}/MySQL-python-1.2.3-0.3.c1.1.el6.x86_64.rpm"
     owner: root
     group: root
-  become: yes
   tags: mysql
 
-- name: install MySQL-python to enable mysql_user module
+- name: YUM-- install MySQL-python to enable mysql_user module
   yum:
     name: /tmp/IVRaaS/MySQL-python-1.2.3-0.3.c1.1.el6.x86_64.rpm
     state: present
   become: yes
   tags: mysql
 
-- name: Ensure mysqld is started and enabled 
+- name: Service-- Ensure mysqld is started and enabled 
   service:
     name: mysqld
     state: started
     enabled: yes
-  become: yes
   tags: mysql 
 
-- name: MYSQL | Update mysql root password for all root accounts
+#########################################################################################
+#											#
+#########################################################################################
+
+
+- name: Mysql_user-- Update mysql root password for all root accounts
   mysql_user: 
     name: root 
     host: localhost 
-    password: "{{ mysql_root_password }}"
-  become: yes
+    password: "{{MYSQL_ROOT_PASS}}"
   tags: mysql
 
-- debug: 
-   msg: "{{ mysql_root_password }}"
-
-- name: MYSQL | insert/update "[client]" configuration block in /root/my.cnf
+- name: Blockinfile-- insert/update "[client]" configuration block in /root/.my.cnf
   blockinfile:
     dest: /root/.my.cnf
     block: |
       [client]
-      password={{ mysql_root_password }}
+      password={{MYSQL_ROOT_PASS}}
     create: yes
     mode: 0600
-  become: yes
   tags: mysql
 
-- name: Create a new databases 
+- name: Mysql_db-- Create new databases 
   mysql_db:
     name: "{{item}}"
     state: present 
-  with_items: "{{dbs}}"
-  become: yes
+  with_items: "{{DATA_BASES}}"
   tags: mysql
 
-- name: Copy sql scripts to /tmp/IVRaaS/sql_sqripts
+- name: Copy-- copy sql scripts to {{EXTRACT_DIR}}/sql_sqripts
   copy:
     src: sql_scripts
-    dest: /tmp/IVRaaS/
+    dest: "{{EXTRACT_DIR}}"
   become: yes
   tags: mysql 
 
-- name: Import sql sqripts
+- name : Replace-- set recipient of marketing report and current deployment country keys in sql scripts
+  replace:
+    dest: "{{item.dest}}"
+    regexp: "{{item.regexp}}"
+    replace: "{{item.replace}}" 
+  with_items: "{{MYSSQL_REPLACE}}"
+
+- name: Mysql_db-- Import sql sqripts
   mysql_db:
     state: import
     name: all
-    target: /tmp/IVRaaS/sql_scripts/{{item}}
-  with_items: "{{sql_scripts}}"
+    target: "{{EXTRACT_DIR}}/sql_scripts/{{item}}"
+  with_items: "{{SQL_SCRIPTS}}"
   become: yes
   tags: mysql

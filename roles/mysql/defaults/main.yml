@@ -1,6 +1,8 @@
 ---
 
-dbs:
+MYSQL_ROOT_PASS: password123
+
+DATA_BASES:
   - StatVoxProdV2
   - StatVoxProdV2Tmp
   - exploitvocalAdmin
@@ -8,7 +10,7 @@ dbs:
   - gvw
   - gvw_logs
 
-sql_scripts:
+SQL_SCRIPTS:
   - db-stats-struct.sql
   - db-stats-data.sql
   - db-gvw-initUserAndDb.sql   
@@ -16,4 +18,6 @@ sql_scripts:
   - db-gvw_logs-initUserAndDb.sql 
   - db-gvw_logs-struct_12.4.12.sql
 
-   
+MYSQL_REPLACE:
+- { dest: "{{EXTRACT_DIR}}/sql_scripts/db-gvw_logs-struct_12.4.12.sql" , regexp: R8500@rapport.ivraas , replace: R8500@rapport.ivraas }
+- { dest: "{{EXTRACT_DIR}}/sql_scripts/db-gvw-struct_12.4.12.sql" , regexp: LOCAL_COUNTRY , replace: LOCAL_COUNTRY }

@@ -31,7 +31,7 @@
   with_items: "{{BATCH_USER}}"
   tags: batch
 
-- name: File-- Create batches and stats directories
+- name: File-- Create {{BATCH_APP_BASE}}/<batches>/batch , {{EXTRACT_DIR}}/<batches> and /mnt/statvox2/var shared directories
   file:
     path: "{{item.path}}"
     owner: "{{item.owner}}"
@@ -40,7 +40,7 @@
   with_items: "{{BATCH_FILE_1}}"
   tags: batch
 
-- name: Unarchive-- extract libperl.zip and batches   
+- name: Unarchive-- extract libperl.zip and batches 
   unarchive:
     src: "{{item.src}}"
     dest: "{{item.dest}}"
@@ -48,7 +48,14 @@
   with_items: "{{BATCH_UNARCHIVE}}"
   tags: batch
 
-- name: Synchronize-- copy conf/ to etc/
+- name : Replace-- set key values in configuration files 
+  replace:
+    dest: "{{item.dest}}"
+    regexp: "{{item.regexp}}"
+    replace: "{{item.replace}}"
+  with_items: "{{BATCH_REPLACE}}"
+
+- name: Synchronize-- copy conf/ to etc/ and batch/bin/init.d/cron to /etc/init.d
   synchronize:
     src: "{{item.src}}"
     dest: "{{item.dest}}"
@@ -65,7 +72,7 @@
   with_items: "{{BATCH_FILE_2}}"
   tags: batch
 
-- name: File-- Set owner and group for synchronized files and directories
+- name: File-- create soft links under /etc/cron.d
   file:
     src: "{{item.src}}"
     dest: "{{item.dest}}"
@@ -81,45 +88,4 @@
      line: "export SHARED_LIB_PERL={{BATCH_APP_BASE}}/libperl"
   tags: batch
 
-#- name: Unarchive {{BATCH_ZIP_FILENAME}}.zip into {{EXTRACT_DIR}}
-#  unarchive:
-#    src: "{{BATCH_ZIP_FILENAME}}.zip"
-#    dest: "{{EXTRACT_DIR}}"
-#  tags: batch
-#
-#- name: Copy batch.sh to {{EXTRACT_DIR}}
-#  copy:
-#    src: batch.sh
-#    dest: "{{EXTRACT_DIR}}"
-#    mode: 0550
-#  become: yes
-#  tags: batch
-# 
-#- name: Place batches in its place
-#  shell: MODULE="{{item.NAME}}" FULL_FILENAME="{{EXTRACT_DIR}}""{{BATCH_ZIP_FILENAME}}"/"{{item.NAME}}"-"{{item.TYPE}}"-"{{item.VERSION}}".tar.gz ./batch.sh >> /tmp/batch.sh_output 2>&1
-#  args:
-#    chdir: "{{EXTRACT_DIR}}"
-##    creates: "{{item.dir}}/META-INF"
-#  with_items: "{{BATCHES}}"
-#  become: yes
-#  tags: batch
-#
-#- name: Copy files from foo to bar
-#  copy: 
-#    remote_src: True 
-#    src: "{{item.SRC}}"
-#    dest: /etc/init.d/
-#    mode: 0700
-#  with_items: "{{BATCH_STARTUP}}"
-#  become: yes 
-#  tags: batch
-#
-#- name: Ensure Batch startup scripts are started and enabled
-#  service:
-#    name: "{{item.SERVICE}}"
-#    state: started
-#    enabled: yes
-#  with_items: "{{BATCH_STARTUP}}"
-#  become: yes
-#  tags: batch
 

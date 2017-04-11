@@ -70,3 +70,14 @@
   notify: restart tomcat
   tags: tomcat
 
+- name : Replace-- set key values in configuration files
+  replace:
+    dest: "{{item.0.dest}}"
+    regexp: "{{item.1.regexp}}"
+    replace: "{{item.1.replace}}"
+  with_subelements: 
+   - "{{TOMCAT_REPLACE}}"
+   - changes
+  tags: tomcat_test
+
+

@@ -21,19 +21,19 @@ BATCH_FILE_1:
  - { path: "{{BATCH_APP_BASE}}/{{BATCHES.6.name}}/batch"   	, owner: stats   , group: stats   , state: directory }
  - { path: "{{BATCH_APP_BASE}}/{{BATCHES.7.name}}/batch" 	, owner: stats   , group: stats   , state: directory }
  - { path: "{{BATCH_APP_BASE}}/{{BATCHES.8.name}}/batch"    	, owner: stats   , group: stats   , state: directory }
- - { path: /mnt/statVox2/var/data 	   	, owner: stats   , group: stats   , state: directory }
- - { path: /mnt/statVox2/var/pcn 	   	, owner: stats   , group: stats   , state: directory }
- - { path: /mnt/statVox2/var/stats	   	, owner: stats   , group: stats   , state: directory }
- - { path: /mnt/statVox2/var/archive 	   	, owner: stats   , group: stats   , state: directory }
- - { path: "{{EXTRACT_DIR}}/{{BATCHES.0.name}}" , owner: root    , group: root    , state: directory }
- - { path: "{{EXTRACT_DIR}}/{{BATCHES.1.name}}" , owner: root    , group: root    , state: directory }
- - { path: "{{EXTRACT_DIR}}/{{BATCHES.2.name}}" , owner: root    , group: root    , state: directory }
- - { path: "{{EXTRACT_DIR}}/{{BATCHES.3.name}}" , owner: root    , group: root    , state: directory }
- - { path: "{{EXTRACT_DIR}}/{{BATCHES.4.name}}" , owner: root    , group: root    , state: directory }
- - { path: "{{EXTRACT_DIR}}/{{BATCHES.5.name}}" , owner: root    , group: root    , state: directory }
- - { path: "{{EXTRACT_DIR}}/{{BATCHES.6.name}}" , owner: root    , group: root    , state: directory }
- - { path: "{{EXTRACT_DIR}}/{{BATCHES.7.name}}" , owner: root    , group: root    , state: directory }
- - { path: "{{EXTRACT_DIR}}/{{BATCHES.8.name}}" , owner: root    , group: root    , state: directory }
+ - { path: /mnt/statVox2/var/data 	   			, owner: stats   , group: stats   , state: directory }
+ - { path: /mnt/statVox2/var/pcn 	   			, owner: stats   , group: stats   , state: directory }
+ - { path: /mnt/statVox2/var/stats	   			, owner: stats   , group: stats   , state: directory }
+ - { path: /mnt/statVox2/var/archive 	   			, owner: stats   , group: stats   , state: directory }
+ - { path: "{{EXTRACT_DIR}}/{{BATCHES.0.name}}" 		, owner: root    , group: root    , state: directory }
+ - { path: "{{EXTRACT_DIR}}/{{BATCHES.1.name}}" 		, owner: root    , group: root    , state: directory }
+ - { path: "{{EXTRACT_DIR}}/{{BATCHES.2.name}}" 		, owner: root    , group: root    , state: directory }
+ - { path: "{{EXTRACT_DIR}}/{{BATCHES.3.name}}" 		, owner: root    , group: root    , state: directory }
+ - { path: "{{EXTRACT_DIR}}/{{BATCHES.4.name}}" 		, owner: root    , group: root    , state: directory }
+ - { path: "{{EXTRACT_DIR}}/{{BATCHES.5.name}}" 		, owner: root    , group: root    , state: directory }
+ - { path: "{{EXTRACT_DIR}}/{{BATCHES.6.name}}" 		, owner: root    , group: root    , state: directory }
+ - { path: "{{EXTRACT_DIR}}/{{BATCHES.7.name}}" 		, owner: root    , group: root    , state: directory }
+ - { path: "{{EXTRACT_DIR}}/{{BATCHES.8.name}}"  		, owner: root    , group: root    , state: directory }
 
 BATCH_UNARCHIVE:
  - { src: libperl.zip 		       , dest: "{{BATCH_APP_BASE}}" , remote_src: no }
@@ -58,19 +58,21 @@ BATCH_UNARCHIVE:
  - { src: "{{EXTRACT_DIR}}/{{BATCHES.8.name}}/binpackage/{{BATCHES.8.name}}.tgz" , dest: "{{BATCH_APP_BASE}}/{{BATCHES.8.name}}/batch" , remote_src: yes }
 
 
+BATCH_REPLACE:
+
 BATCH_SYNCHRONIZE:
- - { src: "{{EXTRACT_DIR}}/{{BATCHES.0.name}}/conf/" , dest: "{{BATCH_APP_BASE}}/{{BATCHES.0.name}}/batch/etc" }
- - { src: "{{EXTRACT_DIR}}/{{BATCHES.1.name}}/conf/" , dest: "{{BATCH_APP_BASE}}/{{BATCHES.1.name}}/batch/etc" }
- - { src: "{{EXTRACT_DIR}}/{{BATCHES.2.name}}/conf/" , dest: "{{BATCH_APP_BASE}}/{{BATCHES.2.name}}/batch/etc" }
- - { src: "{{EXTRACT_DIR}}/{{BATCHES.3.name}}/conf/" , dest: "{{BATCH_APP_BASE}}/{{BATCHES.3.name}}/batch/etc" }
- - { src: "{{EXTRACT_DIR}}/{{BATCHES.4.name}}/conf/" , dest: "{{BATCH_APP_BASE}}/{{BATCHES.4.name}}/batch/etc" }
- - { src: "{{EXTRACT_DIR}}/{{BATCHES.5.name}}/conf/" , dest: "{{BATCH_APP_BASE}}/{{BATCHES.5.name}}/batch/etc" }
- - { src: "{{EXTRACT_DIR}}/{{BATCHES.6.name}}/conf/" , dest: "{{BATCH_APP_BASE}}/{{BATCHES.6.name}}/batch/etc" }
- - { src: "{{EXTRACT_DIR}}/{{BATCHES.7.name}}/conf/" , dest: "{{BATCH_APP_BASE}}/{{BATCHES.7.name}}/batch/etc" }
- - { src: "{{EXTRACT_DIR}}/{{BATCHES.8.name}}/conf/" , dest: "{{BATCH_APP_BASE}}/{{BATCHES.8.name}}/batch/etc" }
- - { src: "{{BATCH_APP_BASE}}/{{BATCHES.0.name}}/batch/bin/init.d/" , dest: /etc/init.d }
- - { src: "{{BATCH_APP_BASE}}/{{BATCHES.4.name}}/batch/bin/init.d/" , dest: /etc/init.d }
- - { src: "{{BATCH_APP_BASE}}/{{BATCHES.5.name}}/batch/bin/init.d/" , dest: /etc/init.d }
+ - { src: "{{EXTRACT_DIR}}/{{BATCHES.0.name}}/conf/" 		    , dest: "{{BATCH_APP_BASE}}/{{BATCHES.0.name}}/batch/etc" }
+ - { src: "{{EXTRACT_DIR}}/{{BATCHES.1.name}}/conf/" 		    , dest: "{{BATCH_APP_BASE}}/{{BATCHES.1.name}}/batch/etc" }
+ - { src: "{{EXTRACT_DIR}}/{{BATCHES.2.name}}/conf/" 	  	    , dest: "{{BATCH_APP_BASE}}/{{BATCHES.2.name}}/batch/etc" }
+ - { src: "{{EXTRACT_DIR}}/{{BATCHES.3.name}}/conf/" 		    , dest: "{{BATCH_APP_BASE}}/{{BATCHES.3.name}}/batch/etc" }
+ - { src: "{{EXTRACT_DIR}}/{{BATCHES.4.name}}/conf/" 		    , dest: "{{BATCH_APP_BASE}}/{{BATCHES.4.name}}/batch/etc" }
+ - { src: "{{EXTRACT_DIR}}/{{BATCHES.5.name}}/conf/" 		    , dest: "{{BATCH_APP_BASE}}/{{BATCHES.5.name}}/batch/etc" }
+ - { src: "{{EXTRACT_DIR}}/{{BATCHES.6.name}}/conf/" 		    , dest: "{{BATCH_APP_BASE}}/{{BATCHES.6.name}}/batch/etc" }
+ - { src: "{{EXTRACT_DIR}}/{{BATCHES.7.name}}/conf/" 		    , dest: "{{BATCH_APP_BASE}}/{{BATCHES.7.name}}/batch/etc" }
+ - { src: "{{EXTRACT_DIR}}/{{BATCHES.8.name}}/conf/" 		    , dest: "{{BATCH_APP_BASE}}/{{BATCHES.8.name}}/batch/etc" }
+ - { src: "{{BATCH_APP_BASE}}/{{BATCHES.0.name}}/batch/bin/init.d/" , dest: /etc/init.d 				      }
+ - { src: "{{BATCH_APP_BASE}}/{{BATCHES.4.name}}/batch/bin/init.d/" , dest: /etc/init.d 				      }
+ - { src: "{{BATCH_APP_BASE}}/{{BATCHES.5.name}}/batch/bin/init.d/" , dest: /etc/init.d 				      }
 
 BATCH_FILE_2:
  - { path: "{{BATCH_APP_BASE}}/{{BATCHES.0.name}}/batch" , owner: serveur , group: serveur , recurse: yes }
@@ -82,9 +84,9 @@ BATCH_FILE_2:
  - { path: "{{BATCH_APP_BASE}}/{{BATCHES.6.name}}/batch" , owner: stats   , group: stats   , recurse: yes }
  - { path: "{{BATCH_APP_BASE}}/{{BATCHES.7.name}}/batch" , owner: stats   , group: stats   , recurse: yes }
  - { path: "{{BATCH_APP_BASE}}/{{BATCHES.8.name}}/batch" , owner: stats   , group: stats   , recurse: yes }
- - { path: /etc/init.d/convPcnV2 	, owner: root   , group: root   , recurse: no }
- - { path: /etc/init.d/gvStatCalculator , owner: root   , group: root   , recurse: no }
- - { path: /etc/init.d/gvStatManager 	, owner: root   , group: root   , recurse: no }
+ - { path: /etc/init.d/convPcnV2 			 , owner: root    , group: root    , recurse: no }
+ - { path: /etc/init.d/gvStatCalculator 		 , owner: root    , group: root    , recurse: no }
+ - { path: /etc/init.d/gvStatManager 			 , owner: root    , group: root    , recurse: no }
 
 BATCH_FILE_3:
  - { src: "{{BATCH_APP_BASE}}/{{BATCHES.0.name}}/batch/etc/cron" , dest: "/etc/cron.d/{{BATCHES.0.name}}" , owner: root , group: root , state: link }
