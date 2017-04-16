@@ -20,7 +20,7 @@ WEB_DOMAIN: amea.dmz.cloud.mbs
 
 WEB_APP_BASE: /usr2/web
 
-WEB_LOG_BASE: /user2/logs/apache 
+WEB_LOG_BASE: /usr2/logs/apache 
 
 WEB_ZIP_FILENAME: webapp
 
@@ -72,4 +72,4 @@ BATCH_STARTUP:
  - { SERVICE: gvStatManager	, SRC: /usr2/batch/stats-manager/batch/bin/init.d/gvStatManager		}
  - { SERVICE: convPcnV2 	, SRC: /usr2/batch/convPcnV2/batch/bin/init.d/convPcnV2			}
 
-
+MYSQL_IP: 192.168.138.5

@@ -3,9 +3,9 @@
 
         DocumentRoot {{item.var2}}/{{item.var1}}/ROOT/
 
-        ErrorLog {{item.var3}}}/{{item.var1}}/current/error.log
+        ErrorLog {{item.var3}}/{{item.var1}}/current/error.log
         ErrorLog syslog:local2
-        CustomLog {{item.var3}}}/{{item.var1}}/current/access.log combined
+        CustomLog {{item.var3}}/{{item.var1}}/current/access.log combined
         CustomLog "| logger -p 'local2.info' -t '[gv-admmsgvocale-svi.dmz]'" combined
 
 

@@ -114,6 +114,7 @@ TOMCAT_BLOCKINFILE:
 
 
 TOMCAT_REPLACE:
+############################################# context files in tomcat ##############################################
  - dest: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.0.vhost}}/ROOT.xml" 
    changes:
     - { regexp: /usr2/web/gv-admmsgvocale-svi-amea.dmz.cloud.mbs , replace: "{{WEB_APP_BASE}}/{{WEB_APPS.0.vhost}}" }
@@ -141,33 +142,91 @@ TOMCAT_REPLACE:
  - dest: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.9.vhost}}/vocalmestre1.xml"
    changes:
     - { regexp: /usr2/web/gv-authent-amea.dmz.cloud.mbs 	 , replace: "{{WEB_APP_BASE}}/{{WEB_APPS.9.vhost}}" }
+#########################################  admmsgvocale Webapp META-INF  ############################################
  - dest: "{{WEB_APP_BASE}}/{{WEB_APPS.0.vhost}}/ROOT/META-INF/context.xml" 
-   changes:  
+   changes:   
     - { regexp: /usr2/web/gv-admmsgvocale-svi-amea.dmz.cloud.mbs , replace: "{{WEB_APP_BASE}}/{{WEB_APPS.0.vhost}}" }
+ - dest: "{{WEB_APP_BASE}}/{{WEB_APPS.0.vhost}}/ROOT/META-INF/hibernate.cfg.xml" 
+   changes:  
+    - { regexp: cloud-amea02-itg.ope.cloud.mbs 			 , replace: "{{MYSQL_IP}}" }
+############################################  authent Webapp META-INF  ##############################################
  - dest: "{{WEB_APP_BASE}}/{{WEB_APPS.1.vhost}}/ROOT/META-INF/context.xml"
    changes:
     - { regexp: /usr2/web/gv-authent-amea.dmz.cloud.mbs 	 , replace: "{{WEB_APP_BASE}}/{{WEB_APPS.1.vhost}}" }
+ - dest: "{{WEB_APP_BASE}}/{{WEB_APPS.1.vhost}}/ROOT/META-INF/application.properties"
+   changes:
+    - { regexp: cloud-amea02-itg.ope.cloud.mbs 	 		 , replace: "{{MYSQL_IP}}" }
+ - dest: "{{WEB_APP_BASE}}/{{WEB_APPS.1.vhost}}/ROOT/META-INF/hibernateStatMaster.cfg.xml"
+   changes:
+    - { regexp: cloud-amea02-itg.ope.cloud.mbs 	 		 , replace: "{{MYSQL_IP}}" }
+ - dest: "{{WEB_APP_BASE}}/{{WEB_APPS.1.vhost}}/ROOT/META-INF/hibernate.cfg.xml"
+   changes:
+    - { regexp: cloud-amea02-itg.ope.cloud.mbs 	 		 , replace: "{{MYSQL_IP}}" }
+##########################################  provisioning Webapp META-INF ############################################
  - dest: "{{WEB_APP_BASE}}/{{WEB_APPS.2.vhost}}/ROOT/META-INF/context.xml"         
    changes:
     - { regexp: /usr2/web/gv-provisioning-amea.dmz.cloud.mbs 	 , replace: "{{WEB_APP_BASE}}/{{WEB_APPS.2.vhost}}" }
+########################################  switchingservice Webapp META-INF ##########################################
+
  - dest: "{{WEB_APP_BASE}}/{{WEB_APPS.3.vhost}}/ROOT/META-INF/context.xml"         
    changes:
     - { regexp: /usr2/web/gv-switchingservice-amea.dmz.cloud.mbs , replace: "{{WEB_APP_BASE}}/{{WEB_APPS.3.vhost}}" }
+ - dest: "{{WEB_APP_BASE}}/{{WEB_APPS.3.vhost}}/ROOT/META-INF/application.properties"         
+   changes:
+    - { regexp: cloud-amea02-itg.ope.cloud.mbs 			 , replace: "{{MYSQL_IP}}" }
+############################################  webservice Webapp META-INF #############################################
  - dest: "{{WEB_APP_BASE}}/{{WEB_APPS.4.vhost}}/ROOT/META-INF/context.xml"         
    changes:
     - { regexp: /usr2/web/gv-webservices-amea.dmz.cloud.mbs	 , replace: "{{WEB_APP_BASE}}/{{WEB_APPS.4.vhost}}" }
+ - dest: "{{WEB_APP_BASE}}/{{WEB_APPS.4.vhost}}/ROOT/META-INF/hibernate.cfg.xml"         
+   changes:
+    - { regexp: cloud-amea02-itg.ope.cloud.mbs	 		 , replace: "{{MYSQL_IP}}" }
+ - dest: "{{WEB_APP_BASE}}/{{WEB_APPS.4.vhost}}/ROOT/META-INF/hibernateStatMaster.cfg.xml"         
+   changes:
+    - { regexp: cloud-amea02-itg.ope.cloud.mbs	 		 , replace: "{{MYSQL_IP}}" }
+############################################  admin-stp Webapp META-INF ##############################################
  - dest: "{{WEB_APP_BASE}}/{{WEB_APPS.6.vhost}}/admin-stp/META-INF/context.xml"    
    changes:
     - { regexp: /usr2/web/gv-authent-amea.dmz.cloud.mbs 	 , replace: "{{WEB_APP_BASE}}/{{WEB_APPS.6.vhost}}" }
+ - dest: "{{WEB_APP_BASE}}/{{WEB_APPS.6.vhost}}/admin-stp/META-INF/application.properties"    
+   changes:
+    - { regexp: cloud-amea02-itg.ope.cloud.mbs	 		 , replace: "{{MYSQL_IP}}" }
+###############################################  adv Webapp META-INF #################################################
  - dest: "{{WEB_APP_BASE}}/{{WEB_APPS.7.vhost}}/adv1/META-INF/context.xml"         
    changes:
     - { regexp: /usr2/web/gv-authent-amea.dmz.cloud.mbs 	 , replace: "{{WEB_APP_BASE}}/{{WEB_APPS.7.vhost}}" }
+ - dest: "{{WEB_APP_BASE}}/{{WEB_APPS.7.vhost}}/adv1/META-INF/hibernate.cfg.xml"    
+   changes:
+    - { regexp: cloud-amea02-itg.ope.cloud.mbs	 		 , replace: "{{MYSQL_IP}}" }
+ - dest: "{{WEB_APP_BASE}}/{{WEB_APPS.7.vhost}}/adv1/META-INF/hibernateStat.cfg.xml"    
+   changes:
+    - { regexp: cloud-amea02-itg.ope.cloud.mbs	 		 , replace: "{{MYSQL_IP}}" }
+ - dest: "{{WEB_APP_BASE}}/{{WEB_APPS.7.vhost}}/adv1/META-INF/hibernateStatMaster.cfg.xml"    
+   changes:
+    - { regexp: cloud-amea02-itg.ope.cloud.mbs	 		 , replace: "{{MYSQL_IP}}" }
+#################################################  stats Webapp META-INF ###############################################
  - dest: "{{WEB_APP_BASE}}/{{WEB_APPS.8.vhost}}/stats/META-INF/context.xml"        
    changes:
     - { regexp: /usr2/web/gv-authent-amea.dmz.cloud.mbs 	 , replace: "{{WEB_APP_BASE}}/{{WEB_APPS.8.vhost}}" }
+ - dest: "{{WEB_APP_BASE}}/{{WEB_APPS.8.vhost}}/stats/META-INF/application.properties"    
+   changes:
+    - { regexp: cloud-amea02-itg.ope.cloud.mbs	 		 , replace: "{{MYSQL_IP}}" }
+##############################################  vocalmestre Webapp META-INF ############################################
  - dest: "{{WEB_APP_BASE}}/{{WEB_APPS.9.vhost}}/vocalmestre1/META-INF/context.xml" 
    changes:
     - { regexp: /usr2/web/gv-authent-amea.dmz.cloud.mbs 	 , replace: "{{WEB_APP_BASE}}/{{WEB_APPS.9.vhost}}" }
-  
+ - dest: "{{WEB_APP_BASE}}/{{WEB_APPS.9.vhost}}/adv1/META-INF/hibernate.cfg.xml"    
+   changes:
+    - { regexp: cloud-amea02-itg.ope.cloud.mbs	 		 , replace: "{{MYSQL_IP}}" }
+ - dest: "{{WEB_APP_BASE}}/{{WEB_APPS.9.vhost}}/adv1/META-INF/hibernateStat.cfg.xml"    
+   changes:
+    - { regexp: cloud-amea02-itg.ope.cloud.mbs	 		 , replace: "{{MYSQL_IP}}" }
+ - dest: "{{WEB_APP_BASE}}/{{WEB_APPS.9.vhost}}/adv1/META-INF/hibernateStatMaster.cfg.xml"    
+   changes:
+    - { regexp: cloud-amea02-itg.ope.cloud.mbs	 		 , replace: "{{MYSQL_IP}}" }
+
+
+
+
 
 

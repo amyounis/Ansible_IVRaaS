@@ -88,4 +88,13 @@
      line: "export SHARED_LIB_PERL={{BATCH_APP_BASE}}/libperl"
   tags: batch
 
+- name : Replace-- set key values in configuration files
+  replace:
+    dest: "{{item.0.dest}}"
+    regexp: "{{item.1.regexp}}"
+    replace: "{{item.1.replace}}"
+  with_subelements:
+   - "{{BATCH_REPLACE}}"
+   - changes
+  tags: batch_test
 

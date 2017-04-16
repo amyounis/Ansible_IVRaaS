@@ -58,8 +58,6 @@ BATCH_UNARCHIVE:
  - { src: "{{EXTRACT_DIR}}/{{BATCHES.8.name}}/binpackage/{{BATCHES.8.name}}.tgz" , dest: "{{BATCH_APP_BASE}}/{{BATCHES.8.name}}/batch" , remote_src: yes }
 
 
-BATCH_REPLACE:
-
 BATCH_SYNCHRONIZE:
  - { src: "{{EXTRACT_DIR}}/{{BATCHES.0.name}}/conf/" 		    , dest: "{{BATCH_APP_BASE}}/{{BATCHES.0.name}}/batch/etc" }
  - { src: "{{EXTRACT_DIR}}/{{BATCHES.1.name}}/conf/" 		    , dest: "{{BATCH_APP_BASE}}/{{BATCHES.1.name}}/batch/etc" }
@@ -96,4 +94,62 @@ BATCH_FILE_3:
  - { src: "{{BATCH_APP_BASE}}/{{BATCHES.7.name}}/batch/etc/cron" , dest: "/etc/cron.d/{{BATCHES.7.name}}" , owner: root , group: root , state: link }
  - { src: "{{BATCH_APP_BASE}}/{{BATCHES.8.name}}/batch/etc/cron" , dest: "/etc/cron.d/{{BATCHES.8.name}}" , owner: root , group: root , state: link }
 
+
+BATCH_REPLACE:
+################################################  batch convPcnV2  ##################################################
+ - dest: "{{BATCH_APP_BASE}}/{{BATCHES.0.name}}/batch/etc/cron"
+   changes:
+    - { regexp: /usr2/batch/convPcnV2			 , replace: "{{BATCH_APP_BASE}}/{{BATCHES.0.name}}" }
+##################################################  batch gv-batch  #################################################
+ - dest: "{{BATCH_APP_BASE}}/{{BATCHES.1.name}}/batch/etc/cron"
+   changes:
+    - { regexp: /usr2/batch/gv-batch			 , replace: "{{BATCH_APP_BASE}}/{{BATCHES.1.name}}" }
+ - dest: "{{BATCH_APP_BASE}}/{{BATCHES.1.name}}/batch/etc/hibernateStatMaster.cfg.xml"
+   changes:
+    - { regexp: cloud-amea02-itg.ope.cloud.mbs      	 , replace: "{{MYSQL_IP}}" }
+ - dest: "{{BATCH_APP_BASE}}/{{BATCHES.1.name}}/batch/etc/hibernate.cfg.xml"
+   changes:
+    - { regexp: cloud-amea02-itg.ope.cloud.mbs 		 , replace: "{{MYSQL_IP}}" }
+##################################################  batch gv-batch-stp ## ############################################
+ - dest: "{{BATCH_APP_BASE}}/{{BATCHES.2.name}}/batch/etc/cron"
+   changes:
+    - { regexp: /usr2/batch/gv-stats-stp     		 , replace: "{{WEB_APP_BASE}}/{{BATCHES.2.name}}" }
+ - dest: "{{BATCH_APP_BASE}}/{{BATCHES.2.name}}/batch/etc/gvaa-stats.properties"
+   changes:
+    - { regexp: cloud-amea02-itg.ope.cloud.mbs 		 , replace: "{{MYSQL_IP}}" }
+####################################################  batch gv-tools   ###############################################
+ - dest: "{{BATCH_APP_BASE}}/{{BATCHES.3.name}}/batch/etc/hibernate.cfg.xml"
+   changes:
+    - { regexp: cloud-amea02-itg.ope.cloud.mbs 		 , replace: "{{MYSQL_IP}}" }
+################################################  batch stats-calculator  ############################################
+ - dest: "{{BATCH_APP_BASE}}/{{BATCHES.4.name}}/batch/etc/stats-calculator.cfg"
+   changes:
+    - { regexp: /usr2/batch/stats-calculator      	 , replace: "{{WEB_APP_BASE}}/{{BATCHES.4.name}}" }
+################################################  batch stats-manager  ##############################################
+ - dest: "{{BATCH_APP_BASE}}/{{BATCHES.5.name}}/batch/etc/statManagerOms.cfg"
+   changes:
+    - { regexp: /usr2/batch/stats-manager         	 , replace: "{{WEB_APP_BASE}}/{{BATCHES.5.name}}" }
+#########################################  batch stats-manager-reintegration  #######################################
+ - dest: "{{BATCH_APP_BASE}}/{{BATCHES.6.name}}/batch/etc/statManager.cfg"
+   changes:
+    - { regexp: /usr2/batch/stats-manager-reintegration  , replace: "{{WEB_APP_BASE}}/{{BATCHES.6.name}}" }
+##########################################  batch stats-rapatriement ### ############################################
+ - dest: "{{BATCH_APP_BASE}}/{{BATCHES.7.name}}/batch/etc/cron"
+   changes:
+    - { regexp: /usr2/batch/stats-rapatriement           , replace: "{{WEB_APP_BASE}}/{{BATCHES.7.name}}" }
+ - dest: "{{BATCH_APP_BASE}}/{{BATCHES.7.name}}/batch/etc/stats_rapatriement.cfg"
+   changes:
+    - { regexp: cloud-amea02-itg.ope.cloud.mbs   	 , replace: "{{MYSQL_IP}}" }
+###############################################  batch stats-utilities  ##############################################
+ - dest: "{{BATCH_APP_BASE}}/{{BATCHES.8.name}}/batch/etc/cron"
+   changes:
+    - { regexp: /usr2/batch/stats-utilities          	 , replace: "{{WEB_APP_BASE}}/{{BATCHES.8.name}}" }
+ - dest: "{{BATCH_APP_BASE}}/{{BATCHES.8.name}}/batch/etc/stats-analyzer.cfg"
+   changes:
+    - { regexp: /usr2/batch/stats-utilities          	 , replace: "{{WEB_APP_BASE}}/{{BATCHES.8.name}}" }
+    - { regexp: cloud-amea02-itg.ope.cloud.mbs   	 , replace: "{{MYSQL_IP}}" }
+ - dest: "{{BATCH_APP_BASE}}/{{BATCHES.8.name}}/batch/etc/stats-purgeTemporaryTables.cfg"
+   changes:
+    - { regexp: /usr2/batch/stats-utilities          	 , replace: "{{WEB_APP_BASE}}/{{BATCHES.8.name}}" }
+    - { regexp: cloud-amea02-itg.ope.cloud.mbs   	 , replace: "{{MYSQL_IP}}" }
 

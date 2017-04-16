@@ -78,6 +78,6 @@
   with_subelements: 
    - "{{TOMCAT_REPLACE}}"
    - changes
-  tags: tomcat_test
+  tags: tomcat
 
 
