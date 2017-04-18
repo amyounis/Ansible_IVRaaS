@@ -1,25 +1,13 @@
 --- 
+
 ########################################
-
-- name: IVRaaS deployment on OrangeInfra
-  hosts: IVRaaS_servers
-  gather_facts: False
-
-  roles:
-   - common
-
-#########################################
 
 - name: IVRaaS was 
   hosts: was
   gather_facts: False
 
   roles:
-   - sox
-   - nfs
-   - java
-   - apache
-   - tomcat
+   - was
 
 #########################################
 
@@ -28,7 +16,7 @@
   gather_facts: False
 
   roles:
-   - mysql
+   - db
 
 ########################################
 
@@ -37,6 +25,4 @@
   gather_facts: False
 
   roles:
-   - nfs
-   - java
    - batch

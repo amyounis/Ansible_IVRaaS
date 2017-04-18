@@ -1,0 +1,11 @@
+---
+
+- name: restart tomcat
+  service: 
+    name: "tomcat{{TOMCAT_VERSION}}"
+    state: restarted
+
+- name: restart httpd 
+  service:
+    name: httpd
+    state: restarted

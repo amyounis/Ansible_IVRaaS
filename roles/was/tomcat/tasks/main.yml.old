@@ -1,0 +1,109 @@
+---
+
+#########################################################################################################################
+
+- name: Ensure tomcat is installed
+  yum:
+    name: tomcat6
+    state: latest
+  become: yes
+  tags: tomcat
+
+- name: Ensure tomcat server is started and enabled
+  service:
+    name: tomcat6
+    state: started
+    enabled: yes
+  become: yes
+  tags: tomcat
+
+#########################################################################################################################
+
+- name: Modify {{TOMCAT_CONF}}/server.xml and {{TOMCAT_CONF}}/tomcat6.conf (customize thread count) and (customize memory usage)
+  lineinfile:
+    dest: "{{item.dest}}"
+    regexp: "{{item.regexp}}"
+    line: "{{item.line}}"
+  with_items: "{{replace}}"
+  become: yes
+  notify: restart tomcat
+  tags: tomcat
+
+- name: Modify {{TOMCAT_CONF}}/server.xml to add virtual hosts
+  blockinfile:
+    dest: "{{TOMCAT_CONF}}/server.xml"
+    marker: "<!-- {mark} ANSIBLE MANAGED BLOCK -->"
+    insertafter: "</Host>"
+    block: "{{ lookup('file', 'vhosts') }}"
+  become: yes
+  notify: restart tomcat
+  tags: tomcat
+
+- name: Create configuration directories in {{TOMCAT_CONF}}/Catalina
+  file:
+    path: "{{item}}"
+    state: directory
+  with_items: "{{tomcat_conf_directories}}"
+  become: yes
+  notify: restart tomcat
+  tags: tomcat
+
+- name: Copy tomcat manager/ app tp {{TOMCAT_HOME}}/webapps/
+  copy:
+    src: manager
+    dest: "{{TOMCAT_HOME}}/webapps/"
+  become: yes
+  notify: restart tomcat
+  tags: tomcat
+
+- name: Modify {{TOMCAT_CONF}}/tomcat-users to add roles and users
+  blockinfile:
+    dest: "{{TOMCAT_CONF}}/tomcat-users.xml"
+    marker: "<!-- {mark} ANSIBLE MANAGED BLOCK -->"
+    insertafter: "<tomcat-users>"
+    block: "{{ lookup('file', 'tomcat-users') }}"
+  become: yes
+  notify: restart tomcat
+  tags: tomcat
+
+- name: Create and copy manager.xml
+  copy:
+    src: manager.xml
+    dest: "{{item}}"
+  with_items: "{{dest}}"
+  become: yes
+  notify: restart tomcat
+  tags: tomcat
+
+- name: Copy web.sh to {{EXTRACT_DIR}}
+  copy:
+    src: web.sh
+    dest: "{{EXTRACT_DIR}}"
+    mode: 0550
+  become: yes
+  tags: tomcat
+
+- name: Unarchive {{WEB_ZIP_FILENAME}}.zip into {{EXTRACT_DIR}}
+  unarchive:
+    src: "{{WEB_ZIP_FILENAME}}.zip"
+    dest: "{{EXTRACT_DIR}}"
+  tags: tomcat
+
+#- name: Place webapps in its place
+#  shell: tar xfz "{{item.name}}"*.tar.gz && unzip binpackage/*.war -d "{{item.dir}}" && cp -r conf/. "{{item.dir}}"/META-INF && find . ! -name '*.tar.gz' -delete
+#  args:
+#    chdir: /tmp/IVRaaS/webapp
+#    creates: "{{item.dir}}/META-INF"
+#  with_items: "{{WEBAPPS}}"
+#  become: yes
+#  tags: tomcat
+
+- name: Deploy webapps in its place
+  shell: MODULE="{{item.NAME}}" PACKAGE="{{EXTRACT_DIR}}""{{WEB_ZIP_FILENAME}}"/"{{item.NAME}}"-"{{item.TYPE}}"-"{{item.VERSION}}".tar.gz ./web.sh >> /tmp/web.sh_output 2>&1
+  args:
+    chdir: "{{EXTRACT_DIR}}"
+#    creates: "{{item.dir}}/META-INF"
+  with_items: "{{WEBAPPS}}"
+  become: yes
+  tags: tomcat_test
+

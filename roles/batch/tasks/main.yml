@@ -1,5 +1,73 @@
 ---
 
+##################################################################################
+#                           Install Oracle Java Jdk                              #
+##################################################################################
+
+
+- name: Copy java jdk8 to {{EXTRACT_DIR}}
+  copy:
+    src: "{{JAVA_RPM}}"
+    dest: "{{EXTRACT_DIR}}"
+  tags: java
+ 
+
+- name: Install Java 8
+  yum:
+    name: "{{EXTRACT_DIR}}/{{JAVA_RPM}}"
+  become: yes
+  tags: java
+
+
+- name: Correct java version selected
+  alternatives:
+    name: java
+    path: "{{JAVA_HOME}}/java"
+  become: yes
+  tags: java
+
+
+
+- shell: ls -I common-media* /etc/yum.repos.d/
+  register: result
+  become: yes
+  tags: common
+
+
+- name: Ensure all yum repos are enabled
+  replace:
+    dest: /etc/yum.repos.d/{{item}}
+    regexp: 'enabled=0'
+    replace: 'enabled=1'
+  with_items: "{{result.stdout_lines}}"
+  become: yes
+  tags: common
+
+
+- name: Mount up nfs volume
+  mount:
+    name: /mntcvf/web_rw
+    src: ubuntu:/ubuntu
+    fstype: nfs
+    opts: rw,rsize=32768,wsize=32768,tcp 
+    state: mounted
+  become: yes
+  tags: nfs
+
+- name: Create directory tree inside nfs directory
+  file:
+    path: /mntcvf/web_rw/gv-data/{{item}}
+    state: directory
+#   owner: tomcat
+#   group: tomcat
+  with_items:
+    - mevo
+    - services
+    - statistiques
+  become: yes
+  tags: nfs 
+
+
 #################################################################################
 #										#
 #################################################################################
@@ -15,6 +83,7 @@
 #################################################################################
 #										#
 #################################################################################
+
 
 - name: Group-- Create groups stats,serveur and tomcat
   group:
@@ -97,4 +166,5 @@
    - "{{BATCH_REPLACE}}"
    - changes
   tags: batch_test
+
 

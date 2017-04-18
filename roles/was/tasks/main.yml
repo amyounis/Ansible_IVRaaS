@@ -1,0 +1,214 @@
+---
+
+##########################################################################################################################
+#						pre apache,tomcat tasks							 #
+##########################################################################################################################
+
+- shell: ls -I common-media* /etc/yum.repos.d/
+  register: result
+  become: yes
+  tags: common
+
+
+- name: Ensure all yum repos are enabled
+  replace:
+    dest: /etc/yum.repos.d/{{item}}
+    regexp: 'enabled=0'
+    replace: 'enabled=1'
+  with_items: "{{result.stdout_lines}}"
+  become: yes
+  tags: common
+
+ 
+- name: Ensure sox s installed
+  yum:
+    name: sox
+    state: latest
+  become: yes
+  tags: sox
+
+
+- name: Copy java jdk8 to {{EXTRACT_DIR}}
+  copy:
+    src: "{{JAVA_RPM}}"
+    dest: "{{EXTRACT_DIR}}"
+  tags: java
+ 
+
+- name: Install Java 8
+  yum:
+    name: "{{EXTRACT_DIR}}/{{JAVA_RPM}}"
+  become: yes
+  tags: java
+
+
+- name: Correct java version selected
+  alternatives:
+    name: java
+    path: "{{JAVA_HOME}}/java"
+  become: yes
+  tags: java
+
+
+- name: Mount up nfs volume
+  mount:
+    name: /mntcvf/web_rw
+    src: ubuntu:/ubuntu
+    fstype: nfs
+    opts: rw,rsize=32768,wsize=32768,tcp 
+    state: mounted
+  become: yes
+  tags: nfs
+
+- name: Create directory tree inside nfs directory
+  file:
+    path: /mntcvf/web_rw/gv-data/{{item}}
+    state: directory
+#   owner: tomcat
+#   group: tomcat
+  with_items:
+    - mevo
+    - services
+    - statistiques
+  become: yes
+  tags: nfs 
+
+
+##########################################################################################################################
+#						Install apache http server						 #
+##########################################################################################################################
+
+- name: Ensure apache http server is installed
+  yum:
+    name: httpd
+    state: latest
+  tags: apache
+
+- name: Ensure http server is enabled
+  service:
+    name: httpd
+    enabled: yes
+  tags: apache
+
+
+##########################################################################################################################
+#						Apache server Configuration					         #
+##########################################################################################################################
+
+- name: File-- Create web application and logs directories
+  file:
+    dest: "{{item.dest}}"
+    state: "{{item.state}}"
+  with_items: "{{APACHE_FILE}}"
+  tags: apache
+
+- name: Copy-- Copy  modules/ to {{APACHE_CONF}}/modules/
+  copy:
+    src: "{{item.src}}" 
+    dest: "{{item.dest}}"
+  with_items: "{{APACHE_COPY}}"
+  tags: apache
+
+- name: Template-- Templating mod_jk.conf, worker.properties and apache virtual hosts configuration files
+  template:
+    src: "{{item.src}}"
+    dest: "{{item.dest}}"
+  with_items: "{{APACHE_TEMPLATE}}"
+  notify: restart httpd
+  tags: apache
+
+- name: Lineinfile-- Modify httpd.conf 
+  lineinfile: 
+    dest: "{{item.dest}}"
+    line: "{{item.line}}"
+  with_items: "{{APACHE_LINEINFILE}}"
+  tags: apache
+
+
+##########################################################################################################################
+#						Tomcat installation							 #
+##########################################################################################################################
+
+- name: Ensure tomcat is installed
+  yum:
+    name: tomcat6
+    state: latest
+  tags: tomcat
+
+
+- name: Ensure tomcat server is started and enabled
+  service:
+    name: tomcat6
+    enabled: yes
+  tags: tomcat
+
+
+##########################################################################################################################
+#						Tomcat configurations							 #
+##########################################################################################################################
+
+- name: File-- Create virtual hosts dirs under  {{TOMCAT_CONF}}/Catalina and dirs to extract webapps in {{EXTRACT_DIR}}
+  file:
+    path: "{{item.path}}"
+    state: "{{item.state}}"
+  with_items: "{{TOMCAT_FILE}}"
+  tags: tomcat
+
+
+- name: Unarchive-- extract {{WEB_ZIP_FILENAME}}.zip and webapps into {{EXTRACT_DIR}}
+  unarchive:
+    src: "{{item.src}}"
+    dest: "{{item.dest}}"
+    remote_src: "{{item.remote_src}}"
+  with_items: "{{TOMCAT_UNARCHIVE}}"
+  tags: tomcat
+
+
+- name: Synchronize-- copy conf/ to META-INF
+  synchronize:
+    src: "{{item.src}}"
+    dest: "{{item.dest}}"
+  delegate_to: "{{ inventory_hostname }}"
+  with_items: "{{TOMCAT_SYNCHRONIZE}}"
+  tags: tomcat
+
+
+- name: Copy-- Copy tomcat manager/ app to {{TOMCAT_HOME}}/webapps/ , manager.xml under vhosts and context.xml to <appname>.xml 
+  copy:
+    src: "{{item.src}}"
+    dest: "{{item.dest}}"
+    remote_src: "{{item.remote_src}}"
+  with_items: "{{TOMCAT_COPY}}"
+  tags: tomcat
+
+
+- name: Lineinfile-- Modify {{TOMCAT_CONF}}/server.xml and {{TOMCAT_CONF}}/tomcat6.conf 
+  lineinfile:
+    dest: "{{item.dest}}"
+    regexp: "{{item.regexp}}"
+    line: "{{item.line}}"
+  with_items: "{{TOMCAT_LINEINFILE}}"
+  notify: restart tomcat
+  tags: tomcat
+
+
+- name: Blockinfile-- Modify {{TOMCAT_CONF}}/server.xml to add virtual hosts and {{TOMCAT_CONF}}/tomcat-users.xml to add users and roles 
+  blockinfile:
+    dest: "{{item.dest}}"
+    insertafter: "{{item.insertafter}}"
+    marker: "{{item.marker}}"
+    block: "{{item.block}}"
+  with_items: "{{TOMCAT_BLOCKINFILE}}"
+  notify: restart tomcat
+  tags: tomcat
+
+
+- name : Replace-- set key values in configuration files
+  replace:
+    dest: "{{item.0.dest}}"
+    regexp: "{{item.1.regexp}}"
+    replace: "{{item.1.replace}}"
+  with_subelements: 
+   - "{{TOMCAT_REPLACE}}"
+   - changes
+  tags: tomcat
