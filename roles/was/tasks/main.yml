@@ -106,6 +106,7 @@
   copy:
     src: "{{item.src}}" 
     dest: "{{item.dest}}"
+    mode: "{{item.mode}}"
   with_items: "{{APACHE_COPY}}"
   tags: apache
 

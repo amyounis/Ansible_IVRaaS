@@ -94,13 +94,13 @@
   become: yes
   tags: mysql 
 
-- name : Replace-- set recipient of marketing report and current deployment country keys in sql scripts
-  replace:
-    dest: "{{item.dest}}"
-    regexp: "{{item.regexp}}"
-    replace: "{{item.replace}}" 
-  with_items: "{{MYSQL_REPLACE}}"
-
+#- name : Replace-- set recipient of marketing report and current deployment country keys in sql scripts
+#  replace:
+#    dest: "{{item.dest}}"
+#    regexp: "{{item.regexp}}"
+#    replace: "{{item.replace}}" 
+#  with_items: "{{MYSQL_REPLACE}}"
+#  tags: mysql
 
 - name: Mysql_db-- Import sql sqripts
   mysql_db:

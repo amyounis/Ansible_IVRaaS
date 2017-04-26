@@ -25,7 +25,7 @@ APACHE_FILE:
 
 
 APACHE_COPY:
- - { src: modules/  , dest: "{{APACHE_CONF}}/modules/" }
+ - { src: modules/  , dest: "{{APACHE_CONF}}/modules/" , mode: '0755' }
 
 APACHE_TEMPLATE:
  - { src: mod_jk.conf.j2 , dest: "{{APACHE_CONF}}/conf/mod_jk.conf" , var1: "{{WEB_LOG_BASE}}" }

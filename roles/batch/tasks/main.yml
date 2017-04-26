@@ -100,6 +100,12 @@
   with_items: "{{BATCH_USER}}"
   tags: batch
 
+- name: Lineinfile-- set SHARED_LIB_PERL environment variable of stats user
+  lineinfile:
+     dest: /home/stats/.bashrc
+     line: "export SHARED_LIB_PERL={{BATCH_APP_BASE}}/libperl"
+  tags: batch
+
 - name: File-- Create {{BATCH_APP_BASE}}/<batches>/batch , {{EXTRACT_DIR}}/<batches> and /mnt/statvox2/var shared directories
   file:
     path: "{{item.path}}"
@@ -117,14 +123,7 @@
   with_items: "{{BATCH_UNARCHIVE}}"
   tags: batch
 
-- name : Replace-- set key values in configuration files 
-  replace:
-    dest: "{{item.dest}}"
-    regexp: "{{item.regexp}}"
-    replace: "{{item.replace}}"
-  with_items: "{{BATCH_REPLACE}}"
-
-- name: Synchronize-- copy conf/ to etc/ and batch/bin/init.d/cron to /etc/init.d
+- name: Synchronize-- copy conf/ to etc/ and batch/bin/init.d/ to /etc/init.d
   synchronize:
     src: "{{item.src}}"
     dest: "{{item.dest}}"
@@ -151,12 +150,6 @@
   with_items: "{{BATCH_FILE_3}}"
   tags: batch
 
-- name: Export environment variable of stats user
-  lineinfile:
-     dest: /home/stats/.bashrc
-     line: "export SHARED_LIB_PERL={{BATCH_APP_BASE}}/libperl"
-  tags: batch
-
 - name : Replace-- set key values in configuration files
   replace:
     dest: "{{item.0.dest}}"
@@ -165,6 +158,6 @@
   with_subelements:
    - "{{BATCH_REPLACE}}"
    - changes
-  tags: batch_test
+  tags: batch
 
 
