@@ -24,22 +24,14 @@ APACHE_FILE:
  - { dest: "{{WEB_LOG_BASE}}/mod_jk/current"			, state: directory }
 
 
-APACHE_COPY:
- - { src: modules/  , dest: "{{APACHE_CONF}}/modules/" , mode: '0755' }
-
 APACHE_TEMPLATE:
- - { src: mod_jk.conf.j2 , dest: "{{APACHE_CONF}}/conf/mod_jk.conf" , var1: "{{WEB_LOG_BASE}}" }
- - { src: workers.properties.j2 , dest: "{{APACHE_CONF}}/conf/workers.properties" , var1: "{{TOMCAT_HOME}}" }
- - { src: gv-authent.conf.j2 , dest: "{{APACHE_CONF}}/conf.d/{{WEB_APPS.1.vhost}}.conf" , var1: "{{WEB_APPS.1.vhost}}" , var2: "{{WEB_APP_BASE}}" , var3: "{{WEB_LOG_BASE}}" }
- - { src: gv-admmsgvocale-svi.conf.j2 , dest: "{{APACHE_CONF}}/conf.d/{{WEB_APPS.0.vhost}}.conf" , var1: "{{WEB_APPS.0.vhost}}" , var2: "{{WEB_APP_BASE}}" , var3: "{{WEB_LOG_BASE}}" }
- - { src: gv-provisioning.conf.j2 , dest: "{{APACHE_CONF}}/conf.d/{{WEB_APPS.2.vhost}}.conf" , var1: "{{WEB_APPS.2.vhost}}" , var2: "{{WEB_APP_BASE}}" , var3: "{{WEB_LOG_BASE}}" }
- - { src: gv-svifiles.conf.j2 , dest: "{{APACHE_CONF}}/conf.d/{{WEB_APPS.5.vhost}}.conf" , var1: "{{WEB_APPS.5.vhost}}" , var2: "{{WEB_APP_BASE}}" , var3: "{{WEB_LOG_BASE}}" }
- - { src: gv-switchingservice.conf.j2 , dest: "{{APACHE_CONF}}/conf.d/{{WEB_APPS.3.vhost}}.conf" , var1: "{{WEB_APPS.3.vhost}}" , var2: "{{WEB_APP_BASE}}" , var3: "{{WEB_LOG_BASE}}" }
- - { src: gv-webservices.conf.j2 , dest: "{{APACHE_CONF}}/conf.d/{{WEB_APPS.4.vhost}}.conf" , var1: "{{WEB_APPS.4.vhost}}" , var2: "{{WEB_APP_BASE}}" , var3: "{{WEB_LOG_BASE}}" }
+ - { src: gv-admmsgvocale-svi.conf.j2 , dest: "{{APACHE_CONF}}/{{WEB_APPS.0.vhost}}.conf" , var1: "{{WEB_APPS.0.vhost}}" , var2: "{{WEB_APP_BASE}}" , var3: "{{WEB_LOG_BASE}}" }
+ - { src: gv-authent.conf.j2 	      , dest: "{{APACHE_CONF}}/{{WEB_APPS.1.vhost}}.conf" , var1: "{{WEB_APPS.1.vhost}}" , var2: "{{WEB_APP_BASE}}" , var3: "{{WEB_LOG_BASE}}" }
+ - { src: gv-provisioning.conf.j2     , dest: "{{APACHE_CONF}}/{{WEB_APPS.2.vhost}}.conf" , var1: "{{WEB_APPS.2.vhost}}" , var2: "{{WEB_APP_BASE}}" , var3: "{{WEB_LOG_BASE}}" }
+ - { src: gv-switchingservice.conf.j2 , dest: "{{APACHE_CONF}}/{{WEB_APPS.3.vhost}}.conf" , var1: "{{WEB_APPS.3.vhost}}" , var2: "{{WEB_APP_BASE}}" , var3: "{{WEB_LOG_BASE}}" }
+ - { src: gv-webservices.conf.j2      , dest: "{{APACHE_CONF}}/{{WEB_APPS.4.vhost}}.conf" , var1: "{{WEB_APPS.4.vhost}}" , var2: "{{WEB_APP_BASE}}" , var3: "{{WEB_LOG_BASE}}" }
+ - { src: gv-svifiles.conf.j2         , dest: "{{APACHE_CONF}}/{{WEB_APPS.5.vhost}}.conf" , var1: "{{WEB_APPS.5.vhost}}" , var2: "{{WEB_APP_BASE}}" , var3: "{{WEB_LOG_BASE}}" }
  
-APACHE_LINEINFILE:
- - { dest: "{{APACHE_CONF}}/conf/httpd.conf" , line: "include conf/mod_jk.conf" }
-
 
 ##########################################################################################################################
 #						tomcat tasks variables							 #
@@ -65,27 +57,27 @@ TOMCAT_FILE:
 
 
 TOMCAT_UNARCHIVE: 
- - { src: "{{WEB_ZIP_FILENAME}}.zip",dest: "{{EXTRACT_DIR}}" , remote_src: no }
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.0.name}}-webapp-{{WEB_APPS.0.version}}.tar.gz",dest: "{{EXTRACT_DIR}}/{{WEB_APPS.0.name}}" , remote_src: yes}
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.1.name}}-webapp-{{WEB_APPS.1.version}}.tar.gz",dest: "{{EXTRACT_DIR}}/{{WEB_APPS.1.name}}" , remote_src: yes}
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.2.name}}-webapp-{{WEB_APPS.2.version}}.tar.gz",dest: "{{EXTRACT_DIR}}/{{WEB_APPS.2.name}}" , remote_src: yes}
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.3.name}}-webapp-{{WEB_APPS.3.version}}.tar.gz",dest: "{{EXTRACT_DIR}}/{{WEB_APPS.3.name}}" , remote_src: yes}
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.4.name}}-webapp-{{WEB_APPS.4.version}}.tar.gz",dest: "{{EXTRACT_DIR}}/{{WEB_APPS.4.name}}" , remote_src: yes}
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.5.name}}-webapp-{{WEB_APPS.5.version}}.tar.gz",dest: "{{EXTRACT_DIR}}/{{WEB_APPS.5.name}}" , remote_src: yes}
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.6.name}}-webapp-{{WEB_APPS.6.version}}.tar.gz",dest: "{{EXTRACT_DIR}}/{{WEB_APPS.6.name}}" , remote_src: yes}
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.7.name}}-webapp-{{WEB_APPS.7.version}}.tar.gz",dest: "{{EXTRACT_DIR}}/{{WEB_APPS.7.name}}" , remote_src: yes}  
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.8.name}}-webapp-{{WEB_APPS.8.version}}.tar.gz",dest: "{{EXTRACT_DIR}}/{{WEB_APPS.8.name}}" , remote_src: yes}
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.9.name}}-webapp-{{WEB_APPS.9.version}}.tar.gz",dest: "{{EXTRACT_DIR}}/{{WEB_APPS.9.name}}" , remote_src: yes}  
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.0.name}}/binpackage/{{WEB_APPS.0.name}}.war" , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.0.vhost}}/ROOT" , remote_src: yes}
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.1.name}}/binpackage/{{WEB_APPS.1.name}}.war" , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.1.vhost}}/ROOT" , remote_src: yes} 
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.2.name}}/binpackage/{{WEB_APPS.2.name}}.war" , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.2.vhost}}/ROOT" , remote_src: yes}
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.3.name}}/binpackage/{{WEB_APPS.3.name}}.war" , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.3.vhost}}/ROOT" , remote_src: yes} 
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.4.name}}/binpackage/{{WEB_APPS.4.name}}.war" , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.4.vhost}}/ROOT" , remote_src: yes}
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.5.name}}/binpackage/{{WEB_APPS.5.name}}.war" , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.5.vhost}}/ROOT" , remote_src: yes} 
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.6.name}}/binpackage/{{WEB_APPS.6.name}}.war" , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.1.vhost}}/admin-stp" , remote_src: yes}
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.7.name}}/binpackage/{{WEB_APPS.7.name}}.war" , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.1.vhost}}/adv1" , remote_src: yes}
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.8.name}}/binpackage/{{WEB_APPS.8.name}}.war" , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.1.vhost}}/stats" , remote_src: yes}
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.9.name}}/binpackage/{{WEB_APPS.9.name}}.war" , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.1.vhost}}/vocalmestre1" , remote_src: yes} 
+ - { src: "{{WEB_ZIP_FILENAME}}.zip"						     , dest: "{{EXTRACT_DIR}}" 					 , remote_src: no }
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.0.name}}-webapp-{{WEB_APPS.0.version}}.tar.gz" , dest: "{{EXTRACT_DIR}}/{{WEB_APPS.0.name}}" 		 , remote_src: yes}
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.1.name}}-webapp-{{WEB_APPS.1.version}}.tar.gz" , dest: "{{EXTRACT_DIR}}/{{WEB_APPS.1.name}}" 		 , remote_src: yes}
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.2.name}}-webapp-{{WEB_APPS.2.version}}.tar.gz" , dest: "{{EXTRACT_DIR}}/{{WEB_APPS.2.name}}" 		 , remote_src: yes}
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.3.name}}-webapp-{{WEB_APPS.3.version}}.tar.gz" , dest: "{{EXTRACT_DIR}}/{{WEB_APPS.3.name}}" 		 , remote_src: yes}
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.4.name}}-webapp-{{WEB_APPS.4.version}}.tar.gz" , dest: "{{EXTRACT_DIR}}/{{WEB_APPS.4.name}}" 		 , remote_src: yes}
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.5.name}}-webapp-{{WEB_APPS.5.version}}.tar.gz" , dest: "{{EXTRACT_DIR}}/{{WEB_APPS.5.name}}" 		 , remote_src: yes}
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.6.name}}-webapp-{{WEB_APPS.6.version}}.tar.gz" , dest: "{{EXTRACT_DIR}}/{{WEB_APPS.6.name}}" 		 , remote_src: yes}
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.7.name}}-webapp-{{WEB_APPS.7.version}}.tar.gz" , dest: "{{EXTRACT_DIR}}/{{WEB_APPS.7.name}}" 		 , remote_src: yes}  
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.8.name}}-webapp-{{WEB_APPS.8.version}}.tar.gz" , dest: "{{EXTRACT_DIR}}/{{WEB_APPS.8.name}}" 		 , remote_src: yes}
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.9.name}}-webapp-{{WEB_APPS.9.version}}.tar.gz" , dest: "{{EXTRACT_DIR}}/{{WEB_APPS.9.name}}" 		 , remote_src: yes}  
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.0.name}}/binpackage/{{WEB_APPS.0.name}}.war"   , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.0.vhost}}/ROOT" 	 , remote_src: yes}
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.1.name}}/binpackage/{{WEB_APPS.1.name}}.war"   , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.1.vhost}}/ROOT" 	 , remote_src: yes} 
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.2.name}}/binpackage/{{WEB_APPS.2.name}}.war"   , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.2.vhost}}/ROOT"        , remote_src: yes}
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.3.name}}/binpackage/{{WEB_APPS.3.name}}.war"   , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.3.vhost}}/ROOT" 	 , remote_src: yes} 
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.4.name}}/binpackage/{{WEB_APPS.4.name}}.war"   , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.4.vhost}}/ROOT" 	 , remote_src: yes}
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.5.name}}/binpackage/{{WEB_APPS.5.name}}.war"   , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.5.vhost}}/ROOT" 	 , remote_src: yes} 
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.6.name}}/binpackage/{{WEB_APPS.6.name}}.war"   , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.6.vhost}}/admin-stp" 	 , remote_src: yes}
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.7.name}}/binpackage/{{WEB_APPS.7.name}}.war"   , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.7.vhost}}/adv1" 	 , remote_src: yes}
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.8.name}}/binpackage/{{WEB_APPS.8.name}}.war"   , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.8.vhost}}/stats" 	 , remote_src: yes}
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.9.name}}/binpackage/{{WEB_APPS.9.name}}.war"   , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.9.vhost}}/vocalmestre1", remote_src: yes} 
 
 
 TOMCAT_SYNCHRONIZE:
@@ -101,22 +93,15 @@ TOMCAT_SYNCHRONIZE:
  - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.9.name}}/conf/" , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.9.vhost}}/vocalmestre1/META-INF" }
  
 TOMCAT_COPY:
- - { src: manager     , dest: "{{TOMCAT_HOME}}/webapps/"     		       , remote_src: no  }
- - { src: manager.xml , dest: "{{TOMCAT_HOME}}/conf/Catalina/localhost/"       , remote_src: no  }
- - { src: manager.xml , dest: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.0.vhost}}/" , remote_src: no  }
- - { src: manager.xml , dest: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.1.vhost}}/" , remote_src: no  }
- - { src: manager.xml , dest: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.2.vhost}}/" , remote_src: no  }
- - { src: manager.xml , dest: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.3.vhost}}/" , remote_src: no  }
- - { src: manager.xml , dest: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.4.vhost}}/" , remote_src: no  }
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.0.name}}/conf/context.xml" , dest: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.0.vhost}}/ROOT.xml" , remote_src: yes  }
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.1.name}}/conf/context.xml" , dest: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.1.vhost}}/ROOT.xml" , remote_src: yes  }
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.2.name}}/conf/context.xml" , dest: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.2.vhost}}/ROOT.xml" , remote_src: yes  }
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.3.name}}/conf/context.xml" , dest: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.3.vhost}}/ROOT.xml" , remote_src: yes  }
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.4.name}}/conf/context.xml" , dest: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.4.vhost}}/ROOT.xml" , remote_src: yes  }
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.6.name}}/conf/context.xml" , dest: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.1.vhost}}/admin-stp.xml" , remote_src: yes  }
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.7.name}}/conf/context.xml" , dest: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.1.vhost}}/adv1.xml" , remote_src: yes  }
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.8.name}}/conf/context.xml" , dest: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.1.vhost}}/stats.xml" , remote_src: yes  }
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.9.name}}/conf/context.xml" , dest: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.1.vhost}}/vocalmestre1.xml" , remote_src: yes  }
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.0.name}}/conf/context.xml" , dest: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.0.vhost}}/ROOT.xml" 	  , remote_src: yes }
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.1.name}}/conf/context.xml" , dest: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.1.vhost}}/ROOT.xml" 	  , remote_src: yes }
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.2.name}}/conf/context.xml" , dest: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.2.vhost}}/ROOT.xml" 	  , remote_src: yes }
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.3.name}}/conf/context.xml" , dest: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.3.vhost}}/ROOT.xml" 	  , remote_src: yes }
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.4.name}}/conf/context.xml" , dest: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.4.vhost}}/ROOT.xml" 	  , remote_src: yes }
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.6.name}}/conf/context.xml" , dest: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.1.vhost}}/admin-stp.xml" 	  , remote_src: yes }
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.7.name}}/conf/context.xml" , dest: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.1.vhost}}/adv1.xml" 	  , remote_src: yes }
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.8.name}}/conf/context.xml" , dest: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.1.vhost}}/stats.xml" 	  , remote_src: yes }
+ - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.9.name}}/conf/context.xml" , dest: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.1.vhost}}/vocalmestre1.xml" , remote_src: yes }
 
 
 TOMCAT_LINEINFILE:
@@ -128,16 +113,12 @@ TOMCAT_LINEINFILE:
    regexp: '<Engine name="Catalina" defaultHost="localhost"'
    line: <Engine name="Catalina" defaultHost="localhost" jvmRoute="localhost">
 
- - dest: "{{TOMCAT_CONF}}/tomcat{{TOMCAT_VERSION}}.conf"
-   regexp: 'JAVA_OPTS='
-   line: JAVA_OPTS="${JAVA_OPTS} -Xmx1536m -Xms1024m -Xmn512m -XX:MaxPermSize=512m -Djavax.sql.DataSource.Factory=org.apache.commons.dbcp.BasicDataSourceFactory"
-
+# - dest: "{{TOMCAT_CONF}}/tomcat{{TOMCAT_VERSION}}.conf"
+#   regexp: 'JAVA_OPTS='
+#   line: JAVA_OPTS="${JAVA_OPTS} -Xmx1536m -Xms1024m -Xmn512m -XX:MaxPermSize=512m -Djavax.sql.DataSource.Factory=org.apache.commons.dbcp.BasicDataSourceFactory"
+#
 
 TOMCAT_BLOCKINFILE:
- - dest: "{{TOMCAT_CONF}}/tomcat-users.xml"
-   insertafter: "<tomcat-users>"
-   marker: "<!-- {mark} ANSIBLE MANAGED BLOCK -->"
-   block: "{{ lookup('file', 'tomcat-users') }}" 
  - dest: "{{TOMCAT_CONF}}/server.xml"
    insertafter: "</Host>"
    marker: "<!-- {mark} ANSIBLE MANAGED BLOCK -->"
@@ -198,12 +179,6 @@ TOMCAT_REPLACE:
  - dest: "{{WEB_APP_BASE}}/{{WEB_APPS.1.vhost}}/ROOT/META-INF/context.xml"
    changes:
     - { regexp: /usr2/web/gv-authent-amea.dmz.cloud.mbs 	 , replace: "{{WEB_APP_BASE}}/{{WEB_APPS.1.vhost}}" }
-# - dest: "{{WEB_APP_BASE}}/{{WEB_APPS.1.vhost}}/ROOT/META-INF/application.properties"
-#   changes:
-#    - { regexp: cloud-amea02-itg.ope.cloud.mbs 	 		 , replace: "{{MYSQL_IP}}" }
- - dest: "{{WEB_APP_BASE}}/{{WEB_APPS.1.vhost}}/ROOT/META-INF/hibernateStatMaster.cfg.xml"
-   changes:
-    - { regexp: cloud-amea02-itg.ope.cloud.mbs 	 		 , replace: "{{MYSQL_IP}}" }
  - dest: "{{WEB_APP_BASE}}/{{WEB_APPS.1.vhost}}/ROOT/META-INF/hibernate.cfg.xml"
    changes:
     - { regexp: cloud-amea02-itg.ope.cloud.mbs 	 		 , replace: "{{MYSQL_IP}}" }
@@ -212,7 +187,6 @@ TOMCAT_REPLACE:
    changes:
     - { regexp: /usr2/web/gv-provisioning-amea.dmz.cloud.mbs 	 , replace: "{{WEB_APP_BASE}}/{{WEB_APPS.2.vhost}}" }
 ########################################  switchingservice Webapp META-INF ##########################################
-
  - dest: "{{WEB_APP_BASE}}/{{WEB_APPS.3.vhost}}/ROOT/META-INF/context.xml"         
    changes:
     - { regexp: /usr2/web/gv-switchingservice-amea.dmz.cloud.mbs , replace: "{{WEB_APP_BASE}}/{{WEB_APPS.3.vhost}}" }
@@ -228,7 +202,7 @@ TOMCAT_REPLACE:
     - { regexp: cloud-amea02-itg.ope.cloud.mbs	 		 , replace: "{{MYSQL_IP}}" }
  - dest: "{{WEB_APP_BASE}}/{{WEB_APPS.4.vhost}}/ROOT/META-INF/hibernateStatMaster.cfg.xml"         
    changes:
-    - { regexp: cloud-amea02-itg.ope.cloud.mbs	 		 , replace: "{{MYSQL_IP}}" }
+   - { regexp: cloud-amea02-itg.ope.cloud.mbs	 		 , replace: "{{MYSQL_IP}}" }
 ############################################  admin-stp Webapp META-INF ##############################################
  - dest: "{{WEB_APP_BASE}}/{{WEB_APPS.6.vhost}}/admin-stp/META-INF/context.xml"    
    changes:

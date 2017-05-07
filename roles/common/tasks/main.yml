@@ -1,0 +1,24 @@
+---
+
+##########################################################################################################################
+#						common tasks for all hosts						 #
+##########################################################################################################################
+
+- shell: ls -I common-media* /etc/yum.repos.d/
+  register: result
+  tags: common
+
+- name: Ensure all yum repos are enabled
+  replace:
+    dest: /etc/yum.repos.d/{{item}}
+    regexp: 'enabled=0'
+    replace: 'enabled=1'
+  with_items: "{{result.stdout_lines}}"
+  tags: common
+
+- name: upgrade all packages
+  yum:
+    name: '*'
+    state: latest
+  tags: common
+ 

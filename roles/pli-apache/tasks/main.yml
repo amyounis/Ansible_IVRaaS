@@ -1,0 +1,40 @@
+---
+
+- name: Copy-- copy {{APACHE_TAR}} to /tmp
+  copy: 
+    src: "{{APACHE_TAR}}"
+    dest: /tmp
+  tags: pli-apache
+
+- name: File-- create directory /images/apache/{{APACHE_VERSION}}/
+  file:
+    path: "/images/apache/{{APACHE_VERSION}}/"
+    state: directory
+  tags: pli-apache
+
+- name: Unarchive-- /tmp/{{APACHE_TAR}} into /images/apache/{{APACHE_VERSION}}/
+  unarchive:
+    src: "/tmp/{{APACHE_TAR}}"
+    dest: "/images/apache/{{APACHE_VERSION}}/"
+    remote_src: yes
+  tags: pli-apache
+
+- name: Shell-- run apa_install.ksh
+  shell: ./apa_install.ksh
+  args:
+    chdir: "/images/apache/{{APACHE_VERSION}}/"
+    creates: /opt/apache/
+  tags: pli-apache
+
+- name: Shell-- run apa_creinstance.ksh
+  shell: ./apa_creinstance.ksh {{AppliId}} {{AppliType}} {{AppliVersion}} {{AppliGroup}} {{AppliUser}} {{AppliVg}} {{AppliLvSize}} {{Worker}} {{Http}} {{HttpPort}} {{Https}} {{HttpsPort}} {{AjpPort}} {{Interface}} {{Flag}}
+  args:
+    chdir: /opt/apache/bin/
+    creates: /opt/application/ivraas/G02R09C06/apache*
+  tags: pli-apache
+
+- name: Shell-- run apa_changecurrent.ksh
+  shell: ./apa_changecurrent.ksh {{AppliId}} {{AppliVersion}}
+  args:
+    chdir: /opt/apache/bin/
+  tags: pli-apache

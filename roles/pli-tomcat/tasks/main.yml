@@ -1,0 +1,26 @@
+---
+
+- name: Copy-- copy tar to /tmp
+  copy: 
+    src: "{{TOMCAT_TAR}}"
+    dest: /tmp
+  tags: pli-tomcat
+
+- name: File--
+  file:
+    path: "/images/tomcat/{{TOMCAT_VERSION}}/"
+    state: directory
+  tags: pli-tomcat
+
+- name: Unarchive-- 
+  unarchive:
+    src: "/tmp/{{TOMCAT_TAR}}"
+    dest: "/images/tomcat/{{TOMCAT_VERSION}}/"
+    remote_src: yes
+  tags: pli-tomcat
+
+- name: Shell--
+  shell: ./tomcat-create-instance.ksh -i {appliId} -o {appliVersion} -u {owner} -g {groupe} -shutdown {shutdownPort} -http {httpPort} -https {httpsPort} -ajp {ajpPort} -jmx {jmxPort}
+  args:
+    chdir: "/images/tomcat/{{TOMCAT_VERSION}}/"
+  tags: pli-tomcat-later

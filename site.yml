@@ -3,10 +3,21 @@
 ########################################
 
 - name: IVRaaS was 
-  hosts: was
+  hosts: IVRaaS_servers
   gather_facts: False
 
   roles:
+   - common
+
+########################################
+
+- name: IVRaaS was 
+  hosts: test
+  gather_facts: False
+
+  roles:
+   - pli-apache
+   - pli-tomcat
    - was
 
 #########################################

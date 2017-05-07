@@ -1,0 +1,28 @@
+---
+
+##################################################################################
+#                           Install Oracle Java Jdk                              #
+##################################################################################
+
+
+- name: Copy java jdk8 to {{TMP_DIR}}
+  copy:
+    src: "{{JAVA_RPM}}"
+    dest: "{{TMP_DIR}}"
+  tags: java
+ 
+
+- name: Install Java 8
+  yum:
+    name: "{{TMP_DIR}}/{{JAVA_RPM}}"
+  become: yes
+  tags: java
+
+
+- name: Correct java version selected
+  alternatives:
+    name: java
+    path: "{{JAVA_HOME}}/java"
+  become: yes
+  tags: java
+

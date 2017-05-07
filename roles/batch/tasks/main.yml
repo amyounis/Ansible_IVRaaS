@@ -28,21 +28,6 @@
 
 
 
-- shell: ls -I common-media* /etc/yum.repos.d/
-  register: result
-  become: yes
-  tags: common
-
-
-- name: Ensure all yum repos are enabled
-  replace:
-    dest: /etc/yum.repos.d/{{item}}
-    regexp: 'enabled=0'
-    replace: 'enabled=1'
-  with_items: "{{result.stdout_lines}}"
-  become: yes
-  tags: common
-
 
 - name: Mount up nfs volume
   mount:

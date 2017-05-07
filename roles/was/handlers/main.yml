@@ -2,7 +2,7 @@
 
 - name: restart tomcat
   service: 
-    name: "tomcat{{TOMCAT_VERSION}}"
+    name: tomcat
     state: restarted
 
 - name: restart httpd 

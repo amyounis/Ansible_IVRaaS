@@ -1,6 +1,0 @@
----
-
-- name: restart tomcat
-  service: 
-    name: "tomcat{{TOMCAT_VERSION}}"
-    state: restarted
