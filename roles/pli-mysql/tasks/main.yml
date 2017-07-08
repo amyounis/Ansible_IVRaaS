@@ -1,0 +1,29 @@
+---
+
+- name: Copy-- copy {{MYSQL_TAR}} to /tmp
+  copy: 
+    src: "{{MYSQL_TAR}}"
+    dest: /tmp
+  tags: pli-mysql
+
+- name: File-- create directory /images/mysql/{{MYSQL_VERSION}}/
+  file:
+    path: "/images/mysql/{{MYSQL_VERSION}}/"
+    state: directory
+  tags: pli-mysql
+
+- name: Unarchive-- /tmp/{{MYSQL_TAR}} into /images/mysql/{{MYSQL_VERSION}}/
+  unarchive:
+    src: "/tmp/{{MYSQL_TAR}}"
+    dest: "/images/mysql/{{MYSQL_VERSION}}/"
+    remote_src: yes
+  tags: pli-mysql
+
+- name: Shell-- run my_instbin.ksh {{MYSQL_VERSION}} 2 silent
+  shell: "sed -i 's#rm -rf $ImagesDir#rm -rf $ImagesDir/*#' my_instbin.ksh && ./my_instbin.ksh {{MYSQL_VERSION}} 2 silent"
+  args:
+    chdir: "/images/mysql/{{MYSQL_VERSION}}"
+    creates: /opt/mysql/
+  tags: pli-mysql
+
+

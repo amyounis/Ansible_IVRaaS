@@ -23,18 +23,13 @@
   shell: ./apa_install.ksh
   args:
     chdir: "/images/apache/{{APACHE_VERSION}}/"
-    creates: /opt/apache/
+    creates: "/opt/apache/{{APACHE_VERSION}}"
   tags: pli-apache
 
 - name: Shell-- run apa_creinstance.ksh
-  shell: ./apa_creinstance.ksh {{AppliId}} {{AppliType}} {{AppliVersion}} {{AppliGroup}} {{AppliUser}} {{AppliVg}} {{AppliLvSize}} {{Worker}} {{Http}} {{HttpPort}} {{Https}} {{HttpsPort}} {{AjpPort}} {{Interface}} {{Flag}}
+  shell: ./apa_creinstance.ksh {{AppliId}} {{AppliType}} {{AppliVersion}} {{AppliGroup}} {{AppliUser}} {{AppliVg}} {{AppliLvSize}} {{Worker}} {{Http}} {{HttpPort}} {{Https}} {{HttpsPort}} {{AjpPort}} {{Interface}} {{Flag}} && ./apa_changecurrent.ksh {{AppliId}} {{AppliVersion}}
   args:
     chdir: /opt/apache/bin/
-    creates: /opt/application/ivraas/G02R09C06/apache*
+    creates: "/opt/application/{{AppliId}}/{{AppliVersion}}/apache*"
   tags: pli-apache
 
-- name: Shell-- run apa_changecurrent.ksh
-  shell: ./apa_changecurrent.ksh {{AppliId}} {{AppliVersion}}
-  args:
-    chdir: /opt/apache/bin/
-  tags: pli-apache

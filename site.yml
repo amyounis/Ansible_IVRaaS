@@ -12,7 +12,7 @@
 ########################################
 
 - name: IVRaaS was 
-  hosts: test
+  hosts: was
   gather_facts: False
 
   roles:
@@ -23,10 +23,11 @@
 #########################################
 
 - name: IVRaaS db 
-  hosts: db
+  hosts: test
   gather_facts: False
 
   roles:
+   - pli-mysql
    - db
 
 ########################################

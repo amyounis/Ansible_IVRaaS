@@ -1,26 +1,42 @@
 ---
 
-- name: Copy-- copy tar to /tmp
+- name: Yum-- ensure prerequisites installed and updated
+  yum:
+    name: 
+     - libX11
+     - gtk2
+    state: latest
+  tags: pli-tomcat
+
+- name: Copy-- copy {{TOMCAT_TAR}} to /tmp
   copy: 
     src: "{{TOMCAT_TAR}}"
     dest: /tmp
   tags: pli-tomcat
 
-- name: File--
+- name: File-- create directory /images/tomcat/{{TOMCAT_VERSION}}/
   file:
     path: "/images/tomcat/{{TOMCAT_VERSION}}/"
     state: directory
   tags: pli-tomcat
 
-- name: Unarchive-- 
+- name: Unarchive-- /tmp/{{TOMCAT_TAR}} into /images/tomcat/{{TOMCAT_VERSION}}/
   unarchive:
     src: "/tmp/{{TOMCAT_TAR}}"
     dest: "/images/tomcat/{{TOMCAT_VERSION}}/"
     remote_src: yes
   tags: pli-tomcat
 
-- name: Shell--
-  shell: ./tomcat-create-instance.ksh -i {appliId} -o {appliVersion} -u {owner} -g {groupe} -shutdown {shutdownPort} -http {httpPort} -https {httpsPort} -ajp {ajpPort} -jmx {jmxPort}
+- name: Shell-- run /images/tomcat/{{TOMCAT_VERSION}}/tomcat-install.ksh silent
+  shell: ./tomcat-install.ksh silent
   args:
     chdir: "/images/tomcat/{{TOMCAT_VERSION}}/"
-  tags: pli-tomcat-later
+    creates: "/opt/tomcat/{{TOMCAT_VERSION}}/"
+  tags: pli-tomcat
+
+- name: Shell-- run /opt/tomcat/bin/tomcat-create-instance.ksh ...
+  shell: "./tomcat-create-instance.ksh -i {{appliId}} -o {{appliVersion}} -u {{owner}} -g {{groupe}} -shutdown {{shutdownPort}} -http {{httpPort}} -https {{httpsPort}} -ajp {{ajpPort}} -jmx {{jmxPort}}"
+  args:
+    chdir: /opt/tomcat/bin/
+    creates: "/opt/application/{{appliId}}/{{appliVersion}}/tomcat/"
+  tags: pli-tomcat

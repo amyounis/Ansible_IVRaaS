@@ -9,7 +9,7 @@ owner: uwas
 groupe: gwas
 shutdownPort: 9801
 httpPort: 9080
-httpsPort: NO
+httpsPort: 9633
 ajpPort: 9089
 jmxPort: 9901
 
