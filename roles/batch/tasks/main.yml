@@ -5,69 +5,69 @@
 ##################################################################################
 
 
-- name: Copy java jdk8 to {{EXTRACT_DIR}}
-  copy:
-    src: "{{JAVA_RPM}}"
-    dest: "{{EXTRACT_DIR}}"
-  tags: java
- 
-
-- name: Install Java 8
-  yum:
-    name: "{{EXTRACT_DIR}}/{{JAVA_RPM}}"
-  become: yes
-  tags: java
-
-
-- name: Correct java version selected
-  alternatives:
-    name: java
-    path: "{{JAVA_HOME}}/java"
-  become: yes
-  tags: java
-
-
-
-
-- name: Mount up nfs volume
-  mount:
-    name: /mntcvf/web_rw
-    src: ubuntu:/ubuntu
-    fstype: nfs
-    opts: rw,rsize=32768,wsize=32768,tcp 
-    state: mounted
-  become: yes
-  tags: nfs
-
-- name: Create directory tree inside nfs directory
-  file:
-    path: /mntcvf/web_rw/gv-data/{{item}}
-    state: directory
-#   owner: tomcat
-#   group: tomcat
-  with_items:
-    - mevo
-    - services
-    - statistiques
-  become: yes
-  tags: nfs 
-
-
-#################################################################################
-#										#
-#################################################################################
-
-- name: Yum-- install mysql client and server
-  yum:
-    name:
-     - mysql
-     - mysql-devel
-    state: latest
-#  tags: batch
-
-#################################################################################
-#										#
-#################################################################################
+#- name: Copy java jdk8 to {{EXTRACT_DIR}}
+#  copy:
+#    src: "{{JAVA_RPM}}"
+#    dest: "{{EXTRACT_DIR}}"
+#  tags: java
+# 
+#
+#- name: Install Java 8
+#  yum:
+#    name: "{{EXTRACT_DIR}}/{{JAVA_RPM}}"
+#  become: yes
+#  tags: java
+#
+#
+#- name: Correct java version selected
+#  alternatives:
+#    name: java
+#    path: "{{JAVA_HOME}}/java"
+#  become: yes
+#  tags: java
+#
+#
+#
+#
+#- name: Mount up nfs volume
+#  mount:
+#    name: /mntcvf/web_rw
+#    src: ubuntu:/ubuntu
+#    fstype: nfs
+#    opts: rw,rsize=32768,wsize=32768,tcp 
+#    state: mounted
+#  become: yes
+#  tags: nfs
+#
+#- name: Create directory tree inside nfs directory
+#  file:
+#    path: /mntcvf/web_rw/gv-data/{{item}}
+#    state: directory
+##   owner: tomcat
+##   group: tomcat
+#  with_items:
+#    - mevo
+#    - services
+#    - statistiques
+#  become: yes
+#  tags: nfs 
+#
+#
+##################################################################################
+##										#
+##################################################################################
+#
+#- name: Yum-- install mysql client and server
+#  yum:
+#    name:
+#     - mysql
+#     - mysql-devel
+#    state: latest
+##  tags: batch
+#
+##################################################################################
+##										#
+##################################################################################
 
 
 - name: Group-- Create groups stats,serveur and tomcat

@@ -1,13 +1,5 @@
 ---
 
-- name: Yum-- ensure prerequisites installed and updated
-  yum:
-    name: 
-     - libX11
-     - gtk2
-    state: latest
-  tags: pli-tomcat
-
 - name: Copy-- copy {{TOMCAT_TAR}} to /tmp
   copy: 
     src: "{{TOMCAT_TAR}}"

@@ -16,7 +16,7 @@
     src: "{{item.src}}"
     dest: "{{item.dest}}"
   with_items: "{{APACHE_TEMPLATE}}"
-  tags: was_test
+  tags: was
 
 ##########################################################################################################################
 #						Tomcat configurations							 #
@@ -64,7 +64,7 @@
     line: "{{item.line}}"
   with_items: "{{TOMCAT_LINEINFILE}}"
   notify: restart tomcat
-  tags: was
+  tags: was2
 
 
 - name: Blockinfile-- Modify {{TOMCAT_CONF}}/server.xml to add virtual hosts and {{TOMCAT_CONF}}/tomcat-users.xml to add users and roles 
@@ -75,7 +75,7 @@
     block: "{{item.block}}"
   with_items: "{{TOMCAT_BLOCKINFILE}}"
   notify: restart tomcat
-  tags: was
+  tags: was2
 
 
 - name : Replace-- set key values in configuration files
@@ -86,4 +86,4 @@
   with_subelements: 
    - "{{TOMCAT_REPLACE}}"
    - changes
-  tags: was
+  tags: was2

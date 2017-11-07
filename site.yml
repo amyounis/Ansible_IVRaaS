@@ -2,7 +2,7 @@
 
 ########################################
 
-- name: IVRaaS was 
+- name: IVRaaS common 
   hosts: IVRaaS_servers
   gather_facts: False
 

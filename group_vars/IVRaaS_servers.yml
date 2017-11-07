@@ -3,28 +3,8 @@
 #
 ###############################################################################
 
-EXTRACT_DIR: /images/IVRaaS
-
-################################################################################
-#
-###############################################################################
-
-JAVA_RPM: jdk-8u121-linux-x64.rpm 
-JAVA_HOME: /usr/java/jdk1.8.0_121/jre/bin
-
-##############################################################################
-#
-###############################################################################
-
-WEB_DOMAIN: amea.dmz.cloud.mbs
 
 IVRAAS_VERSION: G02R09C06
-
-WEB_APP_BASE: "/opt/application/ivraas/{{IVRAAS_VERSION}}/web"
-
-WEB_LOG_BASE: "/opt/application/ivraas/{{IVRAAS_VERSION}}/logs/apache" 
-
-WEB_ZIP_FILENAME: webapp
 
 
 WEB_APPS:
@@ -40,38 +20,19 @@ WEB_APPS:
  - { name: gv-vocalmestre	, version: V12.4.12  , vhost: gv-authent-amea.dmz.cloud.mbs 	     } 
 
 
-##############################################################################
+MYSQL_IP: mysql_server
 
-APACHE_HOME: /opt/application/ivraas/G02R09C06/apache2215/www
-APACHE_CONF: /opt/application/ivraas/G02R09C06/apache2215/conf.d
-
-##############################################################################
-
-TOMCAT_APP_HOME: /opt/tomcat/8.0.36
-TOMCAT_HOME: /opt/application/ivraas/G02R09C06/tomcat/00
-TOMCAT_CONF: /opt/application/ivraas/G02R09C06/tomcat/00/conf
-###############################################################################
-#
-###############################################################################
-
-BATCH_APP_BASE: /usr2/batch
-
-BATCH_ZIP_FILENAME: batch
 
 BATCHES:
- - { name: convPcnV2 			, type: batch	  , version: V2.1.0    }
- - { name: gv-batch 			, type: cronbatch , version: V12.4.12  }
- - { name: gv-batch-stp			, type: cronbatch , version: V2.10.5.1 }
- - { name: gv-tools			, type: cronbatch , version: V12.4.12  }
- - { name: stats-calculator		, type: batch 	  , version: V2.1.0    }
- - { name: stats-manager		, type: batch 	  , version: V2.1.0    }
- - { name: stats-manager-reintegration	, type: batch 	  , version: V2.1.0    }
- - { name: stats-rapatriement		, type: cronbatch , version: V2.1.0    }
- - { name: stats-utilities		, type: cronbatch , version: V2.1.0    }
+ - { name: convPcnV2                    , type: batch     , version: V2.1.0    }
+ - { name: gv-batch                     , type: cronbatch , version: V12.4.12  }
+ - { name: gv-batch-stp                 , type: cronbatch , version: V2.10.5.1 }
+ - { name: gv-tools                     , type: cronbatch , version: V12.4.12  }
+ - { name: stats-calculator             , type: batch     , version: V2.1.0    }
+ - { name: stats-manager                , type: batch     , version: V2.1.0    }
+ - { name: stats-manager-reintegration  , type: batch     , version: V2.1.0    }
+ - { name: stats-rapatriement           , type: cronbatch , version: V2.1.0    }
+ - { name: stats-utilities              , type: cronbatch , version: V2.1.0    }
 
-BATCH_STARTUP:
- - { SERVICE: gvStatCalculator	, SRC: /usr2/batch/stats-calculator/batch/bin/init.d/gvStatCalculator	}
- - { SERVICE: gvStatManager	, SRC: /usr2/batch/stats-manager/batch/bin/init.d/gvStatManager		}
- - { SERVICE: convPcnV2 	, SRC: /usr2/batch/convPcnV2/batch/bin/init.d/convPcnV2			}
 
-MYSQL_IP: 10.193.253.112
+

@@ -1,5 +1,17 @@
 ---
 
+
+EXTRACT_DIR: "/images/IVRaaS_{{IVRAAS_VERSION}}"
+
+WEB_APP_BASE: "/opt/application/ivraas/{{IVRAAS_VERSION}}/web"
+
+WEB_LOG_BASE: "/opt/application/ivraas/{{IVRAAS_VERSION}}/apache2215/logs"
+
+APACHE_CONF: "/opt/application/ivraas/{{IVRAAS_VERSION}}/apache2215/conf.d"
+
+TOMCAT_CONF: "/opt/application/ivraas/{{IVRAAS_VERSION}}/tomcat/00/conf"
+
+
 ##########################################################################################################################
 #						apache tasks variables							 #
 ##########################################################################################################################
@@ -57,7 +69,7 @@ TOMCAT_FILE:
 
 
 TOMCAT_UNARCHIVE: 
- - { src: "{{WEB_ZIP_FILENAME}}.zip"						     , dest: "{{EXTRACT_DIR}}" 					 , remote_src: no }
+ - { src: webapp.zip							             , dest: "{{EXTRACT_DIR}}" 					 , remote_src: no }
  - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.0.name}}-webapp-{{WEB_APPS.0.version}}.tar.gz" , dest: "{{EXTRACT_DIR}}/{{WEB_APPS.0.name}}" 		 , remote_src: yes}
  - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.1.name}}-webapp-{{WEB_APPS.1.version}}.tar.gz" , dest: "{{EXTRACT_DIR}}/{{WEB_APPS.1.name}}" 		 , remote_src: yes}
  - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.2.name}}-webapp-{{WEB_APPS.2.version}}.tar.gz" , dest: "{{EXTRACT_DIR}}/{{WEB_APPS.2.name}}" 		 , remote_src: yes}
@@ -105,9 +117,9 @@ TOMCAT_COPY:
 
 
 TOMCAT_LINEINFILE:
- - dest: "{{TOMCAT_CONF}}/server.xml"
-   regexp: '<Connector port="8009"'
-   line: <Connector port="8009" maxThreads="800" connectionTimeout="60000" minSpareThreads="25" maxSpareThreads="75" enableLookups="false" protocol="AJP/1.3" redirectPort="8443" />
+# - dest: "{{TOMCAT_CONF}}/server.xml"
+#   regexp: '<Connector port="8009"'
+#   line: <Connector port="8009" maxThreads="800" connectionTimeout="60000" minSpareThreads="25" maxSpareThreads="75" enableLookups="false" protocol="AJP/1.3" redirectPort="8443" />
 
  - dest: "{{TOMCAT_CONF}}/server.xml"
    regexp: '<Engine name="Catalina" defaultHost="localhost"'
