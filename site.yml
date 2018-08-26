@@ -23,7 +23,7 @@
 #########################################
 
 - name: IVRaaS db 
-  hosts: test
+  hosts: db
   gather_facts: False
 
   roles:

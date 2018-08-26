@@ -4,21 +4,10 @@
 #						common tasks for all hosts						 #
 ##########################################################################################################################
 
-- shell: ls -I common-media* /etc/yum.repos.d/
-  register: result
+- name: Copy-- Copy ivraas_repo.tar to /home/osadmin
+  unarchive:
+    src: "{{ playbook_dir }}/IVRaaS_files/ivraas_repo.tar"
+    dest: /images 
   tags: common
 
-- name: Ensure all yum repos are enabled
-  replace:
-    dest: /etc/yum.repos.d/{{item}}
-    regexp: 'enabled=0'
-    replace: 'enabled=1'
-  with_items: "{{result.stdout_lines}}"
-  tags: common
-
-- name: upgrade all packages
-  yum:
-    name: '*'
-    state: latest
-  tags: common
  
