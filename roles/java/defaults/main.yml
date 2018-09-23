@@ -1,2 +1,13 @@
 ---
 # defaults file for java
+
+# The name of the jdk pacakge in the "files" directory
+JAVA_RPM: jdk-8u152-linux-x64.rpm
+
+# The temprary directory on hosts to copy the jdk package to 
+TMP_DIR: /tmp
+
+# The JAVA home Directory
+JAVA_HOME: /usr/java/jdk1.8.0_152/jre/bin
+
+

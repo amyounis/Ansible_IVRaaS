@@ -16,8 +16,10 @@ db
 batch
 
 [IVRaaS_servers:vars]
-#ansible_become=yes
-#ansible_become_method=su
-#ansible_become_pass=PLATON
-ansible_user=root
+ansible_become=yes
+ansible_become_method=su
+ansible_become_pass=PLATON
+ansible_user=osadmin
+ansible_ssh_user=osadmin
+ansible_ssh_pass=Adm3Pl2
 

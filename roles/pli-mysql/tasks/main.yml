@@ -6,10 +6,16 @@
     dest: /tmp
   tags: pli-mysql
 
-- name: File-- create directory /images/mysql/{{MYSQL_VERSION}}/
+- name: File-- create directory /images/mysql/{{MYSQL_VERSION}}
   file:
     path: "/images/mysql/{{MYSQL_VERSION}}/"
     state: directory
+  tags: pli-mysql
+
+- name: Stat-- Check if /opt/mysql/na/{{MYSQL_VERSION}} exist 
+  stat:
+    path: "/opt/mysql/na/{{MYSQL_VERSION}}"
+  register: Dir_existance
   tags: pli-mysql
 
 - name: Unarchive-- /tmp/{{MYSQL_TAR}} into /images/mysql/{{MYSQL_VERSION}}/
@@ -17,13 +23,100 @@
     src: "/tmp/{{MYSQL_TAR}}"
     dest: "/images/mysql/{{MYSQL_VERSION}}/"
     remote_src: yes
+  when: not Dir_existance.stat.exists
   tags: pli-mysql
 
 - name: Shell-- run my_instbin.ksh {{MYSQL_VERSION}} 2 silent
-  shell: "sed -i 's#rm -rf $ImagesDir#rm -rf $ImagesDir/*#' my_instbin.ksh && ./my_instbin.ksh {{MYSQL_VERSION}} 2 silent"
+  shell: "./my_instbin.ksh {{MYSQL_VERSION}} 2 silent"
   args:
     chdir: "/images/mysql/{{MYSQL_VERSION}}"
-    creates: /opt/mysql/
+    creates: "/opt/mysql/na/{{MYSQL_VERSION}}"
   tags: pli-mysql
 
+- name: User-- change the user "mysql" password
+  user:
+    name: mysql
+    password: "{{PASSWD}}" 
+  tags: pli-mysql
+
+- name: Lineinfile-- Add "{{DB_VIP}}  bdd-vip" 
+  lineinfile:
+    dest: /etc/hosts
+    line: "{{DB_VIP}}  bdd-vip"
+    state: present
+  tags: pli-mysql
+
+#########################################################################################
+#				Preproduction						#
+#########################################################################################
+- debug: var=playbook_dir
+  tags: pli-mysql
+  
+- name: Copy-- Copy myserver01.conf to /opt/mysql/bin/myserver01.conf --- Preproduction only ---
+  copy:
+    src: myserver01.conf
+    dest: /opt/mysql/bin/myserver01.conf
+  register: conf_file
+  when: '"preproduction.inventory" in inventory_file'
+  tags: pli-mysql
+
+- name: Shell-- Run the command "./my_createsrv.ksh myserver01 5.6.35 silent" --- Preproduction only ---
+  shell: "./my_createsrv.ksh myserver01 5.6.35 silent"
+  args:
+    chdir: /opt/mysql/bin
+    creates: /myqdata/myserver01/data/mysql/
+  when: '"preproduction.inventory" in inventory_file'
+  tags: pli-mysql
+
+#########################################################################################
+#				Production						#
+#########################################################################################
+
+- name: Copy-- Copy my_failover_db_nas.conf to /opt/mysql/bin/my_failover_db_nas.conf --- Production only ---
+  copy:
+    src: my_failover_db_nas.conf
+    dest: /opt/mysql/bin/my_failover_db_nas.conf
+  register: conf_file
+  when: '"production.inventory" in inventory_file'
+  tags: pli-mysql
+
+- name: Shell-- Run the command ksh /opt/mysql/bin/my_failover_db_nas.ksh init --- Production only ---
+  run_once: true
+  delegate_to: db1
+  shell: "ksh /opt/mysql/bin/my_failover_db_nas.ksh init"
+  args:
+    chdir: /opt/mysql/bin
+    creates: /myqdata/myserver01/data/mysql/
+  when: '"production.inventory" in inventory_file'
+  tags: pli-mysql
+
+#########################################################################################
+
+- name: Lineinfile--
+  run_once:
+  delegate_to: db1 
+  lineinfile:
+    dest: /myqdata/myserver01/data/my.cnf
+    insertafter: "collation-server=latin1_general_ci"
+    line: "collation-server=latin1_swedish_ci"
+  tags: pli-mysql
+    
+
+- name: Replace-- Mysql configurations in the configuration file /myqdata/myserver01/data/my.cnf
+  run_once: true
+  delegate_to: db1
+  replace:
+    path: /myqdata/myserver01/data/my.cnf
+    regexp: "^sql-mode="
+    replace: "#sql-mode="
+  tags: pli-mysql
+
+- name: Replace-- Mysql configurations in the configuration file /myqdata/myserver01/data/my.cnf
+  run_once: true
+  delegate_to: db1
+  replace:
+    path: /myqdata/myserver01/data/my.cnf
+    regexp: "^lower-case-table-names=1"
+    replace: "lower-case-table-names=0"
+  tags: pli-mysql
 

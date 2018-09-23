@@ -1,3 +1,5 @@
 .idea
 site.retry
-IVRaaS_files/
+files/
+roles/*/files/
+*.rpm

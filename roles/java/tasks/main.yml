@@ -5,7 +5,7 @@
 ##################################################################################
 
 
-- name: Copy java jdk8 to {{TMP_DIR}}
+- name: Copy-- Copy java jdk8 to "{{TMP_DIR}}"
   copy:
     src: "{{JAVA_RPM}}"
     dest: "{{TMP_DIR}}"
@@ -15,7 +15,6 @@
 - name: Install Java 8
   yum:
     name: "{{TMP_DIR}}/{{JAVA_RPM}}"
-  become: yes
   tags: java
 
 
@@ -23,6 +22,5 @@
   alternatives:
     name: java
     path: "{{JAVA_HOME}}/java"
-  become: yes
   tags: java
 

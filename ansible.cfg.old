@@ -1,3 +1,0 @@
-[defaults]
-remote_tmp     = /images/IVRaaS/.ansible-${USER}/tmp
-#timeout = 10

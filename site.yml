@@ -4,7 +4,6 @@
 
 - name: IVRaaS common 
   hosts: IVRaaS_servers
-  gather_facts: False
 
   roles:
    - common
@@ -18,6 +17,7 @@
   roles:
    - pli-apache
    - pli-tomcat
+   - java
    - was
 
 #########################################
@@ -37,4 +37,5 @@
   gather_facts: False
 
   roles:
+   - java
    - batch

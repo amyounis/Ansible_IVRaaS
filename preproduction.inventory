@@ -1,0 +1,20 @@
+[was]
+was1		ansible_host=172.16.2.111
+
+[db]
+db1   		ansible_host=172.16.2.112	
+
+[batch]
+batch1   	ansible_host=172.16.2.113	
+
+[IVRaaS_servers:children]
+was
+db
+batch
+
+[IVRaaS_servers:vars]
+#ansible_become=yes
+#ansible_become_method=su
+#ansible_become_pass=PLATON
+ansible_user=root
+

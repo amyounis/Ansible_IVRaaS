@@ -4,10 +4,65 @@
 #						common tasks for all hosts						 #
 ##########################################################################################################################
 
-- name: Copy-- Copy ivraas_repo.tar to /home/osadmin
-  unarchive:
-    src: "{{ playbook_dir }}/IVRaaS_files/ivraas_repo.tar"
-    dest: /images 
+- name: Replace-- Configure /etc/sysconfig/keyboard KEYTABLE="us"
+  replace:
+    path: /etc/sysconfig/keyboard
+    regexp: 'KEYTABLE=.*'
+    replace: 'KEYTABLE="us"'
+    backup: yes
   tags: common
 
+- name: Replace-- Configure /etc/sysconfig/keyboard LAYOUT="us"
+  replace:
+    path: /etc/sysconfig/keyboard
+    regexp: 'LAYOUT=.*'
+    replace: 'LAYOUT="us"'
+    backup: yes
+  tags: common
+
+- name: Shell-- Run the command loadkeys us
+  shell: loadkeys us
+  tags: common
+
+- name: Replace-- Configure /etc/sysconfig/i18n LANG="en_US.utf8"
+  replace:
+    path: /etc/sysconfig/i18n
+    regexp: 'LANG=.*'
+    replace: 'LANG="en_US.utf8"'
+    backup: yes
+  tags: common
+    
+- name: Timezone-- Set timezone to "{{ ZONE }}"
+  timezone:
+    name: "{{ ZONE }}"
+  tags: common
+
+- name: Stat-- Check if /image/ivraas_repo exist
+  stat:
+    path: /images/ivraas_repo
+  register: Dir_existance
+  tags: common
+
+- name: Uarchive-- Unarchive files/ivraas_repo.tar to /images
+  unarchive:
+    src: "{{ playbook_dir }}/files/ivraas_repo.tar"
+    dest: /images
+  when: not Dir_existance.stat.exists
+  tags: common
+
+- name: Yum_repository-- Add ivraas repository
+  yum_repository:
+    name: ivraas
+    description: IVRaaS repo
+    baseurl: file:///images/ivraas_repo
+  tags: common
+
+- name: Yum-- Yum Update
+  yum:
+    name: '*'
+    state: latest
+    exclude: kernel*
+    skip_broken: yes
+    enablerepo: "ivraas"
+  tags: common
  
