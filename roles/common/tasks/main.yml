@@ -37,9 +37,9 @@
     name: "{{ ZONE }}"
   tags: common
 
-- name: Stat-- Check if /image/ivraas_repo exist
+- name: Stat-- Check if /image/ivraas_repo/repodata exist
   stat:
-    path: /images/ivraas_repo
+    path: /images/ivraas_repo/repodata
   register: Dir_existance
   tags: common
 
@@ -63,6 +63,7 @@
     state: latest
     exclude: kernel*
     skip_broken: yes
+    disablerepo: '*'
     enablerepo: "ivraas"
   tags: common
  

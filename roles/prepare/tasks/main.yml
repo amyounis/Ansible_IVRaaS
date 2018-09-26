@@ -1,0 +1,21 @@
+---
+
+- name: Unarchive-- Unarchive {{IVRAAS_TAR_NAME}} 
+  unarchive:
+    src: "{{IVRAAS_TAR_NAME}}.tar.gz"
+    dest: "{{playbook_dir}}/files"
+  tags: prepare
+
+- name: Archive-- Archive {{playbook_dir}}/files/{{IVRAAS_TAR_NAME}}/sql
+  archive:
+    path: "{{playbook_dir}}/files/{{IVRAAS_TAR_NAME}}/sql"
+    dest: "{{playbook_dir}}/files/{{IVRAAS_TAR_NAME}}/sql.gz"
+    remove: yes
+  tags: prepare
+
+- name: Archive-- Archive "{{playbook_dir}}/files/{{IVRAAS_TAR_NAME}}/*webapp*"
+  archive:
+    path: "{{playbook_dir}}/files/{{IVRAAS_TAR_NAME}}/*webapp*"
+    dest: "{{playbook_dir}}/files/{{IVRAAS_TAR_NAME}}/webapps.gz"
+    remove: yes
+  tags: prepare

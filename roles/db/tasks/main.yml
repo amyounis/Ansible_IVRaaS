@@ -1,94 +1,67 @@
 ---
 
-#########################################################################################
-#											#
-#########################################################################################
+#- name: Yum-- Yum install MySQL-python package 
+#  yum:
+#    name: MySQL-python
+#  tags: db
 
+- name: File-- Create /tmp/mysql-scripts/
+  run_once: yes
+  delegate_to: db1
+  file:
+    path: /tmp/mysql-scripts/
+    state: directory
+    owner: mysql
+    group: mysql
+  tags: db
 
-- name: YUM-- install mysql client and server
-  yum:
-    name:
-     - mysql
-     - mysql-server
-    state: latest
-  tags: mysql
+- name: Unarchive-- Put sql scripts under /tmp/mysql-scripts/
+  run_once: yes
+  delegate_to: db1
+  unarchive:
+    src: "{{IVRAAS_TAR_NAME}}.tar.gz"
+    dest: /tmp/mysql-scripts/
+    extra_opts: "{{IVRAAS_TAR_NAME}}/sql"
+    owner: mysql
+  tags: db
 
-
-- name: COPY-- copy Mysql-python to {{ECTRACT_DIR}}
-  copy:
-    src: MySQL-python-1.2.3-0.3.c1.1.el6.x86_64.rpm
-    dest: "{{EXTRACT_DIR}}/MySQL-python-1.2.3-0.3.c1.1.el6.x86_64.rpm"
-    owner: root
-    group: root
-  tags: mysql
-
-
-- name: YUM-- install MySQL-python to enable mysql_user module
-  yum:
-    name: "{{EXTRACT_DIR}}/MySQL-python-1.2.3-0.3.c1.1.el6.x86_64.rpm"
-    state: present
-  become: yes
-  tags: mysql
-
-
-- name: Service-- Ensure mysqld is started and enabled 
-  service:
-    name: mysqld
-    state: started
-    enabled: yes
-  tags: mysql 
-
-
-#########################################################################################
-#											#
-#########################################################################################
-
-- name: Mysql_user-- Update mysql root password for all root accounts
-  mysql_user: 
-    name: root 
-    host: localhost 
-    password: "{{MYSQL_ROOT_PASS}}"
-  tags: mysql
-
-
-- name: Blockinfile-- insert/update "[client]" configuration block in /root/.my.cnf
-  blockinfile:
-    dest: /root/.my.cnf
-    block: |
-      [client]
-      password={{MYSQL_ROOT_PASS}}
-    create: yes
-    mode: 0600
-  tags: mysql
-
-- name: Mysql_db-- Create new databases 
-  mysql_db:
-    name: "{{item}}"
-    state: present 
-  with_items: "{{DATA_BASES}}"
-  tags: mysql
-
-
-- name: Copy-- copy sql scripts to {{EXTRACT_DIR}}/sql_sqripts
-  copy:
-    src: sql_scripts
-    dest: "{{EXTRACT_DIR}}"
-  become: yes
-  tags: mysql 
-
-#- name : Replace-- set recipient of marketing report and current deployment country keys in sql scripts
-#  replace:
-#    dest: "{{item.dest}}"
-#    regexp: "{{item.regexp}}"
-#    replace: "{{item.replace}}" 
-#  with_items: "{{MYSQL_REPLACE}}"
-#  tags: mysql
-
-- name: Mysql_db-- Import sql sqripts
-  mysql_db:
-    state: import
-    name: all
-    target: "{{EXTRACT_DIR}}/sql_scripts/{{item}}"
+- name: Replace-- Replace "cloud-amea01-itg.ope.cloud.mbs" with {{hostvars['was1'].ansible_eth1.ipv4.address}} in sql scripts
+  run_once: yes
+  delegate_to: db1
+  replace:
+    path: "/tmp/mysql-scripts/{{IVRAAS_TAR_NAME}}/sql/fromScratch/{{item}}"
+    regexp: "cloud-amea01-itg.ope.cloud.mbs"
+    replace: "{{hostvars['was1'].ansible_eth1.ipv4.address}}"
   with_items: "{{SQL_SCRIPTS}}"
-  become: yes
-  tags: mysql
+  when: item in 'db-gvw-initUserAndDb.sql db-gvw_logs-initUserAndDb.sql db-stats-struct.sql'
+  tags: db
+
+- name: Replace-- Replace "cloud-amea03-itg.ope.cloud.mbs" with {{hostvars['batch1'].ansible_eth1.ipv4.address}} in sql scripts
+  run_once: yes
+  delegate_to: db1
+  replace:
+    path: "/tmp/mysql-scripts/{{IVRAAS_TAR_NAME}}/sql/fromScratch/{{item}}"
+    regexp: "cloud-amea03-itg.ope.cloud.mbs"
+    replace: "{{hostvars['batch1'].ansible_eth1.ipv4.address}}"
+  with_items: "{{SQL_SCRIPTS}}"
+  when: item in 'db-gvw-initUserAndDb.sql db-gvw_logs-initUserAndDb.sql db-stats-struct.sql'
+  tags: db
+
+#- name: Mysql_db-- Import sql sqripts
+#  run_once: yes
+#  delegate_to: db1
+#  mysql_db:
+#    state: import
+#    name: all
+#    target: "/tmp/sql_scripts/{{IVRAAS_TAR_NAME}}/{{item}}"
+#  with_items: "{{SQL_SCRIPTS}}"
+#  become: yes
+#  become_user: mysql
+#  tags: db_test
+
+- name: Shell-- Import sql scripts
+  run_once: yes
+  delegate_to: db1
+  shell: " runuser -l mysql -c ' mysql < /tmp/mysql-scripts/{{IVRAAS_TAR_NAME}}/sql/fromScratch/{{item}}' "
+  with_items: "{{SQL_SCRIPTS}}"
+  tags: db

@@ -4,7 +4,11 @@
 ###############################################################################
 
 
-IVRAAS_VERSION: G02R09C06
+IVRAAS_TAR_NAME: IVRaaS_G3R2C1P0_20171229_1017
+
+IVRAAS_REPO_NAME: ivraas_repo 
+
+IVRAAS_VERSION: G3R2C1P0
 
 
 WEB_APPS:
@@ -22,6 +26,13 @@ WEB_APPS:
 
 MYSQL_IP: mysql_server
 
+SQL_SCRIPTS:
+ - db-stats-struct.sql
+ - db-stats-data.sql
+ - db-gvw-initUserAndDb.sql
+ - db-gvw-struct_13.2.1.sql
+ - db-gvw_logs-initUserAndDb.sql
+ - db-gvw_logs-struct_13.1.0.sql
 
 BATCHES:
  - { name: convPcnV2                    , type: batch     , version: V2.1.0    }

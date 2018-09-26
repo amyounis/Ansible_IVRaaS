@@ -99,6 +99,7 @@
     dest: /myqdata/myserver01/data/my.cnf
     insertafter: "collation-server=latin1_general_ci"
     line: "collation-server=latin1_swedish_ci"
+  notify: restart mysql
   tags: pli-mysql
     
 
@@ -109,6 +110,7 @@
     path: /myqdata/myserver01/data/my.cnf
     regexp: "^sql-mode="
     replace: "#sql-mode="
+  notify: restart mysql
   tags: pli-mysql
 
 - name: Replace-- Mysql configurations in the configuration file /myqdata/myserver01/data/my.cnf
@@ -118,5 +120,6 @@
     path: /myqdata/myserver01/data/my.cnf
     regexp: "^lower-case-table-names=1"
     replace: "lower-case-table-names=0"
+  notify: restart mysql
   tags: pli-mysql
 
