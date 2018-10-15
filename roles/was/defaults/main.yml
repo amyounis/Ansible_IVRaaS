@@ -3,7 +3,7 @@
 
 EXTRACT_DIR: "/images/IVRaaS_{{IVRAAS_VERSION}}"
 
-WEB_APP_BASE: "/opt/application/ivraas/{{IVRAAS_VERSION}}/web"
+WEB_APP_BASE: "/opt/application/ivraas/{{IVRAAS_VERSION}}/webapps"
 
 WEB_LOG_BASE: "/opt/application/ivraas/{{IVRAAS_VERSION}}/apache2215/logs"
 
@@ -12,28 +12,34 @@ APACHE_CONF: "/opt/application/ivraas/{{IVRAAS_VERSION}}/apache2215/conf.d"
 TOMCAT_CONF: "/opt/application/ivraas/{{IVRAAS_VERSION}}/tomcat/00/conf"
 
 
-##########################################################################################################################
-#						apache tasks variables							 #
-##########################################################################################################################
-
 APACHE_FILE:
- - { dest: "{{WEB_APP_BASE}}/{{WEB_APPS.0.vhost}}/ROOT"		, state: directory }
- - { dest: "{{WEB_APP_BASE}}/{{WEB_APPS.1.vhost}}/ROOT"		, state: directory }
- - { dest: "{{WEB_APP_BASE}}/{{WEB_APPS.2.vhost}}/ROOT"	 	, state: directory }
- - { dest: "{{WEB_APP_BASE}}/{{WEB_APPS.3.vhost}}/ROOT"		, state: directory }
- - { dest: "{{WEB_APP_BASE}}/{{WEB_APPS.4.vhost}}/ROOT"		, state: directory }
- - { dest: "{{WEB_APP_BASE}}/{{WEB_APPS.5.vhost}}/ROOT"		, state: directory }
- - { dest: "{{WEB_APP_BASE}}/{{WEB_APPS.1.vhost}}/admin-stp"	, state: directory }
- - { dest: "{{WEB_APP_BASE}}/{{WEB_APPS.1.vhost}}/stats"	, state: directory }
- - { dest: "{{WEB_APP_BASE}}/{{WEB_APPS.1.vhost}}/adv1"		, state: directory }
- - { dest: "{{WEB_APP_BASE}}/{{WEB_APPS.1.vhost}}/vocalmestre1" , state: directory }
- - { dest: "{{WEB_LOG_BASE}}/{{WEB_APPS.0.vhost}}/current" 	, state: directory }
- - { dest: "{{WEB_LOG_BASE}}/{{WEB_APPS.1.vhost}}/current"	, state: directory }
- - { dest: "{{WEB_LOG_BASE}}/{{WEB_APPS.2.vhost}}/current"	, state: directory }
- - { dest: "{{WEB_LOG_BASE}}/{{WEB_APPS.3.vhost}}/current" 	, state: directory }
- - { dest: "{{WEB_LOG_BASE}}/{{WEB_APPS.4.vhost}}/current"	, state: directory }
- - { dest: "{{WEB_LOG_BASE}}/{{WEB_APPS.5.vhost}}/current"	, state: directory }
- - { dest: "{{WEB_LOG_BASE}}/mod_jk/current"			, state: directory }
+ - { dest: "/images/IVRaaS_{{IVRAAS_VERSION}}"  		, state: directory }
+ - { dest: "{{WEB_APP_BASE}}/{{WEB_APPS.0.name}}/ROOT"		, state: directory }
+ - { dest: "{{WEB_APP_BASE}}/{{WEB_APPS.1.name}}/ROOT"		, state: directory }
+ - { dest: "{{WEB_APP_BASE}}/{{WEB_APPS.2.name}}/ROOT"	 	, state: directory }
+ - { dest: "{{WEB_APP_BASE}}/{{WEB_APPS.3.name}}/ROOT"		, state: directory }
+ - { dest: "{{WEB_APP_BASE}}/{{WEB_APPS.4.name}}/ROOT"		, state: directory }
+ - { dest: "{{WEB_APP_BASE}}/{{WEB_APPS.5.name}}/ROOT"		, state: directory }
+ - { dest: "{{WEB_APP_BASE}}/{{WEB_APPS.1.name}}/admin-stp"	, state: directory }
+ - { dest: "{{WEB_APP_BASE}}/{{WEB_APPS.1.name}}/stats"		, state: directory }
+ - { dest: "{{WEB_APP_BASE}}/{{WEB_APPS.1.name}}/adv1"		, state: directory }
+ - { dest: "{{WEB_APP_BASE}}/{{WEB_APPS.1.name}}/vocalmestre1"  , state: directory }
+ - { dest: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.0.vhost}}"      , state: directory }
+ - { dest: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.1.vhost}}"      , state: directory }
+ - { dest: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.2.vhost}}"      , state: directory }
+ - { dest: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.3.vhost}}"      , state: directory }
+ - { dest: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.4.vhost}}"      , state: directory }
+ - { dest: "{{EXTRACT_DIR}}/{{WEB_APPS.0.name}}" 	        , state: directory }
+ - { dest: "{{EXTRACT_DIR}}/{{WEB_APPS.1.name}}" 	        , state: directory }
+ - { dest: "{{EXTRACT_DIR}}/{{WEB_APPS.2.name}}" 	        , state: directory }
+ - { dest: "{{EXTRACT_DIR}}/{{WEB_APPS.3.name}}" 	        , state: directory }
+ - { dest: "{{EXTRACT_DIR}}/{{WEB_APPS.4.name}}" 	        , state: directory }
+ - { dest: "{{EXTRACT_DIR}}/{{WEB_APPS.5.name}}" 	        , state: directory }
+ - { dest: "{{EXTRACT_DIR}}/{{WEB_APPS.6.name}}" 	        , state: directory }
+ - { dest: "{{EXTRACT_DIR}}/{{WEB_APPS.7.name}}" 	        , state: directory }
+ - { dest: "{{EXTRACT_DIR}}/{{WEB_APPS.8.name}}" 	        , state: directory }
+ - { dest: "{{EXTRACT_DIR}}/{{WEB_APPS.9.name}}" 	        , state: directory }
+
 
 
 APACHE_TEMPLATE:
@@ -44,42 +50,20 @@ APACHE_TEMPLATE:
  - { src: gv-webservices.conf.j2      , dest: "{{APACHE_CONF}}/{{WEB_APPS.4.vhost}}.conf" , var1: "{{WEB_APPS.4.vhost}}" , var2: "{{WEB_APP_BASE}}" , var3: "{{WEB_LOG_BASE}}" }
  - { src: gv-svifiles.conf.j2         , dest: "{{APACHE_CONF}}/{{WEB_APPS.5.vhost}}.conf" , var1: "{{WEB_APPS.5.vhost}}" , var2: "{{WEB_APP_BASE}}" , var3: "{{WEB_LOG_BASE}}" }
  
-
-##########################################################################################################################
-#						tomcat tasks variables							 #
-##########################################################################################################################
-
-
-TOMCAT_FILE:
- - { path: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.0.vhost}}" , state: directory }
- - { path: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.1.vhost}}" , state: directory }
- - { path: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.2.vhost}}" , state: directory }
- - { path: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.3.vhost}}" , state: directory }
- - { path: "{{TOMCAT_CONF}}/Catalina/{{WEB_APPS.4.vhost}}" , state: directory }
- - { path: "{{EXTRACT_DIR}}/{{WEB_APPS.0.name}}" 	   , state: directory }
- - { path: "{{EXTRACT_DIR}}/{{WEB_APPS.1.name}}" 	   , state: directory }
- - { path: "{{EXTRACT_DIR}}/{{WEB_APPS.2.name}}" 	   , state: directory }
- - { path: "{{EXTRACT_DIR}}/{{WEB_APPS.3.name}}" 	   , state: directory }
- - { path: "{{EXTRACT_DIR}}/{{WEB_APPS.4.name}}" 	   , state: directory }
- - { path: "{{EXTRACT_DIR}}/{{WEB_APPS.5.name}}" 	   , state: directory }
- - { path: "{{EXTRACT_DIR}}/{{WEB_APPS.6.name}}" 	   , state: directory }
- - { path: "{{EXTRACT_DIR}}/{{WEB_APPS.7.name}}" 	   , state: directory }
- - { path: "{{EXTRACT_DIR}}/{{WEB_APPS.8.name}}" 	   , state: directory }
- - { path: "{{EXTRACT_DIR}}/{{WEB_APPS.9.name}}" 	   , state: directory }
+TOMCAT_UNARCHIVE_TAR: 
+ - { dest: "{{EXTRACT_DIR}}/{{WEB_APPS.0.name}}" , extra_opts: "{{WEB_APPS.0.name}}-webapp-{{WEB_APPS.0.version}}.tar.gz" }
+ - { dest: "{{EXTRACT_DIR}}/{{WEB_APPS.1.name}}" , extra_opts: "{{WEB_APPS.1.name}}-webapp-{{WEB_APPS.1.version}}.tar.gz" }
+ - { dest: "{{EXTRACT_DIR}}/{{WEB_APPS.2.name}}" , extra_opts: "{{WEB_APPS.2.name}}-webapp-{{WEB_APPS.2.version}}.tar.gz" }
+ - { dest: "{{EXTRACT_DIR}}/{{WEB_APPS.3.name}}" , extra_opts: "{{WEB_APPS.3.name}}-webapp-{{WEB_APPS.3.version}}.tar.gz" }
+ - { dest: "{{EXTRACT_DIR}}/{{WEB_APPS.4.name}}" , extra_opts: "{{WEB_APPS.4.name}}-webapp-{{WEB_APPS.4.version}}.tar.gz" }
+ - { dest: "{{EXTRACT_DIR}}/{{WEB_APPS.5.name}}" , extra_opts: "{{WEB_APPS.5.name}}-webapp-{{WEB_APPS.5.version}}.tar.gz" }
+ - { dest: "{{EXTRACT_DIR}}/{{WEB_APPS.6.name}}" , extra_opts: "{{WEB_APPS.6.name}}-webapp-{{WEB_APPS.6.version}}.tar.gz" }
+ - { dest: "{{EXTRACT_DIR}}/{{WEB_APPS.7.name}}" , extra_opts: "{{WEB_APPS.7.name}}-webapp-{{WEB_APPS.7.version}}.tar.gz" }  
+ - { dest: "{{EXTRACT_DIR}}/{{WEB_APPS.8.name}}" , extra_opts: "{{WEB_APPS.8.name}}-webapp-{{WEB_APPS.8.version}}.tar.gz" }
+ - { dest: "{{EXTRACT_DIR}}/{{WEB_APPS.9.name}}" , extra_opts: "{{WEB_APPS.9.name}}-webapp-{{WEB_APPS.9.version}}.tar.gz" }  
 
 
-TOMCAT_UNARCHIVE: 
- - { src: webapp.zip							             , dest: "{{EXTRACT_DIR}}" 					 , remote_src: no }
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.0.name}}-webapp-{{WEB_APPS.0.version}}.tar.gz" , dest: "{{EXTRACT_DIR}}/{{WEB_APPS.0.name}}" 		 , remote_src: yes}
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.1.name}}-webapp-{{WEB_APPS.1.version}}.tar.gz" , dest: "{{EXTRACT_DIR}}/{{WEB_APPS.1.name}}" 		 , remote_src: yes}
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.2.name}}-webapp-{{WEB_APPS.2.version}}.tar.gz" , dest: "{{EXTRACT_DIR}}/{{WEB_APPS.2.name}}" 		 , remote_src: yes}
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.3.name}}-webapp-{{WEB_APPS.3.version}}.tar.gz" , dest: "{{EXTRACT_DIR}}/{{WEB_APPS.3.name}}" 		 , remote_src: yes}
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.4.name}}-webapp-{{WEB_APPS.4.version}}.tar.gz" , dest: "{{EXTRACT_DIR}}/{{WEB_APPS.4.name}}" 		 , remote_src: yes}
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.5.name}}-webapp-{{WEB_APPS.5.version}}.tar.gz" , dest: "{{EXTRACT_DIR}}/{{WEB_APPS.5.name}}" 		 , remote_src: yes}
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.6.name}}-webapp-{{WEB_APPS.6.version}}.tar.gz" , dest: "{{EXTRACT_DIR}}/{{WEB_APPS.6.name}}" 		 , remote_src: yes}
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.7.name}}-webapp-{{WEB_APPS.7.version}}.tar.gz" , dest: "{{EXTRACT_DIR}}/{{WEB_APPS.7.name}}" 		 , remote_src: yes}  
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.8.name}}-webapp-{{WEB_APPS.8.version}}.tar.gz" , dest: "{{EXTRACT_DIR}}/{{WEB_APPS.8.name}}" 		 , remote_src: yes}
- - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.9.name}}-webapp-{{WEB_APPS.9.version}}.tar.gz" , dest: "{{EXTRACT_DIR}}/{{WEB_APPS.9.name}}" 		 , remote_src: yes}  
+TOMCAT_UNARCHIVE_WEB: 
  - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.0.name}}/binpackage/{{WEB_APPS.0.name}}.war"   , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.0.vhost}}/ROOT" 	 , remote_src: yes}
  - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.1.name}}/binpackage/{{WEB_APPS.1.name}}.war"   , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.1.vhost}}/ROOT" 	 , remote_src: yes} 
  - { src: "{{EXTRACT_DIR}}/{{WEB_APPS.2.name}}/binpackage/{{WEB_APPS.2.name}}.war"   , dest: "{{WEB_APP_BASE}}/{{WEB_APPS.2.vhost}}/ROOT"        , remote_src: yes}

@@ -1,21 +1,54 @@
 ---
 
-- name: Unarchive-- Unarchive {{IVRAAS_TAR_NAME}} 
+- name: Shell-- Get the extracted directory name of the {{IVRAAS_SOURCE}}
+  shell: " tar -tf {{IVRAAS_SOURCE}} |head -n 1 | cut -d/ -f1 "
+  args:
+    warn: false
+  register: OUTPUT1
+  tags: prepare
+
+- set_fact:
+    EXT_DIR: "{{OUTPUT1.stdout}}"
+    cacheable: true
+  tags: prepare
+
+- name: Unarchive-- Unarchive {{IVRAAS_SOURCE}} to /tmp
   unarchive:
-    src: "{{IVRAAS_TAR_NAME}}.tar.gz"
-    dest: "{{playbook_dir}}/files"
+    src: "{{IVRAAS_SOURCE}}"
+    dest: /tmp
+    creates: "/tmp/{{EXT_DIR}}/"
   tags: prepare
 
-- name: Archive-- Archive {{playbook_dir}}/files/{{IVRAAS_TAR_NAME}}/sql
-  archive:
-    path: "{{playbook_dir}}/files/{{IVRAAS_TAR_NAME}}/sql"
-    dest: "{{playbook_dir}}/files/{{IVRAAS_TAR_NAME}}/sql.gz"
-    remove: yes
+- name: Shell-- Get the batches versions
+  shell: for i in convPcnV2 gv-batch gv-stats-stp gv-tools stats-calculator stats-manager stats-manager-reintegration stats-rapatriement stats-utilities ; do ls $i* |grep -oP '(?<=-V).*(?=.tar)' ;done
+  args:
+    chdir: "/tmp/{{EXT_DIR}}/"
+  register: OUTPUT2
   tags: prepare
 
-- name: Archive-- Archive "{{playbook_dir}}/files/{{IVRAAS_TAR_NAME}}/*webapp*"
-  archive:
-    path: "{{playbook_dir}}/files/{{IVRAAS_TAR_NAME}}/*webapp*"
-    dest: "{{playbook_dir}}/files/{{IVRAAS_TAR_NAME}}/webapps.gz"
-    remove: yes
+- set_fact:
+    BATCHES_VERSIONS: "{{OUTPUT2.stdout_lines}}"
+    cacheable: true
   tags: prepare
+
+#- debug:
+#    var: BATCHES_VERSIONS
+#  tags: prepare
+
+#- name: Archive-- Archive {{playbook_dir}}/files/{{IVRAAS_TAR_NAME}}/sql
+#  archive:
+#    path: "{{playbook_dir}}/files/{{IVRAAS_TAR_NAME}}/sql"
+#    dest: "{{playbook_dir}}/files/{{IVRAAS_TAR_NAME}}/sql.gz"
+#    remove: yes
+#  tags: prepare
+#
+#- name: Archive-- Archive "{{playbook_dir}}/files/{{IVRAAS_TAR_NAME}}/*webapp*"
+#  archive:
+#    path: "{{playbook_dir}}/files/{{IVRAAS_TAR_NAME}}/*webapp*"
+#    dest: "{{playbook_dir}}/files/{{IVRAAS_TAR_NAME}}/webapps.gz"
+#    remove: yes
+#  tags: prepare
+
+
+
+

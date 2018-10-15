@@ -12,7 +12,7 @@ SQL_SCRIPTS:
   - db-stats-struct.sql
   - db-stats-data.sql
   - db-gvw-initUserAndDb.sql   
-  - db-gvw-struct_12.4.12.sql   
+  - db-gvw-struct_*.sql   
   - db-gvw_logs-initUserAndDb.sql 
-  - db-gvw_logs-struct_12.4.12.sql
+  - db-gvw_logs-struct_*.sql
 

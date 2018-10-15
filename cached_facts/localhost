@@ -1,9 +1,20 @@
 {
+    "BATCHES_VERSIONS": [
+        "2.1.0", 
+        "13.2.2", 
+        "2.12.6", 
+        "13.2.2", 
+        "2.1.0", 
+        "2.1.0", 
+        "2.1.0", 
+        "2.1.0", 
+        "2.1.0", 
+        "2.1.0"
+    ], 
+    "EXT_DIR": "IVRaaS_G3R2C1P0_20171229_1017", 
     "ansible_all_ipv4_addresses": [
         "172.16.2.110", 
-        "169.254.11.217", 
-        "10.237.71.68", 
-        "10.237.71.246"
+        "10.237.71.68"
     ], 
     "ansible_all_ipv6_addresses": [
         "fe80::4ffa:f8ec:b04f:45ba", 
@@ -27,23 +38,23 @@
         "root": "UUID=bd90e15f-892a-49a0-8cf4-6eb8f0dc6161"
     }, 
     "ansible_date_time": {
-        "date": "2018-09-26", 
-        "day": "26", 
-        "epoch": "1537956400", 
-        "hour": "12", 
-        "iso8601": "2018-09-26T10:06:40Z", 
-        "iso8601_basic": "20180926T120640825170", 
-        "iso8601_basic_short": "20180926T120640", 
-        "iso8601_micro": "2018-09-26T10:06:40.825382Z", 
-        "minute": "06", 
-        "month": "09", 
-        "second": "40", 
-        "time": "12:06:40", 
+        "date": "2018-10-15", 
+        "day": "15", 
+        "epoch": "1539607603", 
+        "hour": "14", 
+        "iso8601": "2018-10-15T12:46:43Z", 
+        "iso8601_basic": "20181015T144643421702", 
+        "iso8601_basic_short": "20181015T144643", 
+        "iso8601_micro": "2018-10-15T12:46:43.421840Z", 
+        "minute": "46", 
+        "month": "10", 
+        "second": "43", 
+        "time": "14:46:43", 
         "tz": "EET", 
         "tz_offset": "+0200", 
-        "weekday": "Wednesday", 
-        "weekday_number": "3", 
-        "weeknumber": "39", 
+        "weekday": "Monday", 
+        "weekday_number": "1", 
+        "weeknumber": "42", 
         "year": "2018"
     }, 
     "ansible_default_ipv4": {
@@ -799,14 +810,6 @@
             "netmask": "255.255.255.0", 
             "network": "10.237.71.0"
         }, 
-        "ipv4_secondaries": [
-            {
-                "address": "10.237.71.246", 
-                "broadcast": "10.237.71.255", 
-                "netmask": "255.255.255.0", 
-                "network": "10.237.71.0"
-            }
-        ], 
         "ipv6": [
             {
                 "address": "fe80::9690:6521:c516:e5f2", 
@@ -826,14 +829,6 @@
             "software"
         ], 
         "type": "ether"
-    }, 
-    "ansible_ens33_avahi": {
-        "ipv4": {
-            "address": "169.254.11.217", 
-            "broadcast": "169.254.255.255", 
-            "netmask": "255.255.0.0", 
-            "network": "169.254.0.0"
-        }
     }, 
     "ansible_ens34": {
         "active": true, 
@@ -912,7 +907,7 @@
         "type": "ether"
     }, 
     "ansible_env": {
-        "DISPLAY": "localhost:10.0", 
+        "DISPLAY": "localhost:11.0", 
         "HOME": "/root", 
         "LANG": "en_US.UTF-8", 
         "LESSCLOSE": "/usr/bin/lesspipe %s %s", 
@@ -920,7 +915,7 @@
         "LOGNAME": "root", 
         "LS_COLORS": "rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:", 
         "MAIL": "/var/mail/root", 
-        "OLDPWD": "/root/Ansible/Ansible_IVRaaS/files", 
+        "OLDPWD": "/tmp/IVRaaS_G3R2C1P0_20171229_1017", 
         "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin:/snap/bin", 
         "PWD": "/root/Ansible/Ansible_IVRaaS", 
         "QT_QPA_PLATFORMTHEME": "appmenu-qt5", 
@@ -942,7 +937,6 @@
     "ansible_interfaces": [
         "ens34", 
         "lo", 
-        "ens33_avahi", 
         "ens33"
     ], 
     "ansible_is_chroot": false, 
@@ -1032,8 +1026,8 @@
     "ansible_memfree_mb": 85, 
     "ansible_memory_mb": {
         "nocache": {
-            "free": 757, 
-            "used": 1226
+            "free": 829, 
+            "used": 1154
         }, 
         "real": {
             "free": 85, 
@@ -1041,27 +1035,27 @@
             "used": 1898
         }, 
         "swap": {
-            "cached": 11, 
-            "free": 142, 
+            "cached": 29, 
+            "free": 200, 
             "total": 1021, 
-            "used": 879
+            "used": 821
         }
     }, 
     "ansible_memtotal_mb": 1983, 
     "ansible_mounts": [
         {
-            "block_available": 2945107, 
+            "block_available": 2918315, 
             "block_size": 4096, 
             "block_total": 4869551, 
-            "block_used": 1924444, 
+            "block_used": 1951236, 
             "device": "/dev/sda1", 
             "fstype": "ext4", 
-            "inode_available": 1035903, 
+            "inode_available": 1035201, 
             "inode_total": 1245184, 
-            "inode_used": 209281, 
+            "inode_used": 209983, 
             "mount": "/", 
             "options": "rw,relatime,errors=remount-ro,data=ordered", 
-            "size_available": 12063158272, 
+            "size_available": 11953418240, 
             "size_total": 19945680896, 
             "uuid": "bd90e15f-892a-49a0-8cf4-6eb8f0dc6161"
         }
@@ -1113,7 +1107,7 @@
     "ansible_ssh_host_key_ecdsa_public": "AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBH70ErP5zWDIsA3Rt0toMOSc7rwp3mKxO7LvpFjhF/CVggmk6SBRBsk+5yKY/ej5MRuFToKNg06wFy1oj+RbyLM=", 
     "ansible_ssh_host_key_ed25519_public": "AAAAC3NzaC1lZDI1NTE5AAAAIHKADwZ+qw3QQmkK4XDtrjy5eF09b30JZ9pBuWdsqaQy", 
     "ansible_ssh_host_key_rsa_public": "AAAAB3NzaC1yc2EAAAADAQABAAABAQC6Vr2P1DlmVnGbMMR6TJ2VbEpdsubIyQhrvpP9WP4j44vmw93MmFBlw1PHbO7IWn4hbflktnPojR2sp6KNGFyvIfJ3YdI2VYWdHuVbyx/LTv5PJvJtRvEewcNQwk8beiFor+FGnSjjnxsQmOBCuBCVDucRKXd/B85AEBbljqDuGzKqLllqLFWE7MoAxWSNLJQfDK358ImF5/vpEHClfa/hmJ9amIau2yu23AJtdQduufGN/Gtzy3xBY1YDORjWGmHHt9a7e/OanFgI4hmuFFCgIZibIdYpjkr/av6M8387PGNnFbbqUrn3xL2d0CnNvoB7dxLL99GpdEmFxGWwehCn", 
-    "ansible_swapfree_mb": 142, 
+    "ansible_swapfree_mb": 200, 
     "ansible_swaptotal_mb": 1021, 
     "ansible_system": "Linux", 
     "ansible_system_capabilities": [
@@ -1158,7 +1152,7 @@
     ], 
     "ansible_system_capabilities_enforced": "True", 
     "ansible_system_vendor": "VMware, Inc.", 
-    "ansible_uptime_seconds": 1729218, 
+    "ansible_uptime_seconds": 3380420, 
     "ansible_user_dir": "/root", 
     "ansible_user_gecos": "root", 
     "ansible_user_gid": 0, 

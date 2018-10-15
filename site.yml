@@ -1,11 +1,11 @@
 --- 
 
-#- name: IVRaaS prepare
-#  hosts: localhost
-#  
-#  roles:
-#   - prepare
-#
+- name: IVRaaS prepare
+  hosts: localhost
+  
+  roles:
+   - prepare
+
 ########################################
 
 - name: IVRaaS common 

@@ -1,49 +1,21 @@
 ---
-###############################################################################
-#
-###############################################################################
+# Country 
+COUNTRY: Niger
 
+# Time zone, it should be in the following format ex: Africa/Niamey 
+TIME_ZONE: Africa/Niamey
 
-IVRAAS_TAR_NAME: IVRaaS_G3R2C1P0_20171229_1017
+# This is the absolute path to the IVRaaS source TAR file
+IVRAAS_SOURCE: /root/IVRaaS_G3R2C1P0_20171229_1017.tar.gz
 
-IVRAAS_REPO_NAME: ivraas_repo 
+# This is the absolute path to the IVRaaS local repo 
+IVRAAS_REPO: /root/ivraas_repo.tar
 
-IVRAAS_VERSION: G3R2C1P0
+# This is the IVRaaS versio, it should be in the format GxxRxxCxx
+IVRAAS_VERSION: G03R02C01
 
+# This is the public URL accessed from Internet ex: voicepro.ne.orange.com
+URL: www.voicepro.orange.ne
 
-WEB_APPS:
- - { name: gv-admmsgvocale-svi  , version: V12.4.12  , vhost: gv-admmsgvocale-svi-amea.dmz.cloud.mbs }
- - { name: gv-authent		, version: V12.4.12  , vhost: gv-authent-amea.dmz.cloud.mbs          }
- - { name: gv-provisioning 	, version: V1.1.0    , vhost: gv-provisioning-amea.dmz.cloud.mbs     } 
- - { name: gv-switchingservice	, version: V1.12.1   , vhost: gv-switchingservice-amea.dmz.cloud.mbs }
- - { name: gv-webservices 	, version: V12.4.12  , vhost: gv-webservices-amea.dmz.cloud.mbs      }
- - { name: gv-svifiles	 	, version: V12.4.12  , vhost: gv-svifiles-amea.dmz.cloud.mbs 	     }
- - { name: gv-admin-stp 	, version: V2.10.5.1 , vhost: gv-authent-amea.dmz.cloud.mbs 	     } 
- - { name: gv-adv 		, version: V12.4.12  , vhost: gv-authent-amea.dmz.cloud.mbs 	     }
- - { name: gv-stats 		, version: V2.10.5.1 , vhost: gv-authent-amea.dmz.cloud.mbs 	     }
- - { name: gv-vocalmestre	, version: V12.4.12  , vhost: gv-authent-amea.dmz.cloud.mbs 	     } 
-
-
-MYSQL_IP: mysql_server
-
-SQL_SCRIPTS:
- - db-stats-struct.sql
- - db-stats-data.sql
- - db-gvw-initUserAndDb.sql
- - db-gvw-struct_13.2.1.sql
- - db-gvw_logs-initUserAndDb.sql
- - db-gvw_logs-struct_13.1.0.sql
-
-BATCHES:
- - { name: convPcnV2                    , type: batch     , version: V2.1.0    }
- - { name: gv-batch                     , type: cronbatch , version: V12.4.12  }
- - { name: gv-batch-stp                 , type: cronbatch , version: V2.10.5.1 }
- - { name: gv-tools                     , type: cronbatch , version: V12.4.12  }
- - { name: stats-calculator             , type: batch     , version: V2.1.0    }
- - { name: stats-manager                , type: batch     , version: V2.1.0    }
- - { name: stats-manager-reintegration  , type: batch     , version: V2.1.0    }
- - { name: stats-rapatriement           , type: cronbatch , version: V2.1.0    }
- - { name: stats-utilities              , type: cronbatch , version: V2.1.0    }
-
-
-
+# This is the database virtual ip for the two db servers 
+DB_VIP: 172.16.2.111

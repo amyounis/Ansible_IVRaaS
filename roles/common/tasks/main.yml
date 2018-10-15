@@ -32,9 +32,9 @@
     backup: yes
   tags: common
     
-- name: Timezone-- Set timezone to "{{ ZONE }}"
+- name: Timezone-- Set timezone to "{{ TIME_ZONE }}"
   timezone:
-    name: "{{ ZONE }}"
+    name: "{{ TIME_ZONE }}"
   tags: common
 
 - name: Stat-- Check if /image/ivraas_repo/repodata exist
@@ -43,9 +43,9 @@
   register: Dir_existance
   tags: common
 
-- name: Uarchive-- Unarchive files/ivraas_repo.tar to /images
+- name: Uarchive-- Unarchive {{IVRAAS_REPO}} to /images
   unarchive:
-    src: "{{ playbook_dir }}/files/ivraas_repo.tar"
+    src: "{{IVRAAS_REPO}}"
     dest: /images
   when: not Dir_existance.stat.exists
   tags: common

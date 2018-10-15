@@ -4,19 +4,19 @@
 #						Apache server Configuration					         #
 ##########################################################################################################################
 
-- name: File-- Create web application and logs directories
+- name: File-- Create web applications directories
   file:
     dest: "{{item.dest}}"
     state: "{{item.state}}"
   with_items: "{{APACHE_FILE}}"
-  tags: was
+  tags: was-test
 
 - name: Template-- Templating mod_jk.conf, worker.properties and apache virtual hosts configuration files
   template:
     src: "{{item.src}}"
     dest: "{{item.dest}}"
   with_items: "{{APACHE_TEMPLATE}}"
-  tags: was
+  tags: was-test
 
 ##########################################################################################################################
 #						Tomcat configurations							 #
@@ -29,61 +29,67 @@
   with_items: "{{TOMCAT_FILE}}"
   tags: was
 
+- name: Unarchive-- extract {{IVRAAS_TAR_NAME}}.tar.gz into {{EXTRACT_DIR}} 
+  unarchive:
+    src: "{{IVRAAS_TAR_NAME}}.tar.gz"
+    dest: "{{item.dest}}"
+    extra_opts: "{{item.extra_opts}}"
+  with_items: "{{TOMCAT_UNARCHIVE_TAR}}"
+  tags: was
 
 - name: Unarchive-- extract {{WEB_ZIP_FILENAME}}.zip into {{EXTRACT_DIR}} and webapps into deployment dirs
   unarchive:
     src: "{{item.src}}"
     dest: "{{item.dest}}"
     remote_src: "{{item.remote_src}}"
-  with_items: "{{TOMCAT_UNARCHIVE}}"
+  with_items: "{{TOMCAT_UNARCHIVE_WEB}}"
   tags: was
-
-
-- name: Synchronize-- copy conf/ to META-INF
-  synchronize:
-    src: "{{item.src}}"
-    dest: "{{item.dest}}"
-  delegate_to: "{{ inventory_hostname }}"
-  with_items: "{{TOMCAT_SYNCHRONIZE}}"
-  tags: was
-
-
-- name: Copy-- Copy tomcat manager/ app to {{TOMCAT_HOME}}/webapps/ , manager.xml under vhosts and context.xml to <appname>.xml 
-  copy:
-    src: "{{item.src}}"
-    dest: "{{item.dest}}"
-    remote_src: "{{item.remote_src}}"
-  with_items: "{{TOMCAT_COPY}}"
-  tags: was
-
-
-- name: Lineinfile-- Modify {{TOMCAT_CONF}}/server.xml and {{TOMCAT_CONF}}/tomcat6.conf 
-  lineinfile:
-    dest: "{{item.dest}}"
-    regexp: "{{item.regexp}}"
-    line: "{{item.line}}"
-  with_items: "{{TOMCAT_LINEINFILE}}"
-  notify: restart tomcat
-  tags: was2
-
-
-- name: Blockinfile-- Modify {{TOMCAT_CONF}}/server.xml to add virtual hosts and {{TOMCAT_CONF}}/tomcat-users.xml to add users and roles 
-  blockinfile:
-    dest: "{{item.dest}}"
-    insertafter: "{{item.insertafter}}"
-    marker: "{{item.marker}}"
-    block: "{{item.block}}"
-  with_items: "{{TOMCAT_BLOCKINFILE}}"
-  notify: restart tomcat
-  tags: was2
-
-
-- name : Replace-- set key values in configuration files
-  replace:
-    dest: "{{item.0.dest}}"
-    regexp: "{{item.1.regexp}}"
-    replace: "{{item.1.replace}}"
-  with_subelements: 
-   - "{{TOMCAT_REPLACE}}"
-   - changes
-  tags: was2
+#
+#- name: Synchronize-- copy conf/ to META-INF
+#  synchronize:
+#    src: "{{item.src}}"
+#    dest: "{{item.dest}}"
+#  delegate_to: "{{ inventory_hostname }}"
+#  with_items: "{{TOMCAT_SYNCHRONIZE}}"
+#  tags: was
+#
+#
+#- name: Copy-- Copy tomcat manager/ app to {{TOMCAT_HOME}}/webapps/ , manager.xml under vhosts and context.xml to <appname>.xml 
+#  copy:
+#    src: "{{item.src}}"
+#    dest: "{{item.dest}}"
+#    remote_src: "{{item.remote_src}}"
+#  with_items: "{{TOMCAT_COPY}}"
+#  tags: was
+#
+#
+#- name: Lineinfile-- Modify {{TOMCAT_CONF}}/server.xml and {{TOMCAT_CONF}}/tomcat6.conf 
+#  lineinfile:
+#    dest: "{{item.dest}}"
+#    regexp: "{{item.regexp}}"
+#    line: "{{item.line}}"
+#  with_items: "{{TOMCAT_LINEINFILE}}"
+#  notify: restart tomcat
+#  tags: was2
+#
+#
+#- name: Blockinfile-- Modify {{TOMCAT_CONF}}/server.xml to add virtual hosts and {{TOMCAT_CONF}}/tomcat-users.xml to add users and roles 
+#  blockinfile:
+#    dest: "{{item.dest}}"
+#    insertafter: "{{item.insertafter}}"
+#    marker: "{{item.marker}}"
+#    block: "{{item.block}}"
+#  with_items: "{{TOMCAT_BLOCKINFILE}}"
+#  notify: restart tomcat
+#  tags: was2
+#
+#
+#- name : Replace-- set key values in configuration files
+#  replace:
+#    dest: "{{item.0.dest}}"
+#    regexp: "{{item.1.regexp}}"
+#    replace: "{{item.1.replace}}"
+#  with_subelements: 
+#   - "{{TOMCAT_REPLACE}}"
+#   - changes
+#  tags: was2

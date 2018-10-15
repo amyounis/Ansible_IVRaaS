@@ -1,10 +1,5 @@
 ---
 
-#- name: Yum-- Yum install MySQL-python package 
-#  yum:
-#    name: MySQL-python
-#  tags: db
-
 - name: File-- Create /tmp/mysql-scripts/
   run_once: yes
   delegate_to: db1
@@ -15,21 +10,19 @@
     group: mysql
   tags: db
 
-- name: Unarchive-- Put sql scripts under /tmp/mysql-scripts/
-  run_once: yes
-  delegate_to: db1
-  unarchive:
-    src: "{{IVRAAS_TAR_NAME}}.tar.gz"
+- name: Copy-- Copy /tmp/{{hostvars['localhost'].EXT_DIR}}/sql/ to /tmp/mysql-scripts/ 
+  copy:
+    src: "/tmp/{{hostvars['localhost'].EXT_DIR}}/sql/"
     dest: /tmp/mysql-scripts/
-    extra_opts: "{{IVRAAS_TAR_NAME}}/sql"
     owner: mysql
-  tags: db
+    group: mysql
+  tags: db 
 
 - name: Replace-- Replace "cloud-amea01-itg.ope.cloud.mbs" with {{hostvars['was1'].ansible_eth1.ipv4.address}} in sql scripts
   run_once: yes
   delegate_to: db1
   replace:
-    path: "/tmp/mysql-scripts/{{IVRAAS_TAR_NAME}}/sql/fromScratch/{{item}}"
+    path: "/tmp/mysql-scripts/fromScratch/{{item}}"
     regexp: "cloud-amea01-itg.ope.cloud.mbs"
     replace: "{{hostvars['was1'].ansible_eth1.ipv4.address}}"
   with_items: "{{SQL_SCRIPTS}}"
@@ -40,28 +33,16 @@
   run_once: yes
   delegate_to: db1
   replace:
-    path: "/tmp/mysql-scripts/{{IVRAAS_TAR_NAME}}/sql/fromScratch/{{item}}"
+    path: "/tmp/mysql-scripts/fromScratch/{{item}}"
     regexp: "cloud-amea03-itg.ope.cloud.mbs"
     replace: "{{hostvars['batch1'].ansible_eth1.ipv4.address}}"
   with_items: "{{SQL_SCRIPTS}}"
   when: item in 'db-gvw-initUserAndDb.sql db-gvw_logs-initUserAndDb.sql db-stats-struct.sql'
   tags: db
 
-#- name: Mysql_db-- Import sql sqripts
-#  run_once: yes
-#  delegate_to: db1
-#  mysql_db:
-#    state: import
-#    name: all
-#    target: "/tmp/sql_scripts/{{IVRAAS_TAR_NAME}}/{{item}}"
-#  with_items: "{{SQL_SCRIPTS}}"
-#  become: yes
-#  become_user: mysql
-#  tags: db_test
-
 - name: Shell-- Import sql scripts
   run_once: yes
   delegate_to: db1
-  shell: " runuser -l mysql -c ' mysql < /tmp/mysql-scripts/{{IVRAAS_TAR_NAME}}/sql/fromScratch/{{item}}' "
+  shell: " runuser -l mysql -c ' mysql < /tmp/mysql-scripts/fromScratch/{{item}}' "
   with_items: "{{SQL_SCRIPTS}}"
   tags: db

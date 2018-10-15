@@ -1,83 +1,26 @@
 ---
 
-##################################################################################
-#                           Install Oracle Java Jdk                              #
-##################################################################################
+- debug:
+    msg: "{{hostvars['localhost'].BATCHES_VERSIONS.0}}" 
+  tags: batch-test 
 
+- name: Yum-- Install mysql, mysql-devel and nfs-utils.x86_64
+  yum:
+    name:
+     - mysql
+     - mysql-devel
+     - nfs-utils.x86_64
+    state: latest
+  tags: batch
 
-#- name: Copy java jdk8 to {{EXTRACT_DIR}}
-#  copy:
-#    src: "{{JAVA_RPM}}"
-#    dest: "{{EXTRACT_DIR}}"
-#  tags: java
-# 
-#
-#- name: Install Java 8
-#  yum:
-#    name: "{{EXTRACT_DIR}}/{{JAVA_RPM}}"
-#  become: yes
-#  tags: java
-#
-#
-#- name: Correct java version selected
-#  alternatives:
-#    name: java
-#    path: "{{JAVA_HOME}}/java"
-#  become: yes
-#  tags: java
-#
-#
-#
-#
-#- name: Mount up nfs volume
-#  mount:
-#    name: /mntcvf/web_rw
-#    src: ubuntu:/ubuntu
-#    fstype: nfs
-#    opts: rw,rsize=32768,wsize=32768,tcp 
-#    state: mounted
-#  become: yes
-#  tags: nfs
-#
-#- name: Create directory tree inside nfs directory
-#  file:
-#    path: /mntcvf/web_rw/gv-data/{{item}}
-#    state: directory
-##   owner: tomcat
-##   group: tomcat
-#  with_items:
-#    - mevo
-#    - services
-#    - statistiques
-#  become: yes
-#  tags: nfs 
-#
-#
-##################################################################################
-##										#
-##################################################################################
-#
-#- name: Yum-- install mysql client and server
-#  yum:
-#    name:
-#     - mysql
-#     - mysql-devel
-#    state: latest
-##  tags: batch
-#
-##################################################################################
-##										#
-##################################################################################
-
-
-- name: Group-- Create groups stats,serveur and tomcat
+- name: Group-- Create groups stats,serveur and group
   group:
     name: "{{item.name}}"
     gid: "{{item.gid}}"
   with_items: "{{BATCH_GROUP}}"
   tags: batch
 
-- name: User-- Create users stats,serveur and tomcat 
+- name: User-- Create users stats,serveur and ivruser
   user:
     name: "{{item.name}}"
     uid: "{{item.uid}}"
@@ -85,19 +28,26 @@
   with_items: "{{BATCH_USER}}"
   tags: batch
 
-- name: Lineinfile-- set SHARED_LIB_PERL environment variable of stats user
+- name: Lineinfile-- Set SHARED_LIB_PERL environment variable of stats user
   lineinfile:
      dest: /home/stats/.bashrc
      line: "export SHARED_LIB_PERL={{BATCH_APP_BASE}}/libperl"
   tags: batch
 
-- name: File-- Create {{BATCH_APP_BASE}}/<batches>/batch , {{EXTRACT_DIR}}/<batches> and /mnt/statvox2/var shared directories
+- name: File-- Create {{BATCH_APP_BASE}}/batch/<batches>/batch , {{EXTRACT_DIR}}/<batches> and /mnt/statvox2/var shared directories
   file:
     path: "{{item.path}}"
     owner: "{{item.owner}}"
     group: "{{item.group}}"
     state: "{{item.state}}"
   with_items: "{{BATCH_FILE_1}}"
+  tags: batch
+
+- name: Copy-- Copy batches to {{EXTRACT_DIR}} and libperl to {{BATCH_APP_BASE}}
+  copy:
+    src: "{{item.src}}"
+    dest: "{{item.dest}}"
+  with_items: "{{BATCH_COPY}}"
   tags: batch
 
 - name: Unarchive-- extract libperl.zip and batches 

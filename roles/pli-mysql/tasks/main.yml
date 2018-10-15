@@ -39,7 +39,7 @@
     password: "{{PASSWD}}" 
   tags: pli-mysql
 
-- name: Lineinfile-- Add "{{DB_VIP}}  bdd-vip" 
+- name: Lineinfile-- Add the line {{DB_VIP}}  bdd-vip in /etc/hosts
   lineinfile:
     dest: /etc/hosts
     line: "{{DB_VIP}}  bdd-vip"
@@ -92,7 +92,7 @@
 
 #########################################################################################
 
-- name: Lineinfile--
+- name: Lineinfile-- Add collation-server=latin1_swedish_ci in /myqdata/myserver01/data/my.cnf
   run_once:
   delegate_to: db1 
   lineinfile:
@@ -103,7 +103,7 @@
   tags: pli-mysql
     
 
-- name: Replace-- Mysql configurations in the configuration file /myqdata/myserver01/data/my.cnf
+- name: Replace-- Comment the line "sql-mode=*" in /myqdata/myserver01/data/my.cnf
   run_once: true
   delegate_to: db1
   replace:
@@ -113,7 +113,7 @@
   notify: restart mysql
   tags: pli-mysql
 
-- name: Replace-- Mysql configurations in the configuration file /myqdata/myserver01/data/my.cnf
+- name: Replace-- Set the lower-case-table-names= 0 in /myqdata/myserver01/data/my.cnf
   run_once: true
   delegate_to: db1
   replace:

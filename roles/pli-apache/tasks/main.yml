@@ -19,17 +19,24 @@
     remote_src: yes
   tags: pli-apache
 
-- name: Shell-- run apa_install.ksh
+- name: Shell-- Run apa_install.ksh
   shell: ./apa_install.ksh
   args:
     chdir: "/images/apache/{{APACHE_VERSION}}/"
     creates: "/opt/apache/{{APACHE_VERSION}}"
   tags: pli-apache
 
-- name: Shell-- run apa_creinstance.ksh
-  shell: ./apa_creinstance.ksh {{AppliId}} {{AppliType}} {{AppliVersion}} {{AppliGroup}} {{AppliUser}} {{AppliVg}} {{AppliLvSize}} {{Worker}} {{Http}} {{HttpPort}} {{Https}} {{HttpsPort}} {{AjpPort}} {{Interface}} {{Flag}} && ./apa_changecurrent.ksh {{AppliId}} {{AppliVersion}}
+- name: Shell-- Run apa_creinstance.ksh
+  shell: "./apa_creinstance.ksh {{AppliId}} {{AppliType}} {{AppliVersion}} {{AppliGroup}} {{AppliUser}} {{AppliVg}} {{AppliLvSize}} {{Worker}} {{Http}} {{HttpPort}} {{Https}} {{HttpsPort}} {{AjpPort}} {{Interface}} {{Flag}}"
   args:
     chdir: /opt/apache/bin/
-    creates: "/opt/application/{{AppliId}}/{{AppliVersion}}/apache*"
+    creates: "/opt/application/{{AppliId}}/{{AppliVersion}}/apache*/conf.d/"
   tags: pli-apache
+
+- name: Shell-- Run ./apa_changecurrent.ksh {{AppliId}} {{AppliVersion}}
+  shell: "./apa_changecurrent.ksh {{AppliId}} {{AppliVersion}}"
+  args:
+    chdir: /opt/apache/bin/
+  tags: pli-apache
+
 

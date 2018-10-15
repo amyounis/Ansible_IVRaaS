@@ -4,9 +4,9 @@ TOMCAT_TAR: PA-TOM-R6T80-RDG02R02C04.tar
 TOMCAT_VERSION: 8.0.36
 
 appliId: ivraas
-appliVersion: G02R09C06
-owner: uwas
-groupe: gwas
+appliVersion: "{{IVRAAS_VERSION}}"
+owner: ivruser
+groupe: ivrgroup
 shutdownPort: 9801
 httpPort: 9080
 httpsPort: "NO"
