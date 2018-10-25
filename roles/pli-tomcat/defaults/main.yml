@@ -7,9 +7,10 @@ appliId: ivraas
 appliVersion: "{{IVRAAS_VERSION}}"
 owner: ivruser
 groupe: ivrgroup
-shutdownPort: 9801
-httpPort: 9080
+shutdownPort: 9800
+httpPort: 9500
+adminport: 9550
 httpsPort: "NO"
-ajpPort: 9089
+ajpPort: 9081
 jmxPort: "NO"
 

@@ -20,6 +20,7 @@
 
 - name: Correct java version selected
   alternatives:
+    link: /usr/bin/java	
     name: java
     path: "{{JAVA_HOME}}/java"
   tags: java

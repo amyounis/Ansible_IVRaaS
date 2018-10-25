@@ -18,31 +18,70 @@
     group: mysql
   tags: db 
 
+- name: Blockinfile-- Add grant access to 'gvw'@'WAS2' and 'gvw'@'Batch2'on db "gvw" 
+  blockinfile:
+    path: /tmp/mysql-scripts/fromScratch/db-gvw-initUserAndDb.sql
+    insertafter: "CREATE database gvw;"
+    marker: "-- {mark} ANSIBLE MANAGED BLOCK "
+    content: |
+      GRANT SELECT, INSERT, UPDATE, DELETE ON `gvw`.* TO 'gvw'@'{{hostvars['was2'].ansible_eth1.ipv4.address}}' IDENTIFIED BY 'IS59niCK';
+      GRANT SELECT, INSERT, UPDATE, DELETE ON `gvw`.* TO 'gvw'@'{{hostvars['batch2'].ansible_eth1.ipv4.address}}' IDENTIFIED BY 'IS59niCK';
+  tags: db
+
+- name: Blockinfile-- Add grant access to 'gvw_logs'@'WAS2' and 'gvw_logs'@'Batch2'on db "gvw_logs"
+  blockinfile:
+    path: /tmp/mysql-scripts/fromScratch/db-gvw_logs-initUserAndDb.sql
+    insertafter: "CREATE database gvw_logs;"
+    marker: "-- {mark} ANSIBLE MANAGED BLOCK "
+    content: |
+      GRANT SELECT, INSERT, UPDATE, DELETE ON `gvw_logs`.* TO 'gvw_logs'@'{{hostvars['was2'].ansible_eth1.ipv4.address}}' IDENTIFIED BY '9EbrdyaG';
+      GRANT SELECT, INSERT, UPDATE, DELETE, ALTER ON `gvw_logs`.* TO 'gvw_logs'@'{{hostvars['batch2'].ansible_eth1.ipv4.address}}' IDENTIFIED BY '9EbrdyaG';
+  tags: db
+
+- name: Blockinfile-- Add grant access to 'exploitvocal'@'WAS2' and 'exploitvocal'@'Bach2'on all dbs
+  blockinfile:
+    path: /tmp/mysql-scripts/fromScratch/db-stats-struct.sql
+    insertafter: "create database StatVoxProdV2Tmp;"
+    marker: "-- {mark} ANSIBLE MANAGED BLOCK "
+    content: |
+      GRANT ALL PRIVILEGES ON *.* TO 'exploitvocal'@'{{hostvars['was2'].ansible_eth1.ipv4.address}}' IDENTIFIED BY '3YqM26Y5az';
+      GRANT ALL PRIVILEGES ON *.* TO 'exploitvocal'@'{{hostvars['batch2'].ansible_eth1.ipv4.address}}' IDENTIFIED BY '3YqM26Y5az';
+  tags: db
+
 - name: Replace-- Replace "cloud-amea01-itg.ope.cloud.mbs" with {{hostvars['was1'].ansible_eth1.ipv4.address}} in sql scripts
-  run_once: yes
-  delegate_to: db1
   replace:
     path: "/tmp/mysql-scripts/fromScratch/{{item}}"
     regexp: "cloud-amea01-itg.ope.cloud.mbs"
     replace: "{{hostvars['was1'].ansible_eth1.ipv4.address}}"
-  with_items: "{{SQL_SCRIPTS}}"
-  when: item in 'db-gvw-initUserAndDb.sql db-gvw_logs-initUserAndDb.sql db-stats-struct.sql'
+  with_items:
+    - db-gvw-initUserAndDb.sql
+    - db-gvw_logs-initUserAndDb.sql
+    - db-stats-struct.sql
   tags: db
 
 - name: Replace-- Replace "cloud-amea03-itg.ope.cloud.mbs" with {{hostvars['batch1'].ansible_eth1.ipv4.address}} in sql scripts
-  run_once: yes
-  delegate_to: db1
   replace:
     path: "/tmp/mysql-scripts/fromScratch/{{item}}"
     regexp: "cloud-amea03-itg.ope.cloud.mbs"
     replace: "{{hostvars['batch1'].ansible_eth1.ipv4.address}}"
-  with_items: "{{SQL_SCRIPTS}}"
-  when: item in 'db-gvw-initUserAndDb.sql db-gvw_logs-initUserAndDb.sql db-stats-struct.sql'
+  with_items:
+    - db-gvw-initUserAndDb.sql
+    - db-gvw_logs-initUserAndDb.sql
+    - db-stats-struct.sql
   tags: db
 
 - name: Shell-- Import sql scripts
   run_once: yes
   delegate_to: db1
-  shell: " runuser -l mysql -c ' mysql < /tmp/mysql-scripts/fromScratch/{{item}}' "
+  shell: " /sbin/runuser -l mysql -c ' /opt/mysql/na/5.6.35/bin/mysql < /tmp/mysql-scripts/fromScratch/{{item}}' "
   with_items: "{{SQL_SCRIPTS}}"
   tags: db
+
+- name: Shell-- Restart mysql service
+  run_once: yes
+  delegate_to: db1
+  shell: " /sbin/service mysql restart "
+  args:
+    warn: false
+  tags: db
+

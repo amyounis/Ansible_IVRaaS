@@ -1,9 +1,45 @@
-LoadModule jk_module modules/mod_jk.so
+#
+# Mod_jk allows the Apache Web server to connect to application
+# servers using the AJP protocol.  This allows web applications to
+# be integrated seamlessly into your Apache server's URI space and
+# utilize Apache features such as SSL processing.
+#
+# The JTC Connector used by Tomcat to listen this plug-in is Jk
 
-<IfModule mod_jk.c>
-JkWorkersFile conf/workers.properties
-JkLogFile     {{item.var1}}/mod_jk/current/mod_jk.log
-JkShmFile     {{item.var1}}/mod_jk/current/jk-runtime-status
-JkLogLevel warn
-</IfModule>
+### Load jk module
+        LoadModule jk_module modules/mod_jk-1.2.31-httpd-2.2.x.so
 
+# ***- Attention dans la console JOnAS seul le connecteur Jk2 est acessible via la console JOnAS
+# ***- Le connecteur Jk doit donc etre configure manuellement dans le fichier server.xml
+# ***- definition du mandatatement Tomcat Ajp13
+
+# Configure mod_jk *************************************************************
+
+# workers.properties is a mandatory file used by the webserver and which is the same for all JK implementations
+
+        JkWorkersFile /opt/application/ivraas/{{item.var1}}/apache2215/conf.d/workers.properties
+
+# Where to put jk logs
+# Update this path to match your logs directory location (put mod_jk.log next to access_log)
+
+        JkLogFile /opt/application/ivraas/{{item.var1}}/apache2215/logs/mod_jk_ivraas.log
+
+# Set the jk share memory
+
+        JkShmFile /opt/application/ivraas/{{item.var1}}/apache2215/logs/jk-runtime-status
+
+# Set the jk log level [debug/error/info]
+
+        JkLogLevel error
+
+# Select the log format
+
+        JkLogStampFormat "[%a %b %d %H:%M:%S %Y] "
+
+# JkOptions indicate to send SSL KEY SIZE,
+
+        JkOptions +ForwardKeySize +ForwardURICompat -ForwardDirectories
+
+# JkRequestLogFormat set the request format
+
+        JkRequestLogFormat "%w %V %T"

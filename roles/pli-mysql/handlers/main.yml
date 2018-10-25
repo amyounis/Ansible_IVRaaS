@@ -1,8 +1,3 @@
 ---
 # handlers file for roles/pli-mysql
 
-- name: restart mysql
-  service:
-    name: mysql
-    state: restarted
-

@@ -16,3 +16,16 @@ SQL_SCRIPTS:
   - db-gvw_logs-initUserAndDb.sql 
   - db-gvw_logs-struct_*.sql
 
+#db_lineinfile:
+#  - path: /tmp/mysql-scripts/fromScratch/db-gvw-initUserAndDb.sql
+#    changes:
+#      - { insertafter: "CREATE database gvw;" , line: "GRANT SELECT, INSERT, UPDATE, DELETE ON `gvw`.* TO 'gvw'@'{{hostvars['batch2'].ansible_eth1.ipv4.address}}' IDENTIFIED BY 'IS59niCK';" } 
+#      - { insertafter: "CREATE database gvw;" , line: "GRANT SELECT, INSERT, UPDATE, DELETE ON `gvw`.* TO 'gvw'@'{{hostvars['was2'].ansible_eth1.ipv4.address}}' IDENTIFIED BY 'IS59niCK';" } 
+#  - path: /tmp/mysql-scripts/fromScratch/db-gvw_logs-initUserAndDb.sql
+#    changes:
+#      - { insertafter: "CREATE database gvw_logs;" , line: "GRANT SELECT, INSERT, UPDATE, DELETE, ALTER ON `gvw_logs`.* TO 'gvw_logs'@'{{hostvars['batch2'].ansible_eth1.ipv4.address}}' IDENTIFIED BY '9EbrdyaG';" } 
+#      - { insertafter: "CREATE database gvw_logs;" , line: "GRANT SELECT, INSERT, UPDATE, DELETE ON `gvw_logs`.* TO 'gvw_logs'@'{{hostvars['was2'].ansible_eth1.ipv4.address}}' IDENTIFIED BY '9EbrdyaG';" } 
+#  - path: /tmp/mysql-scripts/fromScratch/db-stats-struct.sql
+#    changes:
+#      - { insertafter: "create database StatVoxProdV2Tmp;" , line: "GRANT ALL PRIVILEGES ON *.* TO 'exploitvocal'@'{{hostvars['batch2'].ansible_eth1.ipv4.address}}' IDENTIFIED BY '3YqM26Y5az';" }
+#      - { insertafter: "create database StatVoxProdV2Tmp;" , line: "GRANT ALL PRIVILEGES ON *.* TO 'exploitvocal'@'{{hostvars['was2'].ansible_eth1.ipv4.address}}' IDENTIFIED BY '3YqM26Y5az';" }

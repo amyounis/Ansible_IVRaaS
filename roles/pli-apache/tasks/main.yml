@@ -33,10 +33,18 @@
     creates: "/opt/application/{{AppliId}}/{{AppliVersion}}/apache*/conf.d/"
   tags: pli-apache
 
+- name: Stat-- check if /opt/application/{{AppliId}}/current is linked to the IVRaaS version {{IVRAAS_VERSION}}
+  stat:
+    path: /opt/application/{{AppliId}}/current
+  register: link
+  tags: pli-apache
+
 - name: Shell-- Run ./apa_changecurrent.ksh {{AppliId}} {{AppliVersion}}
   shell: "./apa_changecurrent.ksh {{AppliId}} {{AppliVersion}}"
   args:
     chdir: /opt/apache/bin/
+  when: 
+    -  (not link.stat.exists) or (link.stat.lnk_target|basename != AppliVersion)
   tags: pli-apache
 
 

@@ -20,15 +20,19 @@
   tags: pli-tomcat
 
 - name: Shell-- run /images/tomcat/{{TOMCAT_VERSION}}/tomcat-install.ksh silent
-  shell: ./tomcat-install.ksh silent
+  shell: "./tomcat-install.ksh silent"
   args:
     chdir: "/images/tomcat/{{TOMCAT_VERSION}}/"
     creates: "/opt/tomcat/{{TOMCAT_VERSION}}/"
+  environment:
+    PATH: /usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
   tags: pli-tomcat
 
 - name: Shell-- run /opt/tomcat/bin/tomcat-create-instance.ksh ...
-  shell: "./tomcat-create-instance.ksh -i {{appliId}} -o {{appliVersion}} -u {{owner}} -g {{groupe}} -shutdown {{shutdownPort}} -http {{httpPort}} -https {{httpsPort}} -ajp {{ajpPort}} -jmx {{jmxPort}}"
+  shell: "./tomcat-create-instance.ksh -i {{appliId}} -o {{appliVersion}} -u {{owner}} -g {{groupe}} -shutdown {{shutdownPort}} -http {{httpPort}} -admin {{adminport}} -https {{httpsPort}} -ajp {{ajpPort}} -jmx {{jmxPort}}"
   args:
     chdir: /opt/tomcat/bin/
     creates: "/opt/application/{{appliId}}/{{appliVersion}}/tomcat/"
+  environment:
+    PATH: /usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
   tags: pli-tomcat

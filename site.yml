@@ -14,6 +14,16 @@
   roles:
    - common
 
+#########################################
+
+- name: IVRaaS db 
+  hosts: db
+  gather_facts: False
+
+  roles:
+   - pli-mysql
+   - db
+
 ########################################
 
 - name: IVRaaS was 
@@ -25,16 +35,6 @@
    - pli-tomcat
    - java
    - was
-
-#########################################
-
-- name: IVRaaS db 
-  hosts: db
-  gather_facts: False
-
-  roles:
-   - pli-mysql
-   - db
 
 ########################################
 

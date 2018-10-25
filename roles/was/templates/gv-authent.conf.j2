@@ -1,12 +1,8 @@
 <VirtualHost *:80>
         ServerName {{item.var1}}
+	ServerAlias {{item.var4}}
 
-        DocumentRoot {{item.var2}}/{{item.var1}}/ROOT/
-
-        ErrorLog {{item.var3}}/{{item.var1}}/current/error.log
-        ErrorLog syslog:local2
-        CustomLog {{item.var3}}/{{item.var1}}/current/access.log combined
-        CustomLog "| logger -p 'local2.info' -t '[gv-authent-amea]'" combined
+        DocumentRoot {{item.var2}}/{{item.var3}}/ROOT/
 
 
         # Empecher d'aller dans le repertoire WEB-INF
@@ -45,7 +41,7 @@
         ExpiresActive On
         ExpiresByType image/* "access plus 1 days"
 
-        <Directory "{{item.var2}}/{{item.var1}}/ROOT/">
+        <Directory "{{item.var2}}/{{item.var3}}/ROOT/">
                 Options  FollowSymLinks
                 AllowOverride all
                 order allow,deny

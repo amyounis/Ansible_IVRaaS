@@ -47,6 +47,7 @@
   copy:
     src: "{{item.src}}"
     dest: "{{item.dest}}"
+    force: no
   with_items: "{{BATCH_COPY}}"
   tags: batch
 

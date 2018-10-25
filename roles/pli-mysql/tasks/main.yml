@@ -49,23 +49,21 @@
 #########################################################################################
 #				Preproduction						#
 #########################################################################################
-- debug: var=playbook_dir
-  tags: pli-mysql
   
 - name: Copy-- Copy myserver01.conf to /opt/mysql/bin/myserver01.conf --- Preproduction only ---
   copy:
     src: myserver01.conf
     dest: /opt/mysql/bin/myserver01.conf
   register: conf_file
-  when: '"preproduction.inventory" in inventory_file'
+  when: inventory_file|basename == "preproduction.inventory"
   tags: pli-mysql
 
 - name: Shell-- Run the command "./my_createsrv.ksh myserver01 5.6.35 silent" --- Preproduction only ---
   shell: "./my_createsrv.ksh myserver01 5.6.35 silent"
   args:
     chdir: /opt/mysql/bin
-    creates: /myqdata/myserver01/data/mysql/
-  when: '"preproduction.inventory" in inventory_file'
+    creates: /myqdata/myserver01/data/my.cnf
+  when: inventory_file|basename == "preproduction.inventory"
   tags: pli-mysql
 
 #########################################################################################
@@ -77,17 +75,28 @@
     src: my_failover_db_nas.conf
     dest: /opt/mysql/bin/my_failover_db_nas.conf
   register: conf_file
-  when: '"production.inventory" in inventory_file'
+  when: inventory_file|basename == "production.inventory"
   tags: pli-mysql
 
 - name: Shell-- Run the command ksh /opt/mysql/bin/my_failover_db_nas.ksh init --- Production only ---
   run_once: true
   delegate_to: db1
-  shell: "ksh /opt/mysql/bin/my_failover_db_nas.ksh init"
+  shell: ' ksh /opt/mysql/bin/my_failover_db_nas.ksh init'
   args:
     chdir: /opt/mysql/bin
-    creates: /myqdata/myserver01/data/mysql/
-  when: '"production.inventory" in inventory_file'
+    creates: /myqdata/myserver01/data/my.cnf
+  when: 
+    - inventory_file|basename == "production.inventory"
+    - conf_file.changed
+  tags: pli-mysql
+
+- name: Shell-- Start mysql service
+  run_once: true
+  delegate_to: db1
+  shell: " /bin/ps -ef |/bin/grep -v grep | /bin/grep /opt/mysql || (/bin/rm -rf /myqdata/backup/bdd-vip*.lock; /sbin/service mysql start) "
+  args:
+    warn: false
+  ignore_errors: yes
   tags: pli-mysql
 
 #########################################################################################
@@ -99,10 +108,8 @@
     dest: /myqdata/myserver01/data/my.cnf
     insertafter: "collation-server=latin1_general_ci"
     line: "collation-server=latin1_swedish_ci"
-  notify: restart mysql
   tags: pli-mysql
     
-
 - name: Replace-- Comment the line "sql-mode=*" in /myqdata/myserver01/data/my.cnf
   run_once: true
   delegate_to: db1
@@ -110,7 +117,6 @@
     path: /myqdata/myserver01/data/my.cnf
     regexp: "^sql-mode="
     replace: "#sql-mode="
-  notify: restart mysql
   tags: pli-mysql
 
 - name: Replace-- Set the lower-case-table-names= 0 in /myqdata/myserver01/data/my.cnf
@@ -120,6 +126,13 @@
     path: /myqdata/myserver01/data/my.cnf
     regexp: "^lower-case-table-names=1"
     replace: "lower-case-table-names=0"
-  notify: restart mysql
+  tags: pli-mysql
+
+- name: Shell-- Restart mysql
+  run_once: true
+  delegate_to: db1
+  shell: "/sbin/service mysql restart"
+  args:
+    warn: false
   tags: pli-mysql
 

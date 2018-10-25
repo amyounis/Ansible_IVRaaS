@@ -1,5 +1,4 @@
 .idea
 site.retry
-files/
-roles/*/files/
 *.rpm
+*.tar

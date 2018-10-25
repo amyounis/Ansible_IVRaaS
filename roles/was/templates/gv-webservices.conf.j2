@@ -1,12 +1,8 @@
 <VirtualHost *:80>
         ServerName {{item.var1}}
 
-        DocumentRoot {{item.var2}}/{{item.var1}}/ROOT/
+        DocumentRoot {{item.var2}}/{{item.var3}}/ROOT/
 
-        ErrorLog {{item.var3}}/{{item.var1}}/current/error.log
-        ErrorLog syslog:local2
-        CustomLog {{item.var3}}/{{item.var1}}/current/access.log combined
-        CustomLog "| logger -p 'local2.info' -t '[gv-webservices-amea]'" combined
 
         #KeepAlive off
 
@@ -36,7 +32,7 @@
 
         JkMount /* localhost_ajp13
 
-        <Directory "{{item.var2}}/{{item.var1}}/ROOT/">
+        <Directory "{{item.var2}}/{{item.var3}}/ROOT/">
                 Options  FollowSymLinks
                 AllowOverride all
                 order allow,deny

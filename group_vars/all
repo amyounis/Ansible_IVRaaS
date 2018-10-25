@@ -17,5 +17,10 @@ IVRAAS_VERSION: G03R02C01
 # This is the public URL accessed from Internet ex: voicepro.ne.orange.com
 URL: www.voicepro.orange.ne
 
-# This is the database virtual ip for the two db servers 
-DB_VIP: 172.16.2.111
+# These are the Internal URLS for Authent, Provisioning and swithingservices webapps 
+DNF_AUTH_URL: ivr-ne-authent.itn.ftgroup
+DNF_PROV_URL: ivr-ne-switchingservice.itn.ftgroup
+DNF_SVCS_URL: ivr-ne-provisioning.itn.ftgroup
+
+# This is the database virtual ip for the two db servers, comment incase of production
+DB_VIP: 172.16.2.202

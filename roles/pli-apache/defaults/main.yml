@@ -7,14 +7,14 @@ AppliId: ivraas 			#is Apache instance name
 AppliType: java 			#is your instance type: Java (mod_jk configured), Php (Zend Server), PhpSCL (Red Hat) or other
 AppliVersion: "{{IVRAAS_VERSION}}"	#is your application or instance version
 AppliGroup: ivrgroup			#is your user group. Created if it does not exist
-AppliUser: ivruser				#is your user name. Created if it does not exist
-AppliVg: infravg			#is your volume group
-AppliLvSize: 10240			#value in MB (FS space in megabytes)
+AppliUser: ivruser			#is your user name. Created if it does not exist
+AppliVg: ivraasvg			#is your volume group
+AppliLvSize: 40960			#value in MB (FS space in megabytes)
 Worker:	n				#=Y to run in MPM mode worker. Worker=N to stay in default MPM mode prefork
 Http: y	 				#to enable http mode
 HttpPort: 80 				#with range [80-89] [8080-8090]
 Https: y				#to enable https mode
 HttpsPort: 443 				#with range [443-453] [1024-1034]
-AjpPort: 9089				#with range [9000-9999] (port ajp, plage de valeurs ou NA si type non java)
+AjpPort: 9081				#with range [9000-9999] (port ajp, plage de valeurs ou NA si type non java)
 Interface: eth1	 			#is the name of the network interface ( ethx ou bondx)
 Flag: y					#enable Apache instance startup at server booti

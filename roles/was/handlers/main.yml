@@ -1,11 +1,19 @@
 ---
 
+- name: restart rsyslogd
+  service:
+    name: rsyslog
+    state: restarted
+  listen: "restart web service"
+
 - name: restart tomcat
   service: 
     name: tomcat
     state: restarted
+  listen: "restart web service"
 
 - name: restart httpd 
   service:
     name: httpd
     state: restarted
+  listen: "restart web service"

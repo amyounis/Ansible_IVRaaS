@@ -1,11 +1,11 @@
-workers.tomcat_home={{item.var1}}
+#workers.tomcat_home={{item.var1}}
 #workers.java_home=/usr/bin/
 ps=/
 
 worker.list=localhost_ajp13,jkstatus 
 
 worker.localhost_ajp13.host=127.0.0.1
-worker.localhost_ajp13.port=9089
+worker.localhost_ajp13.port={{item.var1}}
 worker.localhost_ajp13.type=ajp13
 worker.localhost_ajp13.connect_timeout=30000            # Allow to detect Tomcat unavailability
 worker.localhost_ajp13.socket_timeout=300               # Socket timeout

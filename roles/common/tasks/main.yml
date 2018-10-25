@@ -57,13 +57,13 @@
     baseurl: file:///images/ivraas_repo
   tags: common
 
-- name: Yum-- Yum Update
-  yum:
-    name: '*'
-    state: latest
-    exclude: kernel*
-    skip_broken: yes
-    disablerepo: '*'
-    enablerepo: "ivraas"
-  tags: common
- 
+#- name: Yum-- Yum Update
+#  yum:
+#    name: '*'
+#    state: latest
+#    exclude: kernel*
+#    skip_broken: yes
+#    disablerepo: '*'
+#    enablerepo: "ivraas"
+#  tags: common
+# 

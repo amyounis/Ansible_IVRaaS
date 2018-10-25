@@ -19,17 +19,30 @@
     creates: "/tmp/{{EXT_DIR}}/"
   tags: prepare
 
-- name: Shell-- Get the batches versions
-  shell: for i in convPcnV2 gv-batch gv-stats-stp gv-tools stats-calculator stats-manager stats-manager-reintegration stats-rapatriement stats-utilities ; do ls $i* |grep -oP '(?<=-V).*(?=.tar)' ;done
+- name: Shell-- Get the webapps versions
+  shell: for i in gv-admmsgvocale-svi gv-authent gv-provisioning gv-switchingservice gv-webservices gv-svifiles gv-admin-stp gv-adv gv-stats gv-vocalmestre; do ls $i* |grep -i webapp |grep -oP '(?<=-V).*(?=.tar)';done
   args:
     chdir: "/tmp/{{EXT_DIR}}/"
   register: OUTPUT2
   tags: prepare
 
 - set_fact:
-    BATCHES_VERSIONS: "{{OUTPUT2.stdout_lines}}"
+    WEBAPPS_VERSIONS: "{{OUTPUT2.stdout_lines}}"
     cacheable: true
   tags: prepare
+
+- name: Shell-- Get the batches versions
+  shell: ls |grep -i batch |grep -oP '(?<=-V).*(?=.tar)'
+  args:
+    chdir: "/tmp/{{EXT_DIR}}/"
+  register: OUTPUT3
+  tags: prepare
+
+- set_fact:
+    BATCHES_VERSIONS: "{{OUTPUT3.stdout_lines}}"
+    cacheable: true
+  tags: prepare
+
 
 #- debug:
 #    var: BATCHES_VERSIONS
