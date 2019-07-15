@@ -2,3 +2,4 @@
 site.retry
 *.rpm
 *.tar
+cached_facts

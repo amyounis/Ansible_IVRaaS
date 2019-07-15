@@ -24,6 +24,8 @@
   args:
     chdir: "/images/apache/{{APACHE_VERSION}}/"
     creates: "/opt/apache/{{APACHE_VERSION}}"
+  async: 360
+  register: sleeper_apa_install
   tags: pli-apache
 
 - name: Shell-- Run apa_creinstance.ksh
@@ -31,6 +33,8 @@
   args:
     chdir: /opt/apache/bin/
     creates: "/opt/application/{{AppliId}}/{{AppliVersion}}/apache*/conf.d/"
+  async: 360
+  register: sleeper_apa_crtinst
   tags: pli-apache
 
 - name: Stat-- check if /opt/application/{{AppliId}}/current is linked to the IVRaaS version {{IVRAAS_VERSION}}

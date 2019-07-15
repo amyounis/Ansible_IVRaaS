@@ -26,7 +26,15 @@
     creates: "/opt/tomcat/{{TOMCAT_VERSION}}/"
   environment:
     PATH: /usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+  async: 1200
+  register: sleeper_tom_install
   tags: pli-tomcat
+
+#- name: Async_status-- check if creating apache inestance finished
+#  async_status: jid={{ sleeper.ansible_job_id }}
+#  register: job_result
+#  until: job_result.finished
+#  retries: 30
 
 - name: Shell-- run /opt/tomcat/bin/tomcat-create-instance.ksh ...
   shell: "./tomcat-create-instance.ksh -i {{appliId}} -o {{appliVersion}} -u {{owner}} -g {{groupe}} -shutdown {{shutdownPort}} -http {{httpPort}} -admin {{adminport}} -https {{httpsPort}} -ajp {{ajpPort}} -jmx {{jmxPort}}"
@@ -35,4 +43,6 @@
     creates: "/opt/application/{{appliId}}/{{appliVersion}}/tomcat/"
   environment:
     PATH: /usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+  async: 1200
+  register: sleeper_tom_crtinst
   tags: pli-tomcat

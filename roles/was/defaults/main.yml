@@ -146,6 +146,18 @@ WAS_LINEINFILE:
 #
 
 WAS_BLOCKINFILE:
+ 
+ - dest: "/etc/hosts"
+   insertafter: EOF
+   marker: # {mark} ANSIBLE MANAGED BLOCK #
+   block: |
+      {{ansible_eth1.ipv4.address}}    gv-admmsgvocale-svi-amea.dmz.cloud.mbs
+      {{ansible_eth1.ipv4.address}}    gv-provisioning-amea.dmz.cloud.mbs
+      {{ansible_eth1.ipv4.address}}    gv-switchingservice-amea.dmz.cloud.mbs
+      {{ansible_eth1.ipv4.address}}    gv-webservices-amea.dmz.cloud.mbs
+      {{ansible_eth1.ipv4.address}}    gv-svifiles-amea.dmz.cloud.mbs
+      {{ansible_eth1.ipv4.address}}    {{URL}}
+
  - dest: "/opt/application/ivraas/{{IVRAAS_VERSION}}/apache2215/conf/httpd.conf"
    insertafter: '#CustomLog logs\/access_log common'
    marker: # {mark} ANSIBLE MANAGED BLOCK #

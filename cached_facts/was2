@@ -31,23 +31,23 @@
         "transparent_hugepage": "never"
     }, 
     "ansible_date_time": {
-        "date": "2018-10-24", 
-        "day": "24", 
-        "epoch": "1540383122", 
-        "hour": "13", 
-        "iso8601": "2018-10-24T12:12:02Z", 
-        "iso8601_basic": "20181024T131202425923", 
-        "iso8601_basic_short": "20181024T131202", 
-        "iso8601_micro": "2018-10-24T12:12:02.426227Z", 
-        "minute": "12", 
-        "month": "10", 
-        "second": "02", 
-        "time": "13:12:02", 
+        "date": "2018-11-06", 
+        "day": "06", 
+        "epoch": "1541497776", 
+        "hour": "10", 
+        "iso8601": "2018-11-06T09:49:36Z", 
+        "iso8601_basic": "20181106T104936662160", 
+        "iso8601_basic_short": "20181106T104936", 
+        "iso8601_micro": "2018-11-06T09:49:36.662360Z", 
+        "minute": "49", 
+        "month": "11", 
+        "second": "36", 
+        "time": "10:49:36", 
         "tz": "WAT", 
         "tz_offset": "+0100", 
-        "weekday": "Wednesday", 
-        "weekday_number": "3", 
-        "weeknumber": "43", 
+        "weekday": "Tuesday", 
+        "weekday_number": "2", 
+        "weeknumber": "45", 
         "year": "2018"
     }, 
     "ansible_default_ipv4": {
@@ -104,7 +104,7 @@
                 "lvm-pv-uuid-U9AWWd-BkAA-E5l5-HFmG-m320-XykQ-rWvpJP"
             ], 
             "sdc1": [
-                "lvm-pv-uuid-rS20LE-WADN-lbcA-n6au-5ipk-vdel-HkafxS"
+                "lvm-pv-uuid-MvQdI4-0RTu-KzdX-JQxQ-N7Qs-uMBH-BNiAs6"
             ], 
             "sr0": [
                 "ata-VMware_Virtual_IDE_CDROM_Drive_10000000000000000001"
@@ -1063,7 +1063,7 @@
                     "holders": [], 
                     "links": {
                         "ids": [
-                            "lvm-pv-uuid-rS20LE-WADN-lbcA-n6au-5ipk-vdel-HkafxS"
+                            "lvm-pv-uuid-MvQdI4-0RTu-KzdX-JQxQ-N7Qs-uMBH-BNiAs6"
                         ], 
                         "labels": [], 
                         "masters": [], 
@@ -1176,8 +1176,8 @@
         "PWD": "/home/osadmin", 
         "SHELL": "/bin/bash", 
         "SHLVL": "4", 
-        "SSH_CLIENT": "172.16.2.110 38934 22", 
-        "SSH_CONNECTION": "172.16.2.110 38934 172.16.2.12 22", 
+        "SSH_CLIENT": "172.16.2.110 42700 22", 
+        "SSH_CONNECTION": "172.16.2.110 42700 172.16.2.12 22", 
         "SSH_TTY": "/dev/pts/0", 
         "TERM": "xterm", 
         "TMOUT": "600", 
@@ -1500,16 +1500,16 @@
     }, 
     "ansible_machine": "x86_64", 
     "ansible_machine_id": "bffdb97e40179041e6feda3d00000008", 
-    "ansible_memfree_mb": 3634, 
+    "ansible_memfree_mb": 3632, 
     "ansible_memory_mb": {
         "nocache": {
-            "free": 3819, 
-            "used": 142
+            "free": 3818, 
+            "used": 143
         }, 
         "real": {
-            "free": 3634, 
+            "free": 3632, 
             "total": 3961, 
-            "used": 327
+            "used": 329
         }, 
         "swap": {
             "cached": 0, 
@@ -1521,18 +1521,18 @@
     "ansible_memtotal_mb": 3961, 
     "ansible_mounts": [
         {
-            "block_available": 444029, 
+            "block_available": 443743, 
             "block_size": 4096, 
             "block_total": 757700, 
-            "block_used": 313671, 
+            "block_used": 313957, 
             "device": "/dev/mapper/rootvg-root_lv", 
             "fstype": "ext4", 
-            "inode_available": 160234, 
+            "inode_available": 160229, 
             "inode_total": 196608, 
-            "inode_used": 36374, 
+            "inode_used": 36379, 
             "mount": "/", 
             "options": "rw,nodev", 
-            "size_available": 1818742784, 
+            "size_available": 1817571328, 
             "size_total": 3103539200, 
             "uuid": "8cefb8ac-981a-41a7-9003-b5735d1153ed"
         }, 
@@ -1633,34 +1633,34 @@
             "uuid": "358beaff-9c4e-492f-82e2-cacd990a8665"
         }, 
         {
-            "block_available": 438372, 
+            "block_available": 438381, 
             "block_size": 4096, 
             "block_total": 475092, 
-            "block_used": 36720, 
+            "block_used": 36711, 
             "device": "/dev/mapper/rootvg-var_lv", 
             "fstype": "ext4", 
-            "inode_available": 523010, 
+            "inode_available": 523011, 
             "inode_total": 524288, 
-            "inode_used": 1278, 
+            "inode_used": 1277, 
             "mount": "/var", 
             "options": "rw,noexec,nodev,nobarrier", 
-            "size_available": 1795571712, 
+            "size_available": 1795608576, 
             "size_total": 1945976832, 
             "uuid": "cba6f3ad-89cc-464e-9b12-60582713154a"
         }, 
         {
-            "block_available": 1604638, 
+            "block_available": 1604461, 
             "block_size": 131072, 
             "block_total": 1611656, 
-            "block_used": 7018, 
+            "block_used": 7195, 
             "device": "172.16.4.2:/export/VoicePro", 
             "fstype": "nfs", 
-            "inode_available": 13105178, 
+            "inode_available": 13105145, 
             "inode_total": 13107200, 
-            "inode_used": 2022, 
+            "inode_used": 2055, 
             "mount": "/mntcvf/web_rw", 
             "options": "rw,addr=172.16.4.2", 
-            "size_available": 210323111936, 
+            "size_available": 210299912192, 
             "size_total": 211242975232, 
             "uuid": "N/A"
         }
@@ -1716,7 +1716,7 @@
     "ansible_system_capabilities": [], 
     "ansible_system_capabilities_enforced": "False", 
     "ansible_system_vendor": "VMware, Inc.", 
-    "ansible_uptime_seconds": 8150, 
+    "ansible_uptime_seconds": 7674, 
     "ansible_user_dir": "/home/osadmin", 
     "ansible_user_gecos": "Administrateur Platon", 
     "ansible_user_gid": 249, 
@@ -1730,5 +1730,6 @@
     "gather_subset": [
         "all"
     ], 
+    "ivruser_id": "3520", 
     "module_setup": true
 }

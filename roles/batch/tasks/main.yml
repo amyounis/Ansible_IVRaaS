@@ -1,9 +1,5 @@
 ---
 
-- debug:
-    msg: "{{hostvars['localhost'].BATCHES_VERSIONS.0}}" 
-  tags: batch-test 
-
 - name: Yum-- Install mysql, mysql-devel and nfs-utils.x86_64
   yum:
     name:
@@ -43,7 +39,14 @@
   with_items: "{{BATCH_FILE_1}}"
   tags: batch
 
-- name: Copy-- Copy batches to {{EXTRACT_DIR}} and libperl to {{BATCH_APP_BASE}}
+- name: File-- Create symbolic link 
+  file:
+    src: "{{BATCH_APP_BASE}}"
+    dest: "/opt/application/ivraas/current"
+    state: link
+  tags: batch
+
+- name: Copy-- Copy batches to {{EXTRACT_DIR}} and libperl.gz to /tmp
   copy:
     src: "{{item.src}}"
     dest: "{{item.dest}}"
@@ -96,4 +99,40 @@
    - changes
   tags: batch
 
+- name: Blockinfile-- Insert/update WAS1 Vhosts in /etc/hosts in batch1
+  blockinfile:
+    path: /etc/hosts
+    block: |
+      172.16.2.217    OMS01
+      # WAS 1 VHosts
+      {{hostvars['was1'].ansible_eth1.ipv4.address}}	gv-admmsgvocale-svi-amea.dmz.cloud.mbs
+      {{hostvars['was1'].ansible_eth1.ipv4.address}}	gv-provisioning-amea.dmz.cloud.mbs
+      {{hostvars['was1'].ansible_eth1.ipv4.address}}	gv-switchingservice-amea.dmz.cloud.mbs
+      {{hostvars['was1'].ansible_eth1.ipv4.address}}	gv-webservices-amea.dmz.cloud.mbs
+      {{hostvars['was1'].ansible_eth1.ipv4.address}}	gv-svifiles-amea.dmz.cloud.mbs
+      {{hostvars['was1'].ansible_eth1.ipv4.address}}	{{URL}}
+  when: inventory_hostname == "batch1"
+  tags: batch
+
+- name: Blockinfile-- Insert/update WAS2 Vhosts in /etc/hosts in batch2
+  blockinfile:
+    path: /etc/hosts
+    block: |
+      172.16.2.217    OMS01
+      # WAS 1 VHosts
+      {{hostvars['was2'].ansible_eth1.ipv4.address}}	gv-admmsgvocale-svi-amea.dmz.cloud.mbs
+      {{hostvars['was2'].ansible_eth1.ipv4.address}}	gv-provisioning-amea.dmz.cloud.mbs
+      {{hostvars['was2'].ansible_eth1.ipv4.address}}	gv-switchingservice-amea.dmz.cloud.mbs
+      {{hostvars['was2'].ansible_eth1.ipv4.address}}	gv-webservices-amea.dmz.cloud.mbs
+      {{hostvars['was2'].ansible_eth1.ipv4.address}}	gv-svifiles-amea.dmz.cloud.mbs
+      {{hostvars['was2'].ansible_eth1.ipv4.address}}	{{URL}}
+  when: inventory_hostname == "batch2"
+  tags: batch
+
+- name: Lineinfile-- add MAILTO="" n the gv-batch cron job
+  lineinfile:
+    path: "/opt/application/ivraas/{{IVRAAS_VERSION}}/batch/gv-batch/batch/etc/cron"
+    insertbefore: BOF
+    line: 'MAILTO=""'
+  tags: batch
 

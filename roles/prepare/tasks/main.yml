@@ -43,17 +43,12 @@
     cacheable: true
   tags: prepare
 
-
-#- debug:
-#    var: BATCHES_VERSIONS
-#  tags: prepare
-
-#- name: Archive-- Archive {{playbook_dir}}/files/{{IVRAAS_TAR_NAME}}/sql
-#  archive:
-#    path: "{{playbook_dir}}/files/{{IVRAAS_TAR_NAME}}/sql"
-#    dest: "{{playbook_dir}}/files/{{IVRAAS_TAR_NAME}}/sql.gz"
+- name: Archive-- Archive {{playbook_dir}}/files/{{IVRAAS_TAR_NAME}}/sql
+  archive:
+    path: "/tmp/{{EXT_DIR}}/libperl"
+    dest: "/tmp/{{EXT_DIR}}/libperl.gz"
 #    remove: yes
-#  tags: prepare
+  tags: prepare
 #
 #- name: Archive-- Archive "{{playbook_dir}}/files/{{IVRAAS_TAR_NAME}}/*webapp*"
 #  archive:

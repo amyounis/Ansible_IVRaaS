@@ -34,7 +34,7 @@ BATCH_GROUP:
 BATCH_USER:
  - { name: stats       , uid: 30000 , group: stats       }
  - { name: serveur     , uid: 30001 , group: serveur     }
- - { name: ivruser     , uid: 3520  , group: ivrgroup    }
+ - { name: ivruser     , uid: "{{hostvars[groups['was'][0]].ivruser_id}}"  , group: ivrgroup    }
 
 
 BATCH_FILE_1:
@@ -60,9 +60,10 @@ BATCH_FILE_1:
  - { path: "{{EXTRACT_DIR}}/{{BATCHES.6.name}}" 		, owner: root    , group: root    , state: directory }
  - { path: "{{EXTRACT_DIR}}/{{BATCHES.7.name}}" 		, owner: root    , group: root    , state: directory }
  - { path: "{{EXTRACT_DIR}}/{{BATCHES.8.name}}"  		, owner: root    , group: root    , state: directory }
+ - { path: "{{BATCH_APP_BASE}}/logs"  				, owner: stats   , group: stats   , state: directory }
 
 BATCH_COPY:
- - { src: "/tmp/{{hostvars['localhost'].EXT_DIR}}/libperl"    , dest: "{{BATCH_APP_BASE}}" }
+ - { src: "/tmp/{{hostvars['localhost'].EXT_DIR}}/libperl.gz"    , dest: "/tmp" }
  - { src: "/tmp/{{hostvars['localhost'].EXT_DIR}}/{{BATCHES.0.name}}-{{BATCHES.0.type}}-V{{BATCHES.0.version}}.tar.gz" , dest: "{{EXTRACT_DIR}}/{{BATCHES.0.name}}"  }
  - { src: "/tmp/{{hostvars['localhost'].EXT_DIR}}/{{BATCHES.1.name}}-{{BATCHES.1.type}}-V{{BATCHES.1.version}}.tar.gz" , dest: "{{EXTRACT_DIR}}/{{BATCHES.1.name}}"  }
  - { src: "/tmp/{{hostvars['localhost'].EXT_DIR}}/{{BATCHES.2.name}}-{{BATCHES.2.type}}-V{{BATCHES.2.version}}.tar.gz" , dest: "{{EXTRACT_DIR}}/{{BATCHES.2.name}}"  }
@@ -74,6 +75,7 @@ BATCH_COPY:
  - { src: "/tmp/{{hostvars['localhost'].EXT_DIR}}/{{BATCHES.8.name}}-{{BATCHES.8.type}}-V{{BATCHES.8.version}}.tar.gz" , dest: "{{EXTRACT_DIR}}/{{BATCHES.8.name}}"  }
 
 BATCH_UNARCHIVE:
+ - { src: "/tmp/libperl.gz" , dest: "{{BATCH_APP_BASE}}" , remote_src: yes }
  - { src: "{{EXTRACT_DIR}}/{{BATCHES.0.name}}/{{BATCHES.0.name}}-{{BATCHES.0.type}}-V{{BATCHES.0.version}}.tar.gz" , dest: "{{EXTRACT_DIR}}/{{BATCHES.0.name}}" , remote_src: yes }
  - { src: "{{EXTRACT_DIR}}/{{BATCHES.1.name}}/{{BATCHES.1.name}}-{{BATCHES.1.type}}-V{{BATCHES.1.version}}.tar.gz" , dest: "{{EXTRACT_DIR}}/{{BATCHES.1.name}}" , remote_src: yes }
  - { src: "{{EXTRACT_DIR}}/{{BATCHES.2.name}}/{{BATCHES.2.name}}-{{BATCHES.2.type}}-V{{BATCHES.2.version}}.tar.gz" , dest: "{{EXTRACT_DIR}}/{{BATCHES.2.name}}" , remote_src: yes }
@@ -109,24 +111,24 @@ BATCH_SYNCHRONIZE:
  - { src: "{{BATCH_APP_BASE}}/batch/{{BATCHES.5.name}}/batch/bin/init.d/" , dest: /etc/init.d 				      		  }
 
 BATCH_FILE_2:
- - { path: "{{BATCH_APP_BASE}}/{{BATCHES.0.name}}/batch/var/log" , owner: stats   , group: stats   , recurse: yes }
- - { path: "{{BATCH_APP_BASE}}/{{BATCHES.0.name}}/batch/var/run" , owner: stats   , group: stats   , recurse: yes }
- - { path: "{{BATCH_APP_BASE}}/{{BATCHES.0.name}}/batch" 	 , owner: stats   , group: stats   , recurse: yes }
- - { path: "{{BATCH_APP_BASE}}/{{BATCHES.1.name}}/batch" 	 , owner: serveur , group: serveur , recurse: yes }
- - { path: "{{BATCH_APP_BASE}}/{{BATCHES.2.name}}/batch" 	 , owner: serveur , group: serveur , recurse: yes }
- - { path: "{{BATCH_APP_BASE}}/{{BATCHES.3.name}}/batch" 	 , owner: serveur , group: serveur , recurse: yes }
- - { path: "{{BATCH_APP_BASE}}/{{BATCHES.4.name}}/batch/var/log" , owner: stats   , group: stats   , recurse: yes }
- - { path: "{{BATCH_APP_BASE}}/{{BATCHES.4.name}}/batch/var/run" , owner: stats   , group: stats   , recurse: yes }
- - { path: "{{BATCH_APP_BASE}}/{{BATCHES.4.name}}/batch" 	 , owner: stats   , group: stats   , recurse: yes }
- - { path: "{{BATCH_APP_BASE}}/{{BATCHES.5.name}}/batch/var/log" , owner: stats   , group: stats   , recurse: yes }
- - { path: "{{BATCH_APP_BASE}}/{{BATCHES.5.name}}/batch/var/run" , owner: stats   , group: stats   , recurse: yes }
- - { path: "{{BATCH_APP_BASE}}/{{BATCHES.5.name}}/batch" 	 , owner: stats   , group: stats   , recurse: yes }
- - { path: "{{BATCH_APP_BASE}}/{{BATCHES.6.name}}/batch" 	 , owner: stats   , group: stats   , recurse: yes }
- - { path: "{{BATCH_APP_BASE}}/{{BATCHES.7.name}}/batch" 	 , owner: stats   , group: stats   , recurse: yes }
- - { path: "{{BATCH_APP_BASE}}/{{BATCHES.8.name}}/batch" 	 , owner: stats   , group: stats   , recurse: yes }
- - { path: /etc/init.d/convPcnV2 			 	 , owner: stats   , group: stats   , recurse: no }
- - { path: /etc/init.d/gvStatCalculator 		 	 , owner: stats   , group: stats   , recurse: no }
- - { path: /etc/init.d/gvStatManager 			 	 , owner: stats   , group: stats   , recurse: no }
+ - { path: "{{BATCH_APP_BASE}}/batch/{{BATCHES.0.name}}/batch/var/log" , owner: stats   , group: stats   , recurse: yes }
+ - { path: "{{BATCH_APP_BASE}}/batch/{{BATCHES.0.name}}/batch/var/run" , owner: stats   , group: stats   , recurse: yes }
+ - { path: "{{BATCH_APP_BASE}}/batch/{{BATCHES.0.name}}/batch" 	       , owner: stats   , group: stats   , recurse: yes }
+ - { path: "{{BATCH_APP_BASE}}/batch/{{BATCHES.1.name}}/batch" 	       , owner: serveur , group: serveur , recurse: yes }
+ - { path: "{{BATCH_APP_BASE}}/batch/{{BATCHES.2.name}}/batch" 	       , owner: serveur , group: serveur , recurse: yes }
+ - { path: "{{BATCH_APP_BASE}}/batch/{{BATCHES.3.name}}/batch" 	       , owner: serveur , group: serveur , recurse: yes }
+ - { path: "{{BATCH_APP_BASE}}/batch/{{BATCHES.4.name}}/batch/var/log" , owner: stats   , group: stats   , recurse: yes }
+ - { path: "{{BATCH_APP_BASE}}/batch/{{BATCHES.4.name}}/batch/var/run" , owner: stats   , group: stats   , recurse: yes }
+ - { path: "{{BATCH_APP_BASE}}/batch/{{BATCHES.4.name}}/batch" 	       , owner: stats   , group: stats   , recurse: yes }
+ - { path: "{{BATCH_APP_BASE}}/batch/{{BATCHES.5.name}}/batch/var/log" , owner: stats   , group: stats   , recurse: yes }
+ - { path: "{{BATCH_APP_BASE}}/batch/{{BATCHES.5.name}}/batch/var/run" , owner: stats   , group: stats   , recurse: yes }
+ - { path: "{{BATCH_APP_BASE}}/batch/{{BATCHES.5.name}}/batch" 	       , owner: stats   , group: stats   , recurse: yes }
+ - { path: "{{BATCH_APP_BASE}}/batch/{{BATCHES.6.name}}/batch" 	       , owner: stats   , group: stats   , recurse: yes }
+ - { path: "{{BATCH_APP_BASE}}/batch/{{BATCHES.7.name}}/batch" 	       , owner: stats   , group: stats   , recurse: yes }
+ - { path: "{{BATCH_APP_BASE}}/batch/{{BATCHES.8.name}}/batch" 	       , owner: stats   , group: stats   , recurse: yes }
+ - { path: "/etc/init.d/convPcnV2"        , owner: root , group: root , recurse: no }
+ - { path: "/etc/init.d/gvStatManager"    , owner: root , group: root , recurse: no }
+ - { path: "/etc/init.d/gvStatCalculator" , owner: root , group: root , recurse: no }
 
 BATCH_FILE_3:
  - { src: "{{BATCH_APP_BASE}}/batch/{{BATCHES.0.name}}/batch/etc/cron" , dest: "/etc/cron.d/{{BATCHES.0.name}}" , owner: root , group: root , state: link }
@@ -142,6 +144,9 @@ BATCH_REPLACE:
  - dest: "{{BATCH_APP_BASE}}/batch/{{BATCHES.0.name}}/batch/etc/cron"
    changes:
     - { regexp: /usr2/batch/convPcnV2			 , replace: "{{BATCH_APP_BASE}}/batch/{{BATCHES.0.name}}" }
+ - dest: "{{BATCH_APP_BASE}}/batch/{{BATCHES.0.name}}/batch/bin/retreivePcn.sh"
+   changes:
+    - { regexp: itggv-ip01c.omsccs94.cvf		 , replace: OMS01 }
  - dest: /etc/init.d/convPcnV2
    changes:
     - { regexp: /usr2/batch			 	 , replace: "{{BATCH_APP_BASE}}/batch" }
@@ -155,7 +160,7 @@ BATCH_REPLACE:
  - dest: "{{BATCH_APP_BASE}}/batch/{{BATCHES.1.name}}/batch/etc/hibernate.cfg.xml"
    changes:
     - { regexp: cloud-amea02-itg.ope.cloud.mbs 		 , replace: "{{DB_VIP}}" }
-##################################################  batch gv-batch-stp ## ############################################
+##################################################  batch gv-stats-stp ## ############################################
  - dest: "{{BATCH_APP_BASE}}/batch/{{BATCHES.2.name}}/batch/etc/cron"
    changes:
     - { regexp: /usr2/batch/gv-stats-stp     		 , replace: "{{BATCH_APP_BASE}}/batch/{{BATCHES.2.name}}" }
@@ -206,4 +211,10 @@ BATCH_REPLACE:
    changes:
     - { regexp: /usr2/batch/stats-utilities          	 , replace: "{{BATCH_APP_BASE}}/batch/{{BATCHES.8.name}}" }
     - { regexp: cloud-amea02-itg.ope.cloud.mbs   	 , replace: "{{DB_VIP}}" }
+############################################       syslog.conf        ##############################################
+ - dest: "/etc/syslog.conf"
+   changes:
+    - { regexp: '#\$ModLoad imudp' , replace: '$ModLoad imudp' }
+    - { regexp: '#\$UDPServerRun 514' , replace: '$UDPServerRun 514' }
+    - { regexp: '^local7\.\*.*' , replace: 'local7.*           /opt/application/ivraas/current/logs/ivraas_batch.log' }
 

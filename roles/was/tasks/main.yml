@@ -84,3 +84,15 @@
     group: ivrgroup
     recurse: yes
   tags: was
+
+- name: Shell-- get the user "ivruser" id
+  shell: "cat /etc/passwd | grep ivruser |cut -d: -f3"
+  register: ivruser_id
+  tags: was
+
+- name: Set_fact
+  set_fact: 
+    ivruser_id: "{{ivruser_id.stdout}}"
+    cacheable: true
+  tags: was
+
